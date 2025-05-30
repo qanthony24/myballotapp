@@ -1,0 +1,6 @@
+{
+  "name": "MyBallot",
+  "description": "A web application for voters to find candidate information, compare candidates, build a personal ballot, and get election details. Powered by Gemini for Q&A.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
