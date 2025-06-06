@@ -2,12 +2,14 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Cycle } from '../types';
 import { CalendarDaysIcon, MapPinIcon, LifebuoyIcon, PencilSquareIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
-import { getAllCycles, getFormattedElectionName } from '../services/dataService'; 
+import { getAllCycles, getFormattedElectionName } from '../services/dataService';
 import { useAllNotesSummary } from '../hooks/useAllNotesSummary';
+import { useSettings } from '../hooks/useSettings';
 
 const ElectionInfoPage: React.FC = () => {
-  const allElectionEvents = useMemo(() => getAllCycles(), []); 
+  const allElectionEvents = useMemo(() => getAllCycles(), []);
   const allNotesSummary = useAllNotesSummary();
+  const { uiDensity, setUiDensity } = useSettings();
 
   const relevantElection: Cycle | null = allElectionEvents.length > 0 ? allElectionEvents[0] : null;
 
@@ -21,6 +23,18 @@ const ElectionInfoPage: React.FC = () => {
     <div className="max-w-4xl mx-auto">
       <div className="bg-white shadow-xl rounded-lg p-6 md:p-10 border border-midnight-navy/10">
         <h1 className="text-3xl font-display font-bold text-midnight-navy mb-8 text-center">Election Information & Q&A</h1>
+        <div className="mb-8 text-right">
+          <label htmlFor="ui-density" className="text-sm mr-2">UI Density:</label>
+          <select
+            id="ui-density"
+            value={uiDensity}
+            onChange={(e) => setUiDensity(e.target.value as 'normal' | 'compact')}
+            className="border border-midnight-navy/20 rounded px-2 py-1 text-sm"
+          >
+            <option value="normal">Normal</option>
+            <option value="compact">Compact</option>
+          </select>
+        </div>
 
         <div className="mb-10 grid grid-cols-1 md:grid-cols-2 gap-6">
             <InfoCard title="Key Election Dates" icon={<CalendarDaysIcon className="h-8 w-8 text-civic-blue" />}>
@@ -104,10 +118,12 @@ interface InfoCardProps {
     children: React.ReactNode;
 }
 const InfoCard: React.FC<InfoCardProps> = ({ title, icon, children }) => {
+    const { uiDensity } = useSettings();
+    const padding = uiDensity === 'compact' ? 'p-4' : 'p-6';
     return (
-        <div className="bg-slate-100 p-6 rounded-lg shadow-md border border-midnight-navy/10">
+        <div className={`bg-slate-100 ${padding} rounded-lg shadow-md border border-midnight-navy/10`}>
             <div className="flex items-center mb-3">
-                {icon} 
+                {icon}
                 <h3 className="text-xl font-display font-semibold text-midnight-navy ml-3">{title}</h3>
             </div>
             <div className="text-midnight-navy/90 text-sm space-y-1 font-sans">

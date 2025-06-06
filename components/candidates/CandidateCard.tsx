@@ -4,7 +4,8 @@ import { Candidate } from '../../types';
 import { ViewMode } from '../../constants';
 import { getCycleById, getFormattedElectionName, getFormattedCandidateOfficeName } from '../../services/dataService';
 import { BuildingOffice2Icon, CalendarDaysIcon, ArrowRightIcon, CheckBadgeIcon } from '@heroicons/react/24/outline';
-import { useNotes } from '../../hooks/useNotes'; 
+import { useNotes } from '../../hooks/useNotes';
+import { useSettings } from '../../hooks/useSettings';
 
 interface CandidateCardProps {
   candidate: Candidate;
@@ -34,6 +35,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate, viewMode, onTo
   const { notes, addNote, getLatestNote } = useNotes(candidate.id);
   const [isQuickNoteVisible, setIsQuickNoteVisible] = useState(false);
   const [quickNoteText, setQuickNoteText] = useState('');
+  const { uiDensity } = useSettings();
 
   const latestNote = getLatestNote();
 
@@ -44,6 +46,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate, viewMode, onTo
   const selectedForBallot = electionDate ? isCandidateSelected(candidate.id, electionDate) : false;
 
   const cardBaseClasses = "bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl border border-midnight-navy/10";
+  const paddingClasses = uiDensity === 'compact' ? 'p-3 sm:p-4' : 'p-4 sm:p-6';
   
   const incumbentBadge = candidate.isIncumbent ? (
     <span className="ml-2 text-xs font-semibold text-white bg-sunlight-gold px-2 py-0.5 rounded-full inline-flex items-center">
@@ -135,7 +138,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate, viewMode, onTo
             onError={(e) => (e.currentTarget.src = 'https://picsum.photos/400/300?grayscale')}
           />
         </Link>
-        <div className="p-4 sm:p-6 flex flex-col flex-grow">
+        <div className={`${paddingClasses} flex flex-col flex-grow`}>
           <div className="flex justify-between items-start">
             <Link to={`/candidate/${candidate.id}`} className="hover:text-sunlight-gold transition-colors flex-grow mr-2">
               <h3 className="text-xl font-display font-semibold text-midnight-navy mb-1">
@@ -180,7 +183,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate, viewMode, onTo
   return (
     <div className={`${cardBaseClasses} flex flex-col sm:flex-row items-start sm:items-center`}>
       {/* Image Link removed for LIST view */}
-      <div className="p-4 sm:p-6 flex-grow w-full">
+      <div className={`${paddingClasses} flex-grow w-full`}>
         <div className="flex justify-between items-start mb-1">
           <Link to={`/candidate/${candidate.id}`} className="hover:text-sunlight-gold transition-colors flex-grow mr-2">
             <h3 className="text-xl font-display font-semibold text-midnight-navy">

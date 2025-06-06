@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom'; // Removed BrowserRouter
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import { BallotProvider } from './hooks/useBallot';
+import { SettingsProvider } from './hooks/useSettings';
 import Header from './components/layout/Header';
 import Navbar from './components/layout/Navbar';
 import HomePage from './pages/HomePage';
@@ -40,6 +41,7 @@ const App: React.FC = () => {
   return (
       <AuthProvider>
         <BallotProvider>
+          <SettingsProvider>
           <div className="min-h-screen flex flex-col">
             <Header />
             {/* Adjusted padding: pt-20 for header (h-16 + p-4), px-4 for horizontal, pb-20 for Navbar */}
@@ -48,6 +50,7 @@ const App: React.FC = () => {
             </main>
             <Navbar />
           </div>
+          </SettingsProvider>
         </BallotProvider>
       </AuthProvider>
   );

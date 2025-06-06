@@ -9,13 +9,15 @@ import {
   isElectionPast // Use centralized version
 } from '../services/dataService';
 import { DocumentCheckIcon, InformationCircleIcon, CalendarDaysIcon } from '@heroicons/react/24/outline';
-import { useBallot } from '../hooks/useBallot'; 
+import { useBallot } from '../hooks/useBallot';
+import { useSettings } from '../hooks/useSettings';
 
 const BallotMeasuresListPage: React.FC = () => {
   const [allMeasures, setAllMeasures] = useState<BallotMeasure[]>([]);
   const [upcomingElectionEvents, setUpcomingElectionEvents] = useState<Cycle[]>([]);
   const { selectedElectionDate: ballotSelectedElectionDate } = useBallot();
   const [selectedElectionFilter, setSelectedElectionFilter] = useState<string>('');
+  const { uiDensity } = useSettings();
 
   useEffect(() => {
     setAllMeasures(getAllBallotMeasures());
@@ -81,10 +83,10 @@ const BallotMeasuresListPage: React.FC = () => {
         {filteredMeasures.length > 0 ? (
           <div className="space-y-6">
             {filteredMeasures.map(measure => (
-              <Link 
-                key={measure.id} 
-                to={`/ballot-measure/${measure.id}`} 
-                className="block bg-slate-100 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-midnight-navy/20 hover:border-civic-blue"
+              <Link
+                key={measure.id}
+                to={`/ballot-measure/${measure.id}`}
+                className={`block bg-slate-100 ${uiDensity === 'compact' ? 'p-4' : 'p-6'} rounded-lg shadow-md hover:shadow-lg transition-shadow border border-midnight-navy/20 hover:border-civic-blue`}
               >
                 <h2 className="text-xl font-semibold text-midnight-navy mb-1">{measure.title}</h2>
                 <p className="text-sm text-midnight-navy/70 flex items-center">
