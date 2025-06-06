@@ -10,6 +10,7 @@ import {
   getCandidatesByOfficeAndCycle
 } from '../services/dataService';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+import SkeletonCard from '../components/SkeletonCard';
 import { ArrowLeftIcon, BuildingOffice2Icon, CalendarDaysIcon, GlobeAltIcon, EnvelopeIcon, PhoneIcon, UserGroupIcon, PlusCircleIcon, MinusCircleIcon, ScaleIcon, CheckBadgeIcon, PencilSquareIcon, ChatBubbleOvalLeftEllipsisIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useBallot } from '../hooks/useBallot';
 import { useNotes } from '../hooks/useNotes';
@@ -108,7 +109,7 @@ const CandidateProfilePage: React.FC = () => {
     }
   }, [location, loading]); // Depend on loading to ensure ref is available
 
-  if (loading) return <LoadingSpinner size="lg" />;
+  if (loading) return <SkeletonCard />;
   if (!candidate || !candidateCycle) return <div className="text-center py-10 text-sunlight-gold">Candidate or election information not found.</div>;
 
   const surveyQuestions = getSurveyQuestions();
@@ -403,16 +404,16 @@ const CandidateProfilePage: React.FC = () => {
         </h2>
         {opponents.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {opponents.map(op => {
+            {opponents.map((op, idx) => {
               let opponentDisplayName = `${op.firstName} ${op.lastName}`;
               if (op.officeId === 5 && op.runningMateName) {
                 opponentDisplayName += ` / ${op.runningMateName}`;
               }
               return (
-                <Link 
-                  key={op.id} 
-                  to={`/candidate/${op.id}`} 
-                  className="block bg-slate-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-midnight-navy/10 hover:border-sunlight-gold focus:outline-none focus:ring-2 focus:ring-sunlight-gold"
+                <Link
+                  key={op.id}
+                  to={`/candidate/${op.id}`}
+                  className={`block p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-midnight-navy/10 hover:border-sunlight-gold focus:outline-none focus:ring-2 focus:ring-sunlight-gold ${idx % 2 === 1 ? 'bg-slate-50' : 'bg-slate-100'}`}
                 >
                   <div className="flex items-center">
                     <img 

@@ -8,9 +8,10 @@ import { useNotes } from '../../hooks/useNotes';
 
 interface CandidateCardProps {
   candidate: Candidate;
-  viewMode: string; 
+  viewMode: string;
   onToggleCandidateBallotStatus: (candidate: Candidate, electionDate: string) => void;
   isCandidateSelected: (candidateId: number, electionDate: string) => boolean;
+  className?: string;
 }
 
 const getPartyAbbreviation = (party: string): string => {
@@ -24,7 +25,7 @@ const getPartyAbbreviation = (party: string): string => {
   return party.charAt(0).toUpperCase(); // Fallback to first letter
 };
 
-const CandidateCard: React.FC<CandidateCardProps> = ({ candidate, viewMode, onToggleCandidateBallotStatus, isCandidateSelected }) => {
+const CandidateCard: React.FC<CandidateCardProps> = ({ candidate, viewMode, onToggleCandidateBallotStatus, isCandidateSelected, className }) => {
   const cycle = getCycleById(candidate.cycleId); 
   const electionDate = cycle?.electionDate; 
   const formattedElectionName = getFormattedElectionName(cycle);
@@ -126,7 +127,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate, viewMode, onTo
 
   if (viewMode === ViewMode.GRID) {
     return (
-      <div className={`${cardBaseClasses} flex flex-col`}>
+      <div className={`${cardBaseClasses} flex flex-col ${className ?? ''}`}>
         <Link to={`/candidate/${candidate.id}`} className="block hover:opacity-90 transition-opacity">
           <img 
             src={candidate.photoUrl || `https://picsum.photos/seed/${candidate.slug}/400/300`} 
@@ -178,7 +179,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate, viewMode, onTo
   // LIST View
   const partyAbbreviation = getPartyAbbreviation(candidate.party);
   return (
-    <div className={`${cardBaseClasses} flex flex-col sm:flex-row items-start sm:items-center`}>
+    <div className={`${cardBaseClasses} flex flex-col sm:flex-row items-start sm:items-center ${className ?? ''}`}>
       {/* Image Link removed for LIST view */}
       <div className="p-4 sm:p-6 flex-grow w-full">
         <div className="flex justify-between items-start mb-1">
