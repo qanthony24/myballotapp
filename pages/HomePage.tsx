@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import CandidateCard from '../components/candidates/CandidateCard';
+import SkeletonCard from '../components/SkeletonCard';
 import FilterControls from '../components/candidates/FilterControls';
 import { Candidate, Cycle } from '../types'; // Removed CandidateSelection
 import { ViewMode } from '../constants'; // Changed import
@@ -21,6 +22,7 @@ const HomePage: React.FC = () => {
 
   const [allCandidatesData, setAllCandidatesData] = useState<Candidate[]>([]);
   const [upcomingElections, setUpcomingElections] = useState<Cycle[]>([]);
+  const [loading, setLoading] = useState(true);
   
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedOffice, setSelectedOffice] = useState(''); 
@@ -29,6 +31,7 @@ const HomePage: React.FC = () => {
   const [viewMode, setViewMode] = useState<string>(ViewMode.GRID); 
 
   useEffect(() => {
+    setLoading(true);
     setAllCandidatesData(getAllCandidates());
     const cycles = getUpcomingCycles();
     setUpcomingElections(cycles);
@@ -44,6 +47,7 @@ const HomePage: React.FC = () => {
       // No upcoming elections, and ballot context is past or null
       setSelectedElectionDateForFilter(''); // This will mean "All Upcoming Elections" (which will be empty)
     }
+    setLoading(false);
   }, [ballotSelectedElectionDate]); // Re-run when ballot context's selected date changes
 
   const handleCandidateBallotAction = (candidate: Candidate, electionDate: string) => {
@@ -80,6 +84,16 @@ const HomePage: React.FC = () => {
     });
   }, [allCandidatesData, searchTerm, selectedOffice, selectedElectionDateForFilter, selectedParty, upcomingElections]);
 
+  if (loading) {
+    return (
+      <div className={`grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`}>
+        {Array.from({ length: 8 }).map((_, index) => (
+          <SkeletonCard key={index} />
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div>
       <FilterControls
@@ -98,13 +112,14 @@ const HomePage: React.FC = () => {
 
       {filteredCandidates.length > 0 ? (
         <div className={`grid gap-6 ${viewMode === ViewMode.GRID ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'grid-cols-1'}`}>
-          {filteredCandidates.map(candidate => (
-            <CandidateCard 
-              key={candidate.id} 
-              candidate={candidate} 
+          {filteredCandidates.map((candidate, index) => (
+            <CandidateCard
+              key={candidate.id}
+              candidate={candidate}
               viewMode={viewMode}
-              onToggleCandidateBallotStatus={handleCandidateBallotAction} 
+              onToggleCandidateBallotStatus={handleCandidateBallotAction}
               isCandidateSelected={isCandidateSelectedForCard}
+              className={viewMode === ViewMode.LIST && index % 2 === 1 ? 'bg-slate-50' : ''}
             />
           ))}
         </div>
