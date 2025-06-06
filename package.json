@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "contrast": "node scripts/contrast.cjs"
   },
   "dependencies": {
     "@google/genai": "^0.14.0",
@@ -19,6 +20,7 @@
   "devDependencies": {
     "@types/node": "^22.14.0",
     "@types/react": "^19.1.6",
+    "@adobe/color-contrast-analyzer": "^1.0.0",
     "typescript": "~5.7.2",
     "vite": "^6.2.0"
   }
