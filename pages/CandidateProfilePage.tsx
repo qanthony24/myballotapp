@@ -10,6 +10,7 @@ import {
   getCandidatesByOfficeAndCycle
 } from '../services/dataService';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+import CollapsibleAnswer from '../components/CollapsibleAnswer';
 import { ArrowLeftIcon, BuildingOffice2Icon, CalendarDaysIcon, GlobeAltIcon, EnvelopeIcon, PhoneIcon, UserGroupIcon, PlusCircleIcon, MinusCircleIcon, ScaleIcon, CheckBadgeIcon, PencilSquareIcon, ChatBubbleOvalLeftEllipsisIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useBallot } from '../hooks/useBallot';
 import { useNotes } from '../hooks/useNotes';
@@ -325,9 +326,9 @@ const CandidateProfilePage: React.FC = () => {
             {surveyQuestions.map((sq) => (
               <div key={sq.key} className="bg-slate-100 p-4 rounded-md shadow-sm border border-midnight-navy/10">
                 <h3 className="text-lg font-display font-semibold text-midnight-navy">{sq.question}</h3>
-                <p className="text-midnight-navy/90 mt-1 whitespace-pre-line font-sans">
+                <CollapsibleAnswer>
                   {candidate.surveyResponses?.[sq.key] || <span className="italic">No response provided.</span>}
-                </p>
+                </CollapsibleAnswer>
               </div>
             ))}
           </div>
