@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo, useContext, createContext } from 'react';
 import { BallotEntry, BallotArchive, CandidateSelection, MeasureStance, Cycle, ReminderSettings, Candidate } from '../types';
-import { getAllCycles, isElectionPast } from '../services/dataService'; // To determine default election & use centralized isElectionPast
+import { getAllCycles, getCycleByElectionDate, isElectionPast } from '../services/dataService'; // To determine default election & use centralized isElectionPast
 
 interface BallotContextType {
   currentElectionEntries: BallotEntry[];
@@ -276,4 +276,10 @@ export const useBallot = (): BallotContextType => {
     throw new Error('useBallot must be used within a BallotProvider');
   }
   return context;
+};
+
+export const useElection = () => {
+  const { selectedElectionDate } = useBallot();
+  if (!selectedElectionDate) return null;
+  return getCycleByElectionDate(selectedElectionDate);
 };
