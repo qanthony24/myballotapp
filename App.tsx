@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom'; // Removed BrowserRouter
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import { BallotProvider } from './hooks/useBallot';
+import { SettingsProvider } from './hooks/useSettings';
 import Header from './components/layout/Header';
 import ShrinkHeader from './components/ShrinkHeader';
 import ElectionBanner from './components/ElectionBanner';
@@ -45,6 +46,7 @@ const App: React.FC = () => {
   return (
       <AuthProvider>
         <BallotProvider>
+          <SettingsProvider>
           <div className="min-h-screen flex flex-col">
             <HeaderComponent />
             {uiRefresh && <ElectionBanner />}
@@ -54,6 +56,7 @@ const App: React.FC = () => {
             </main>
             <Navbar />
           </div>
+          </SettingsProvider>
         </BallotProvider>
       </AuthProvider>
   );
