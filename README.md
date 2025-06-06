@@ -1,4 +1,4 @@
-# BRVotes
+# MyBallot App
 
 A web application for East Baton Rouge Parish voters to find candidate information, compare candidates, build a personal ballot, and get election details. Powered by Gemini for Q&A.
 

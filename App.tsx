@@ -2,7 +2,10 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom'; // Removed BrowserRouter
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import { BallotProvider } from './hooks/useBallot';
+import { SettingsProvider } from './hooks/useSettings';
 import Header from './components/layout/Header';
+import ShrinkHeader from './components/ShrinkHeader';
+import ElectionBanner from './components/ElectionBanner';
 import Navbar from './components/layout/Navbar';
 import HomePage from './pages/HomePage';
 import BallotMeasuresListPage from './pages/BallotMeasuresListPage';
@@ -37,17 +40,23 @@ const AppRoutes: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  const uiRefresh = process.env.UI_REFRESH !== 'false';
+  const HeaderComponent = uiRefresh ? ShrinkHeader : Header;
+
   return (
       <AuthProvider>
         <BallotProvider>
+          <SettingsProvider>
           <div className="min-h-screen flex flex-col">
-            <Header />
+            <HeaderComponent />
+            {uiRefresh && <ElectionBanner />}
             {/* Adjusted padding: pt-20 for header (h-16 + p-4), px-4 for horizontal, pb-20 for Navbar */}
             <main className="flex-grow container mx-auto px-4 pt-20 pb-20">
               <AppRoutes />
             </main>
             <Navbar />
           </div>
+          </SettingsProvider>
         </BallotProvider>
       </AuthProvider>
   );

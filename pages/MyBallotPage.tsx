@@ -5,14 +5,17 @@ import {
     getCandidateById, 
     getOfficeById, 
     getFormattedElectionNameFromDate, 
-    getResultsForElection, 
-    getBallotMeasuresByElectionDate, 
+    getResultsForElection,
+    getBallotMeasuresByElectionDate,
     getCycleByElectionDate,
+    getAllCandidates,
     getFormattedCandidateOfficeName,
     isElectionPast // Import directly from dataService
 } from '../services/dataService';
 import { Candidate, Office, /* BallotEntry, */ OfficeElectionResults, BallotMeasure, CandidateSelection, /* MeasureStance, */ Cycle, ReminderSettings } from '../types'; // Removed unused imports
 import { TrashIcon, UserCircleIcon, ArrowPathIcon, CheckBadgeIcon, ArrowDownTrayIcon, CalendarDaysIcon, LockClosedIcon, ChartBarIcon, InformationCircleIcon, DocumentCheckIcon, HandThumbUpIcon, HandThumbDownIcon, NoSymbolIcon, BellAlertIcon, PencilSquareIcon, CheckCircleIcon as SolidCheckCircleIcon } from '@heroicons/react/24/outline';
+import SwipeableBallotItem from '../components/SwipeableBallotItem';
+import Confetti from 'react-confetti';
 import ElectionResultsDisplay from '../components/election/ElectionResultsDisplay'; 
 import { ReminderSetupModal } from '../components/reminders/ReminderSetupModal';
 
@@ -45,6 +48,7 @@ const MyBallotPage: React.FC = () => {
   } = useBallot();
   
   const [showSaveConfirmation, setShowSaveConfirmation] = useState(false);
+  const [confettiShown, setConfettiShown] = useState(false);
   const [electionResults, setElectionResults] = useState<OfficeElectionResults[]>([]);
   const [isReminderModalOpen, setIsReminderModalOpen] = useState(false);
   const [currentElectionCycleDetails, setCurrentElectionCycleDetails] = useState<Cycle | null>(null);
@@ -139,6 +143,27 @@ const MyBallotPage: React.FC = () => {
   for (const raceKey in groupedBallotByOffice) {
     groupedBallotByOffice[raceKey].entries.sort((a, b) => a.candidate.ballotOrder - b.candidate.ballotOrder);
   }
+
+  const totalRacesForElection = useMemo(() => {
+    if (!selectedElectionDate) return 0;
+    const cycle = getCycleByElectionDate(selectedElectionDate);
+    if (!cycle) return 0;
+    const candidatesForCycle = getAllCandidates().filter(c => c.cycleId === cycle.id);
+    const uniqueRaces = new Set(candidatesForCycle.map(c => `${c.officeId}-${c.district || 'no-district'}`));
+    return uniqueRaces.size;
+  }, [selectedElectionDate]);
+
+  const ballotIsComplete = populatedCandidateSelections.length >= totalRacesForElection && totalRacesForElection > 0;
+
+  const [showConfetti, setShowConfetti] = useState(false);
+
+  useEffect(() => {
+    if (ballotIsComplete && !confettiShown) {
+      setShowConfetti(true);
+      setConfettiShown(true);
+      setTimeout(() => setShowConfetti(false), 5000);
+    }
+  }, [ballotIsComplete, confettiShown]);
   
   const handleSaveBallot = () => {
     setShowSaveConfirmation(true);
@@ -266,7 +291,11 @@ const MyBallotPage: React.FC = () => {
                                     candidateDisplayName += ` / ${candidate.runningMateName}`;
                                 }
                                 return (
-                                    <div key={`${selectedElectionDate}-candidate-${candidate.id}`} className="bg-slate-100 p-4 rounded-lg shadow-sm flex items-center justify-between transition-all hover:shadow-md border border-slate-100/30 mb-3">
+                                    <SwipeableBallotItem
+                                        key={`${selectedElectionDate}-candidate-${candidate.id}`}
+                                        onRemove={() => removeCandidateSelection(office.id, district, selectedElectionDate)}
+                                    >
+                                    <div className="bg-slate-100 p-4 rounded-lg shadow-sm flex items-center justify-between transition-all hover:shadow-md border border-slate-100/30 mb-3">
                                         <div>
                                             <p className="text-md text-midnight-navy/70">
                                             {candidate.ballotOrder > 0 && <span className="font-semibold mr-1">(#{candidate.ballotOrder})</span>}
@@ -290,6 +319,7 @@ const MyBallotPage: React.FC = () => {
                                             </button>
                                         )}
                                     </div>
+                                    </SwipeableBallotItem>
                                 );
                             })}
                         </div>
@@ -405,13 +435,14 @@ const MyBallotPage: React.FC = () => {
         </div>
       )}
       {showSaveConfirmation && (
-        <div 
+        <div
             className="fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 transition-opacity duration-300 ease-in-out"
             role="alert"
         >
             Ballot for {electionDisplayName} saved successfully!
         </div>
       )}
+      {showConfetti && <Confetti recycle={false} />} 
        {isReminderModalOpen && currentElectionCycleDetails && (
         <ReminderSetupModal
           isOpen={isReminderModalOpen}
