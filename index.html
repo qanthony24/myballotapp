@@ -8,39 +8,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=Nunito+Sans:wght@600;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="./tailwind.config.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="./assets/styles.css">
-  
+
   <script>
     // IMPORTANT: process.env.API_KEY is assumed to be available in the execution environment.
     // Do NOT mock or define process.env here.
-
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            // New Palette
-            'civic-blue': '#2155FF',
-            'sunlight-gold': '#F7B339',
-            'midnight-navy': '#1A2138',
-            'slate-100': '#F5F7FA',
-
-            // Existing - can be phased out or aliased if needed
-            'brand-red': '#C7002B',
-            'brand-dark-blue': '#1E3A5F', // Consider replacing with civic-blue or midnight-navy
-            'brand-medium-blue': '#5A7698',
-            'brand-light-blue-grey': '#A8B4C3',
-            'brand-off-white': '#E9EAEF', // Consider replacing with slate-100
-          },
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            display: ['"Nunito Sans"', 'sans-serif'], 
-            heading: ['"Archivo Black"', 'sans-serif'], // Added Archivo Black for headings
-            mono: ['"Roboto Mono"', 'monospace'] 
-          }
-        }
-      }
-    }
   </script>
 </head>
 <body class="bg-slate-100 font-sans text-midnight-navy"> <!-- Updated body classes -->
