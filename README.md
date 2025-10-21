@@ -72,3 +72,20 @@ Examples:
 - `import { getCandidateById } from 'services/dataService';`
 - `import { Candidate } from 'types';`
 - `import { OFFICES_DATA } from 'constants';`
+
+## Accessibility
+
+Run `npm run contrast` to verify color contrast for theme combinations. The
+script generates a `contrast-results.json` file using
+`@adobe/color-contrast-analyzer`.
+
+| Text Color      | Background     | Ratio | AA  | AAA |
+|-----------------|----------------|------:|:---:|:---:|
+| midnight-navy   | slate-100      | 14.84 | ✅ | ✅ |
+| slate-100       | midnight-navy  | 14.84 | ✅ | ✅ |
+| civic-blue      | slate-100      | 5.14  | ✅ | ❌ |
+| slate-100       | civic-blue     | 5.14  | ✅ | ❌ |
+| sunlight-gold   | midnight-navy  | 8.69  | ✅ | ✅ |
+| midnight-navy   | sunlight-gold  | 8.69  | ✅ | ✅ |
+| sunlight-gold   | civic-blue     | 3.01  | ❌ | ❌ |
+| civic-blue      | sunlight-gold  | 3.01  | ❌ | ❌ |
