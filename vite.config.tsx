@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => {
       define: {
         'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
         'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'process.env.UI_REFRESH': JSON.stringify(env.UI_REFRESH ?? 'true')
+        'process.env.VITE_UI_REFRESH': JSON.stringify(env.VITE_UI_REFRESH ?? 'true')
       },
       resolve: {
         alias: {

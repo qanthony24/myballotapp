@@ -40,7 +40,7 @@ const AppRoutes: React.FC = () => {
 };
 
 const App: React.FC = () => {
-  const uiRefresh = process.env.UI_REFRESH !== 'false';
+  const uiRefresh = import.meta.env.VITE_UI_REFRESH !== 'false';
   const HeaderComponent = uiRefresh ? ShrinkHeader : Header;
 
   return (
