@@ -21,3 +21,18 @@ The app is served at `http://localhost:5173/`. See `package.json` for standard s
 - **No ESLint**: The project does not have ESLint configured.
 - **Firebase Auth**: Login/signup features require the Firebase project (`myballot-app`) to be active and accept requests from `localhost`. Auth-gated pages (`/my-ballot`, `/profile`, `/onboarding`) redirect to `/auth` when not logged in.
 - **Gemini AI Q&A**: Optional. Requires a `GEMINI_API_KEY` in a `.env` file. Without it, the rest of the app works normally.
+
+### Data pipeline
+
+The `data-pipeline/` directory contains a Node.js/TypeScript CLI for fetching ballot data from the Google Civic Information API. See `docs/DATA_SOURCES.md` for full details.
+
+```bash
+# List available elections
+GOOGLE_CIVIC_API_KEY=<key> npx tsx data-pipeline/src/runner.ts --list-elections
+
+# Fetch and normalize contest data
+GOOGLE_CIVIC_API_KEY=<key> npx tsx data-pipeline/src/runner.ts \
+  --address "600 E Trade St Charlotte NC" --election-id 9505
+```
+
+Output goes to `data/contests/`. The debug route at `/#/debug/ballot-feed` reads these JSON files. The API key must **never** be committed or sent to the browser. The pipeline uses file-based caching in `data/.cache/` (gitignored, 24h TTL).
