@@ -1,0 +1,140 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://myballot.app/schemas/contest_v1.json",
+  "title": "MyBallot Contest v1",
+  "description": "Normalized contest/race record based on VIP 5.2 Contest, extended for MyBallot.",
+  "type": "object",
+  "required": ["id", "type", "office", "electionId", "electionDate", "source", "fetchedAt"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Deterministic OCD-style identifier: {electionId}:{ocdDivisionId}:{officeSlug}"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["General", "Primary", "Runoff", "Referendum", "Special"],
+      "description": "Contest type, following VIP 5.2 ContestType."
+    },
+    "office": {
+      "type": "string",
+      "description": "Human-readable office name, e.g. 'US Senate', 'Mayor-President'."
+    },
+    "officeSlug": {
+      "type": "string",
+      "description": "URL-safe slug derived from office name."
+    },
+    "ballotTitle": {
+      "type": ["string", "null"],
+      "description": "Optional ballot title if different from office name."
+    },
+    "electionId": {
+      "type": "string",
+      "description": "Upstream election identifier (Google Civic electionId or internal)."
+    },
+    "electionDate": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO 8601 date of the election, e.g. '2026-03-03'."
+    },
+    "electionName": {
+      "type": "string",
+      "description": "Human-readable election name."
+    },
+    "district": {
+      "type": "object",
+      "description": "Geographic/political district for this contest.",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "scope": {
+          "type": ["string", "null"],
+          "enum": ["national", "statewide", "congressional", "stateUpper", "stateLower", "countywide", "judicial", "schoolBoard", "citywide", "township", "countyCouncil", "cityCouncil", "ward", "special", null]
+        },
+        "ocdDivisionId": {
+          "type": ["string", "null"],
+          "description": "Open Civic Data division ID, e.g. 'ocd-division/country:us/state:la/parish:east_baton_rouge'."
+        }
+      }
+    },
+    "numberElected": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 1,
+      "description": "How many seats are filled by this contest."
+    },
+    "candidates": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Candidate" },
+      "description": "Candidates running in this contest (empty for referenda)."
+    },
+    "referendumInfo": {
+      "type": ["object", "null"],
+      "description": "Present only when type == 'Referendum'.",
+      "properties": {
+        "title": { "type": "string" },
+        "subtitle": { "type": ["string", "null"] },
+        "brief": { "type": ["string", "null"] },
+        "fullText": { "type": ["string", "null"] },
+        "url": { "type": ["string", "null"] },
+        "ballotResponses": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "proStatement": { "type": ["string", "null"] },
+        "conStatement": { "type": ["string", "null"] }
+      }
+    },
+    "source": {
+      "type": "string",
+      "enum": ["google-civic", "manual", "sos-la", "vip-feed"],
+      "description": "Which extractor produced this record."
+    },
+    "sourceMetadata": {
+      "type": "object",
+      "description": "Opaque bag of source-specific metadata.",
+      "additionalProperties": true
+    },
+    "fetchedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of when this record was fetched/created."
+    },
+    "contentHash": {
+      "type": "string",
+      "description": "SHA-256 hex digest of the normalized payload (excluding fetchedAt and contentHash)."
+    },
+    "deleted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Soft-delete flag set when a contest disappears from the upstream source."
+    }
+  },
+  "definitions": {
+    "Candidate": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "party": { "type": ["string", "null"] },
+        "candidateUrl": { "type": ["string", "null"] },
+        "photoUrl": { "type": ["string", "null"] },
+        "email": { "type": ["string", "null"] },
+        "phone": { "type": ["string", "null"] },
+        "channels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string" },
+              "id": { "type": "string" }
+            }
+          }
+        },
+        "orderOnBallot": {
+          "type": ["integer", "null"],
+          "description": "Ballot placement order if known."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "elections": [
+    {
+      "id": "2000",
+      "name": "VIP Test Election",
+      "electionDay": "2031-12-06",
+      "ocdDivisionId": "ocd-division/country:us"
+    },
+    {
+      "id": "9447",
+      "name": "Illinois Primary Election",
+      "electionDay": "2026-03-17",
+      "ocdDivisionId": "ocd-division/country:us/state:il"
+    },
+    {
+      "id": "9453",
+      "name": "Texas Republican Primary Election",
+      "electionDay": "2026-03-03",
+      "ocdDivisionId": "ocd-division/country:us/state:tx"
+    },
+    {
+      "id": "9505",
+      "name": "North Carolina Primary Election",
+      "electionDay": "2026-03-03",
+      "ocdDivisionId": "ocd-division/country:us/state:nc"
+    },
+    {
+      "id": "11157",
+      "name": "Pennsylvania Special Election - State House District 22 and State House District 42",
+      "electionDay": "2026-02-24",
+      "ocdDivisionId": "ocd-division/country:us/state:pa"
+    },
+    {
+      "id": "11199",
+      "name": "Texas Democratic Primary Election",
+      "electionDay": "2026-03-03",
+      "ocdDivisionId": "ocd-division/country:us/state:tx"
+    }
+  ],
+  "kind": "civicinfo#electionsQueryResponse"
+}
