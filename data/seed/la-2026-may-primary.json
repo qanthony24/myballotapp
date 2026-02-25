@@ -1,12 +1,12 @@
 {
-  "electionId": "la-2026-nov",
-  "electionName": "Louisiana 2026 Congressional General / Open Primary",
-  "electionDate": "2026-11-03",
+  "electionId": "la-2026-may-primary",
+  "electionName": "Louisiana 2026 Closed Party Primary",
+  "electionDate": "2026-05-16",
   "jurisdiction": "East Baton Rouge Parish, LA",
   "contests": [
     {
-      "office": "U.S. Senate",
-      "type": "General",
+      "office": "U.S. Senate (Republican Primary)",
+      "type": "Primary",
       "district": {
         "name": "Louisiana",
         "scope": "statewide",
@@ -16,15 +16,26 @@
         { "name": "Bill Cassidy", "party": "Republican", "isIncumbent": true, "candidateUrl": "https://www.billcassidy.com" },
         { "name": "Julia Letlow", "party": "Republican" },
         { "name": "John Fleming", "party": "Republican" },
-        { "name": "Mark Spencer", "party": "Republican" },
+        { "name": "Mark Spencer", "party": "Republican" }
+      ]
+    },
+    {
+      "office": "U.S. Senate (Democratic Primary)",
+      "type": "Primary",
+      "district": {
+        "name": "Louisiana",
+        "scope": "statewide",
+        "ocdDivisionId": "ocd-division/country:us/state:la"
+      },
+      "candidates": [
         { "name": "Nick Albares", "party": "Democratic" },
         { "name": "Gary Crockett", "party": "Democratic" },
         { "name": "Jamie Davis", "party": "Democratic" }
       ]
     },
     {
-      "office": "U.S. Representative, 6th District",
-      "type": "General",
+      "office": "U.S. Representative, 6th District (Democratic Primary)",
+      "type": "Primary",
       "district": {
         "name": "Louisiana 6th Congressional District",
         "scope": "congressional",
@@ -37,11 +48,11 @@
       ]
     },
     {
-      "office": "Justice of the Peace, Ward 2, District 3",
+      "office": "Family Court Judge (Special Election)",
       "type": "Special",
       "district": {
-        "name": "East Baton Rouge Parish Justice Court Ward 2, District 3",
-        "scope": "township",
+        "name": "East Baton Rouge Parish Family Court",
+        "scope": "judicial",
         "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge"
       },
       "candidates": []

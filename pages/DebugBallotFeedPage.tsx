@@ -84,35 +84,39 @@ const DebugBallotFeedPage: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const [manifestRes, contestsRes] = await Promise.allSettled([
-        fetch('/data/contests/manifest.json'),
-        loadContestFiles(),
-      ]);
+      const knownFiles = ['la-2026-may-primary', 'la-2026-nov'];
+      const allContests: ContestV1[] = [];
 
-      if (manifestRes.status === 'fulfilled' && manifestRes.value.ok) {
-        setManifest(await manifestRes.value.json());
+      for (const id of knownFiles) {
+        try {
+          const res = await fetch(`/data/contests/${id}.json`);
+          if (res.ok) {
+            const data: ContestV1[] = await res.json();
+            allContests.push(...data);
+          }
+        } catch { /* skip missing files */ }
       }
 
-      if (contestsRes.status === 'fulfilled') {
-        setContests(contestsRes.value);
-      } else {
-        setError('No pipeline data found. Run the pipeline first:\n  GOOGLE_CIVIC_API_KEY=... npx tsx data-pipeline/src/runner.ts --address "..." --election-id ...');
+      if (allContests.length === 0) {
+        setError('No pipeline data found. Run the pipeline first:\n  npx tsx data-pipeline/src/runner.ts --source manual');
+        return;
+      }
+
+      setContests(allContests);
+
+      const manifestRes = await fetch('/data/contests/manifest.json');
+      if (manifestRes.ok) {
+        const m: Manifest = await manifestRes.json();
+        m.totalContests = allContests.filter(c => !c.deleted).length;
+        m.totalCandidates = allContests.filter(c => !c.deleted).reduce((s, c) => s + c.candidates.length, 0);
+        m.electionName = 'Louisiana 2026 Elections';
+        setManifest(m);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load data');
     } finally {
       setLoading(false);
     }
-  }
-
-  async function loadContestFiles(): Promise<ContestV1[]> {
-    const manifestRes = await fetch('/data/contests/manifest.json');
-    if (!manifestRes.ok) throw new Error('No manifest found');
-    const manifestData: Manifest = await manifestRes.json();
-
-    const dataRes = await fetch(`/data/contests/${manifestData.electionId}.json`);
-    if (!dataRes.ok) throw new Error(`No data found for election ${manifestData.electionId}`);
-    return dataRes.json();
   }
 
   function toggleExpand(id: string) {

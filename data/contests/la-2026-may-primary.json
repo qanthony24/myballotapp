@@ -1,13 +1,13 @@
 [
   {
-    "id": "la-2026-nov:ocd-division/country:us/state:la:u-s-senate",
-    "type": "General",
-    "office": "U.S. Senate",
-    "officeSlug": "u-s-senate",
+    "id": "la-2026-may-primary:ocd-division/country:us/state:la:u-s-senate-republican-primary",
+    "type": "Primary",
+    "office": "U.S. Senate (Republican Primary)",
+    "officeSlug": "u-s-senate-republican-primary",
     "ballotTitle": null,
-    "electionId": "la-2026-nov",
-    "electionDate": "2026-11-03",
-    "electionName": "Louisiana 2026 Congressional General / Open Primary",
+    "electionId": "la-2026-may-primary",
+    "electionDate": "2026-05-16",
+    "electionName": "Louisiana 2026 Closed Party Primary",
     "district": {
       "name": "Louisiana",
       "scope": "statewide",
@@ -54,7 +54,33 @@
         "phone": null,
         "channels": [],
         "orderOnBallot": 4
-      },
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:45:57.259Z",
+    "contentHash": "e9fb2202c9b98b40e600d2942d045109808733c5a68e88a1c72749facf21c201",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-may-primary:ocd-division/country:us/state:la:u-s-senate-democratic-primary",
+    "type": "Primary",
+    "office": "U.S. Senate (Democratic Primary)",
+    "officeSlug": "u-s-senate-democratic-primary",
+    "ballotTitle": null,
+    "electionId": "la-2026-may-primary",
+    "electionDate": "2026-05-16",
+    "electionName": "Louisiana 2026 Closed Party Primary",
+    "district": {
+      "name": "Louisiana",
+      "scope": "statewide",
+      "ocdDivisionId": "ocd-division/country:us/state:la"
+    },
+    "numberElected": 1,
+    "candidates": [
       {
         "name": "Nick Albares",
         "party": "Democratic",
@@ -63,7 +89,7 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 5
+        "orderOnBallot": 1
       },
       {
         "name": "Gary Crockett",
@@ -73,7 +99,7 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 6
+        "orderOnBallot": 2
       },
       {
         "name": "Jamie Davis",
@@ -83,7 +109,7 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 7
+        "orderOnBallot": 3
       }
     ],
     "referendumInfo": null,
@@ -91,19 +117,19 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-25T00:45:57.265Z",
-    "contentHash": "e8c82a00be720b11e5a2533be161a4c20d0679d43c0626f33fd109e9ed5d5004",
+    "fetchedAt": "2026-02-25T00:45:57.259Z",
+    "contentHash": "9c76e4ae919bbb0349d2ae709d5deb9cb3806e37845e2aa717da82050186d3d1",
     "deleted": false
   },
   {
-    "id": "la-2026-nov:ocd-division/country:us/state:la/cd:6:u-s-representative-6th-district",
-    "type": "General",
-    "office": "U.S. Representative, 6th District",
-    "officeSlug": "u-s-representative-6th-district",
+    "id": "la-2026-may-primary:ocd-division/country:us/state:la/cd:6:u-s-representative-6th-district-democratic-primary",
+    "type": "Primary",
+    "office": "U.S. Representative, 6th District (Democratic Primary)",
+    "officeSlug": "u-s-representative-6th-district-democratic-primary",
     "ballotTitle": null,
-    "electionId": "la-2026-nov",
-    "electionDate": "2026-11-03",
-    "electionName": "Louisiana 2026 Congressional General / Open Primary",
+    "electionId": "la-2026-may-primary",
+    "electionDate": "2026-05-16",
+    "electionName": "Louisiana 2026 Closed Party Primary",
     "district": {
       "name": "Louisiana 6th Congressional District",
       "scope": "congressional",
@@ -147,22 +173,22 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-25T00:45:57.265Z",
-    "contentHash": "7dc095f2b0586d4d5e845e1f7077f8d6ed895933009f741895ac67d9f0d7b9c1",
+    "fetchedAt": "2026-02-25T00:45:57.259Z",
+    "contentHash": "462b525ba66fdc07c83f2394c9b21608a491fb33677d90153ab305a2bed2063b",
     "deleted": false
   },
   {
-    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge:justice-of-the-peace-ward-2-district-3",
+    "id": "la-2026-may-primary:ocd-division/country:us/state:la/parish:east_baton_rouge:family-court-judge-special-election",
     "type": "Special",
-    "office": "Justice of the Peace, Ward 2, District 3",
-    "officeSlug": "justice-of-the-peace-ward-2-district-3",
+    "office": "Family Court Judge (Special Election)",
+    "officeSlug": "family-court-judge-special-election",
     "ballotTitle": null,
-    "electionId": "la-2026-nov",
-    "electionDate": "2026-11-03",
-    "electionName": "Louisiana 2026 Congressional General / Open Primary",
+    "electionId": "la-2026-may-primary",
+    "electionDate": "2026-05-16",
+    "electionName": "Louisiana 2026 Closed Party Primary",
     "district": {
-      "name": "East Baton Rouge Parish Justice Court Ward 2, District 3",
-      "scope": "township",
+      "name": "East Baton Rouge Parish Family Court",
+      "scope": "judicial",
       "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge"
     },
     "numberElected": 1,
@@ -172,8 +198,8 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-25T00:45:57.265Z",
-    "contentHash": "8020efc5364d85a722bf19c1004062cfd007583371ddcab9028f74711192b598",
+    "fetchedAt": "2026-02-25T00:45:57.259Z",
+    "contentHash": "c88471f6b9a6e53866541f6767c73cd57067f253058363293707e689eb768661",
     "deleted": false
   }
 ]
