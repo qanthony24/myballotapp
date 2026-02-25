@@ -34,11 +34,28 @@ stack them without touching the UI layer.
 - No candidate bios, survey responses, or photos beyond the occasional
   `photoUrl` / `candidateUrl`.
 
-### Manual Entry (`manual`)
+### Manual Entry (`manual`) — PRIMARY SOURCE FOR LOUISIANA
 
-Planned. Will import from a JSON/CSV maintained by the MyBallot editorial
-team. Fills gaps not covered by the API (e.g. candidate bios, survey
-responses, local races without VIP data).
+| Field           | Value |
+|-----------------|-------|
+| Seed dir        | `data/seed/` |
+| Format          | JSON files matching `SeedFile` TypeScript interface |
+| Coverage        | Louisiana / East Baton Rouge Parish |
+
+This is the **primary data source** for Louisiana elections because Google
+Civic API does not currently carry Louisiana election data (no VIP feed).
+
+The seed file `data/seed/la-2026-nov.json` contains **17 contests** and
+**39 real candidates** for the November 3, 2026 General Election:
+
+- **U.S. Senate** — Cassidy, Letlow, Fleming, Spencer, Davis
+- **U.S. House 5th District** — Miguez, Cathey, Edmonds, McMakin, Cordell, Foy
+- **U.S. House 6th District** — Cleo Fields (incumbent)
+- **Mayor-President** — Broome + 8 challengers (9 total)
+- **Metro Council Districts 1–12** — all qualified candidates
+- **Family Court Judge** — special election (candidates TBD)
+
+To add new races or candidates, edit the seed file and re-run the pipeline.
 
 ### Louisiana Secretary of State (`sos-la`)
 
@@ -80,20 +97,19 @@ A dedicated extractor will parse their feeds when available.
 ## Running the Pipeline
 
 ```bash
-# Set the API key (never committed to source)
-export GOOGLE_CIVIC_API_KEY=<your-key>
+# Process Louisiana seed data (default, no API key needed)
+npx tsx data-pipeline/src/runner.ts --source manual
 
-# List available elections
-npx tsx data-pipeline/src/runner.ts --list-elections
+# List available seed elections
+npx tsx data-pipeline/src/runner.ts --source manual --list-elections
 
-# Fetch contest data for a specific address and election
-npx tsx data-pipeline/src/runner.ts \
-  --address "600 E Trade St Charlotte NC" \
-  --election-id 9505
+# Google Civic (when LA data becomes available)
+GOOGLE_CIVIC_API_KEY=<key> npx tsx data-pipeline/src/runner.ts \
+  --source google-civic --address "..." --election-id ...
 
 # Output:
-#   data/contests/9505.json      ← normalized contest records
-#   data/contests/manifest.json  ← metadata summary
+#   data/contests/la-2026-nov.json  ← normalized contest records
+#   data/contests/manifest.json     ← metadata summary
 ```
 
 ## Schema
