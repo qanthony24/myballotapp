@@ -18,6 +18,9 @@ import OnboardingPage from './pages/OnboardingPage';
 import CandidateProfilePage from './pages/CandidateProfilePage';
 import BallotMeasureDetailPage from './pages/BallotMeasureDetailPage';
 import DebugBallotFeedPage from './pages/DebugBallotFeedPage';
+import AdminCandidatesPage from './pages/admin/AdminCandidatesPage';
+import AdminCandidateEditPage from './pages/admin/AdminCandidateEditPage';
+import AdminSetupPage from './pages/admin/AdminSetupPage';
 
 const AppRoutes: React.FC = () => {
   const { currentUser } = useAuth();
@@ -35,7 +38,9 @@ const AppRoutes: React.FC = () => {
       <Route path="/election-info" element={<ElectionInfoPage />} />
       <Route path="/onboarding" element={currentUser ? <OnboardingPage /> : <Navigate to="/auth" />} />
       <Route path="/debug/ballot-feed" element={<DebugBallotFeedPage />} />
-      {/* Add a catch-all route or a 404 page if desired */}
+      <Route path="/admin" element={currentUser ? <AdminSetupPage /> : <Navigate to="/auth" />} />
+      <Route path="/admin/candidates" element={currentUser ? <AdminCandidatesPage /> : <Navigate to="/auth" />} />
+      <Route path="/admin/candidates/:id" element={currentUser ? <AdminCandidateEditPage /> : <Navigate to="/auth" />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
