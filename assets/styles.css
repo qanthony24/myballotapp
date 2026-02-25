@@ -47,7 +47,7 @@
   margin-top: 0.5rem;
   padding: 0.5rem;
   font-size: 0.9rem;
-  border: 1px solid var(--midnight-navy / 0.3); /* Was brand-light-blue-grey */
+  border: 1px solid rgba(26, 33, 56, 0.3); /* Was brand-light-blue-grey */
   border-radius: 0.375rem; /* rounded-md */
   box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
   background-color: #FFFFFF; 
@@ -58,7 +58,7 @@
 .note-input:focus {
   outline: none;
   border-color: var(--civic-blue); /* Was brand-red */
-  box-shadow: 0 0 0 2px var(--civic-blue / 0.2); /* Was brand-red focus ring */
+  box-shadow: 0 0 0 2px rgba(33, 85, 255, 0.2); /* Was brand-red focus ring */
 }
 
 
@@ -72,18 +72,18 @@
   color: var(--midnight-navy); /* Was brand-dark-blue */
   vertical-align: top;
   white-space: pre-wrap;
-  border-left: 1px solid var(--midnight-navy / 0.2); /* Was brand-light-blue-grey */
+  border-left: 1px solid rgba(26, 33, 56, 0.2); /* Was brand-light-blue-grey */
 }
 
 .compare-notes-cell em {
-  color: var(--midnight-navy / 0.7); /* Was brand-medium-blue */
+  color: rgba(26, 33, 56, 0.7); /* Was brand-medium-blue */
 }
 
 /* Styles for My Private Notes section on Profile Page */
 .notes-section {
   margin-top: 2rem; /* my-8 */
   padding-top: 1.5rem; /* pt-6 */
-  border-top: 1px solid var(--midnight-navy / 0.2); /* Was border-brand-light-blue-grey */
+  border-top: 1px solid rgba(26, 33, 56, 0.2); /* Was border-brand-light-blue-grey */
 }
 
 .note-entry {
@@ -91,12 +91,12 @@
   padding: 1rem; /* p-4 */
   border-radius: 0.375rem; /* rounded-md */
   margin-bottom: 1rem; /* mb-4 */
-  border: 1px solid var(--midnight-navy / 0.2); /* Was border-brand-light-blue-grey */
+  border: 1px solid rgba(26, 33, 56, 0.2); /* Was border-brand-light-blue-grey */
 }
 
 .note-date {
   font-size: 0.75rem; /* text-xs */
-  color: var(--midnight-navy / 0.7); /* Was brand-medium-blue */
+  color: rgba(26, 33, 56, 0.7); /* Was brand-medium-blue */
   margin-bottom: 0.25rem; /* mb-1 */
 }
 
@@ -120,7 +120,7 @@
   border: 1px solid var(--civic-blue);
 }
 .note-actions .edit-btn:hover {
-  background-color: var(--civic-blue / 0.1);
+  background-color: rgba(33, 85, 255, 0.1);
 }
 
 .note-actions .delete-btn {
@@ -128,14 +128,14 @@
   border: 1px solid var(--sunlight-gold);
 }
 .note-actions .delete-btn:hover {
-  background-color: var(--sunlight-gold / 0.1); 
+  background-color: rgba(247, 179, 57, 0.1); 
 }
 
 .quick-note-area {
   margin-top: 0.5rem;
   padding: 0.5rem;
   background-color: var(--slate-100); /* Was a very light grey */
-  border: 1px solid var(--midnight-navy / 0.2); /* Was Light border */
+  border: 1px solid rgba(26, 33, 56, 0.2); /* Was Light border */
   border-radius: 0.25rem;
 }
 
@@ -148,10 +148,10 @@
 
 .quick-note-latest {
   font-size: 0.8rem;
-  color: var(--midnight-navy / 0.7); /* Was brand-medium-blue */
+  color: rgba(26, 33, 56, 0.7); /* Was brand-medium-blue */
   margin-bottom: 0.5rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px dashed var(--midnight-navy / 0.3); /* Was A8B4C3 */
+  border-bottom: 1px dashed rgba(26, 33, 56, 0.3); /* Was A8B4C3 */
 }
 .quick-note-latest strong {
  color: var(--midnight-navy); /* Was brand-dark-blue */
@@ -172,7 +172,7 @@
   background-color: #fff; /* Or var(--slate-100) if preferred for consistency */
   border-radius: 0.5rem; /* rounded-lg */
   box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); /* shadow-xl */
-  border: 1px solid var(--midnight-navy / 0.2); /* Was brand-light-blue-grey */
+  border: 1px solid rgba(26, 33, 56, 0.2); /* Was brand-light-blue-grey */
 }
 
 .auth-container h1, .onboarding-container h1, .profile-container h1 {
@@ -196,7 +196,7 @@
   display: block;
   width: 100%;
   padding: 0.75rem; /* p-3 */
-  border: 1px solid var(--midnight-navy / 0.3); /* Was brand-light-blue-grey */
+  border: 1px solid rgba(26, 33, 56, 0.3); /* Was brand-light-blue-grey */
   border-radius: 0.375rem; /* rounded-md */
   color: var(--midnight-navy); /* Was brand-dark-blue */
   background-color: #FFFFFF; 
@@ -205,10 +205,10 @@
 .form-input:focus {
   outline: none;
   border-color: var(--civic-blue); /* Was brand-red */
-  box-shadow: 0 0 0 3px var(--civic-blue / 0.2); /* Was brand-red focus ring */
+  box-shadow: 0 0 0 3px rgba(33, 85, 255, 0.2); /* Was brand-red focus ring */
 }
 .form-input::placeholder {
-  color: var(--midnight-navy / 0.5); /* Was brand-light-blue-grey */
+  color: rgba(26, 33, 56, 0.5); /* Was brand-light-blue-grey */
 }
 
 .form-label {
@@ -226,7 +226,7 @@
   display: block;
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid var(--midnight-navy / 0.3); /* Was A8B4C3 */
+  border: 1px solid rgba(26, 33, 56, 0.3); /* Was A8B4C3 */
   border-radius: 0.375rem;
   color: var(--midnight-navy); /* Was #1E3A5F */
   background-color: #FFFFFF;
@@ -240,7 +240,7 @@
 .form-select:focus {
   outline: none;
   border-color: var(--civic-blue); /* Was brand-red */
-  box-shadow: 0 0 0 3px var(--civic-blue / 0.2); /* Was brand-red focus ring */
+  box-shadow: 0 0 0 3px rgba(33, 85, 255, 0.2); /* Was brand-red focus ring */
 }
 
 
@@ -258,7 +258,7 @@
   transition: background-color 0.2s ease-in-out, opacity 0.2s ease-in-out;
 }
 .btn-primary:hover {
-  background-color: var(--civic-blue / 0.8); /* Darken civic-blue */
+  background-color: rgba(33, 85, 255, 0.8); /* Darken civic-blue */
 }
 .btn-primary:disabled {
   opacity: 0.6;
@@ -279,7 +279,7 @@
   transition: background-color 0.2s ease-in-out;
 }
 .btn-secondary:hover {
-  background-color: var(--midnight-navy / 0.8); /* Darken midnight-navy */
+  background-color: rgba(26, 33, 56, 0.8); /* Darken midnight-navy */
 }
 
 .btn-outline {
@@ -296,7 +296,7 @@
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 .btn-outline:hover {
-  background-color: var(--civic-blue / 0.1); /* Light civic-blue background */
+  background-color: rgba(33, 85, 255, 0.1); /* Light civic-blue background */
   color: var(--civic-blue);
 }
 
@@ -305,14 +305,14 @@
   display: flex;
   align-items: center;
   text-align: center;
-  color: var(--midnight-navy / 0.7); /* Was brand-medium-blue */
+  color: rgba(26, 33, 56, 0.7); /* Was brand-medium-blue */
   margin: 1.5rem 0; /* my-6 */
 }
 .social-login-divider::before,
 .social-login-divider::after {
   content: '';
   flex: 1;
-  border-bottom: 1px solid var(--midnight-navy / 0.3); /* Was brand-light-blue-grey */
+  border-bottom: 1px solid rgba(26, 33, 56, 0.3); /* Was brand-light-blue-grey */
 }
 .social-login-divider:not(:empty)::before {
   margin-right: .25em;
@@ -329,7 +329,7 @@
   padding: 0.6rem 1rem;
   font-weight: 500;
   border-radius: 0.375rem;
-  border: 1px solid var(--midnight-navy / 0.3); /* Was A8B4C3 */
+  border: 1px solid rgba(26, 33, 56, 0.3); /* Was A8B4C3 */
   transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
   margin-bottom: 0.75rem; /* mb-3 */
   background-color: white;
@@ -341,7 +341,7 @@
   width: 1.25rem; /* w-5 */
 }
 .social-btn:hover {
-  background-color: var(--slate-100 / 0.5); /* Was gray-50 */
+  background-color: rgba(245, 247, 250, 0.5); /* Was gray-50 */
   border-color: var(--civic-blue); /* Was #5A7698 */
 }
 
@@ -381,7 +381,7 @@
   padding: 0.5rem;
 }
 .onboarding-navigation .btn-link:hover {
-  color: var(--civic-blue / 0.8); /* Was brand-dark-blue */
+  color: rgba(33, 85, 255, 0.8); /* Was brand-dark-blue */
 }
 
 .onboarding-checkbox-group label {
@@ -394,8 +394,8 @@
   transition: background-color 0.2s, border-color 0.2s;
 }
 .onboarding-checkbox-group label:hover {
-  background-color: var(--slate-100 / 0.5); /* Was f8f9fa */
-  border-color: var(--midnight-navy / 0.3); /* Was A8B4C3 */
+  background-color: rgba(245, 247, 250, 0.5); /* Was f8f9fa */
+  border-color: rgba(26, 33, 56, 0.3); /* Was A8B4C3 */
 }
 .onboarding-checkbox-group input[type="checkbox"] {
   margin-right: 0.5rem;
@@ -421,10 +421,10 @@
   color: var(--midnight-navy); /* Was brand-dark-blue */
 }
 .profile-field span {
-  color: var(--midnight-navy / 0.8); /* Was brand-medium-blue */
+  color: rgba(26, 33, 56, 0.8); /* Was brand-medium-blue */
 }
 .profile-field em { /* for 'Not specified' text */
-  color: var(--midnight-navy / 0.6); /* Was brand-light-blue-grey */
+  color: rgba(26, 33, 56, 0.6); /* Was brand-light-blue-grey */
 }
 
 .profile-data-grid {
@@ -458,7 +458,7 @@
 }
 .profile-email {
   font-size: 0.9rem;
-  color: var(--midnight-navy / 0.8); /* Was brand-medium-blue */
+  color: rgba(26, 33, 56, 0.8); /* Was brand-medium-blue */
 }
 
 /* Ensure body text uses Inter by default if not overridden by Tailwind */
