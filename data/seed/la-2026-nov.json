@@ -1,0 +1,233 @@
+{
+  "electionId": "la-2026-nov",
+  "electionName": "Louisiana 2026 General Election",
+  "electionDate": "2026-11-03",
+  "jurisdiction": "East Baton Rouge Parish, LA",
+  "contests": [
+    {
+      "office": "U.S. Senate",
+      "type": "General",
+      "district": {
+        "name": "Louisiana",
+        "scope": "statewide",
+        "ocdDivisionId": "ocd-division/country:us/state:la"
+      },
+      "candidates": [
+        { "name": "Bill Cassidy", "party": "Republican", "isIncumbent": true, "candidateUrl": "https://www.billcassidy.com" },
+        { "name": "Julia Letlow", "party": "Republican", "candidateUrl": "https://julialetlow.com" },
+        { "name": "John Fleming", "party": "Republican" },
+        { "name": "Mark Spencer", "party": "Republican" },
+        { "name": "Jamie Davis", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "U.S. Representative, 5th District",
+      "type": "General",
+      "district": {
+        "name": "Louisiana 5th Congressional District",
+        "scope": "congressional",
+        "ocdDivisionId": "ocd-division/country:us/state:la/cd:5"
+      },
+      "candidates": [
+        { "name": "Blake Miguez", "party": "Republican" },
+        { "name": "Stewart Cathey", "party": "Republican" },
+        { "name": "Rick Edmonds", "party": "Republican" },
+        { "name": "Dixon Wallace McMakin", "party": "Republican" },
+        { "name": "Misti Cordell", "party": "Republican" },
+        { "name": "Larry Foy", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "U.S. Representative, 6th District",
+      "type": "General",
+      "district": {
+        "name": "Louisiana 6th Congressional District",
+        "scope": "congressional",
+        "ocdDivisionId": "ocd-division/country:us/state:la/cd:6"
+      },
+      "candidates": [
+        { "name": "Cleo Fields", "party": "Democratic", "isIncumbent": true }
+      ]
+    },
+    {
+      "office": "Mayor-President",
+      "type": "General",
+      "district": {
+        "name": "East Baton Rouge Parish",
+        "scope": "countywide",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge"
+      },
+      "candidates": [
+        { "name": "Sharon Weston Broome", "party": "Democratic", "isIncumbent": true },
+        { "name": "Ted James", "party": "Democratic" },
+        { "name": "Tambra \"Tammy\" Cook", "party": "Republican" },
+        { "name": "Steve Myers", "party": "Republican" },
+        { "name": "Emile \"Sid\" Edwards", "party": "Republican" },
+        { "name": "Nathanial Hearn", "party": "Republican" },
+        { "name": "Ryan \"Bad Biddness\" Carter", "party": "Independent" },
+        { "name": "William \"Champagne\" Roundtree", "party": "Independent" },
+        { "name": "Gregory Taylor", "party": "Independent" }
+      ]
+    },
+    {
+      "office": "Metro Council, District 1",
+      "type": "General",
+      "district": {
+        "name": "Metro Council District 1",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:1"
+      },
+      "candidates": [
+        { "name": "Brandon Noel", "party": "Republican" },
+        { "name": "Gary Price", "party": "Republican" },
+        { "name": "Eric Smith", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "Metro Council, District 2",
+      "type": "General",
+      "district": {
+        "name": "Metro Council District 2",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:2"
+      },
+      "candidates": [
+        { "name": "Dina Johnson", "party": "Democratic" },
+        { "name": "Anthony Kenney", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "Metro Council, District 3",
+      "type": "General",
+      "district": {
+        "name": "Metro Council District 3",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:3"
+      },
+      "candidates": [
+        { "name": "Rowdy Gaudet", "party": "Republican" }
+      ]
+    },
+    {
+      "office": "Metro Council, District 4",
+      "type": "General",
+      "district": {
+        "name": "Metro Council District 4",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:4"
+      },
+      "candidates": [
+        { "name": "Aaron Moak", "party": "Republican" }
+      ]
+    },
+    {
+      "office": "Metro Council, District 5",
+      "type": "General",
+      "district": {
+        "name": "Metro Council District 5",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:5"
+      },
+      "candidates": [
+        { "name": "Redell Norman", "party": "Democratic" },
+        { "name": "Marcus Randall", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "Metro Council, District 6",
+      "type": "General",
+      "district": {
+        "name": "Metro Council District 6",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:6"
+      },
+      "candidates": [
+        { "name": "Clive Dunn Jr.", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "Metro Council, District 7",
+      "type": "General",
+      "district": {
+        "name": "Metro Council District 7",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:7"
+      },
+      "candidates": [
+        { "name": "Alfred Bell", "party": "Democratic" },
+        { "name": "Lamont Cole", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "Metro Council, District 8",
+      "type": "General",
+      "district": {
+        "name": "Metro Council District 8",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:8"
+      },
+      "candidates": [
+        { "name": "Denise Amoroso", "party": "Republican" }
+      ]
+    },
+    {
+      "office": "Metro Council, District 9",
+      "type": "General",
+      "district": {
+        "name": "Metro Council District 9",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:9"
+      },
+      "candidates": [
+        { "name": "Dwight Hudson", "party": "Republican" }
+      ]
+    },
+    {
+      "office": "Metro Council, District 10",
+      "type": "General",
+      "district": {
+        "name": "Metro Council District 10",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:10"
+      },
+      "candidates": [
+        { "name": "Carolyn Coleman", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "Metro Council, District 11",
+      "type": "General",
+      "district": {
+        "name": "Metro Council District 11",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:11"
+      },
+      "candidates": [
+        { "name": "Laura White \"Laurie\" Adams", "party": "Republican" },
+        { "name": "Pennie May Landry", "party": "No Party" }
+      ]
+    },
+    {
+      "office": "Metro Council, District 12",
+      "type": "General",
+      "district": {
+        "name": "Metro Council District 12",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:12"
+      },
+      "candidates": [
+        { "name": "Jennifer \"Jen\" Racca", "party": "Republican" }
+      ]
+    },
+    {
+      "office": "Family Court Judge (Special Election)",
+      "type": "Special",
+      "district": {
+        "name": "East Baton Rouge Parish",
+        "scope": "judicial",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge"
+      },
+      "candidates": []
+    }
+  ]
+}

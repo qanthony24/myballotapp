@@ -1,0 +1,833 @@
+[
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la:u-s-senate",
+    "type": "General",
+    "office": "U.S. Senate",
+    "officeSlug": "u-s-senate",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 General Election",
+    "district": {
+      "name": "Louisiana",
+      "scope": "statewide",
+      "ocdDivisionId": "ocd-division/country:us/state:la"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Bill Cassidy",
+        "party": "Republican",
+        "candidateUrl": "https://www.billcassidy.com",
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1
+      },
+      {
+        "name": "Julia Letlow",
+        "party": "Republican",
+        "candidateUrl": "https://julialetlow.com",
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 2
+      },
+      {
+        "name": "John Fleming",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 3
+      },
+      {
+        "name": "Mark Spencer",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 4
+      },
+      {
+        "name": "Jamie Davis",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 5
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:26:01.018Z",
+    "contentHash": "2df4dadf25ca0d513166bf78aa1a3949293058fa5dcb6cda1c352993dbff4fe7",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/cd:5:u-s-representative-5th-district",
+    "type": "General",
+    "office": "U.S. Representative, 5th District",
+    "officeSlug": "u-s-representative-5th-district",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 General Election",
+    "district": {
+      "name": "Louisiana 5th Congressional District",
+      "scope": "congressional",
+      "ocdDivisionId": "ocd-division/country:us/state:la/cd:5"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Blake Miguez",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1
+      },
+      {
+        "name": "Stewart Cathey",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 2
+      },
+      {
+        "name": "Rick Edmonds",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 3
+      },
+      {
+        "name": "Dixon Wallace McMakin",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 4
+      },
+      {
+        "name": "Misti Cordell",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 5
+      },
+      {
+        "name": "Larry Foy",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 6
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:26:01.018Z",
+    "contentHash": "a8a3df2d7776391c56736d110699a90e0fe6bdc9efe38803d7a342194bec3fbb",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/cd:6:u-s-representative-6th-district",
+    "type": "General",
+    "office": "U.S. Representative, 6th District",
+    "officeSlug": "u-s-representative-6th-district",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 General Election",
+    "district": {
+      "name": "Louisiana 6th Congressional District",
+      "scope": "congressional",
+      "ocdDivisionId": "ocd-division/country:us/state:la/cd:6"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Cleo Fields",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:26:01.018Z",
+    "contentHash": "bea9d3e8bb7a60d2a18ba0646f4878ff7136441d36ab6ac411dfffaf71ba557b",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge:mayor-president",
+    "type": "General",
+    "office": "Mayor-President",
+    "officeSlug": "mayor-president",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 General Election",
+    "district": {
+      "name": "East Baton Rouge Parish",
+      "scope": "countywide",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Sharon Weston Broome",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1
+      },
+      {
+        "name": "Ted James",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 2
+      },
+      {
+        "name": "Tambra \"Tammy\" Cook",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 3
+      },
+      {
+        "name": "Steve Myers",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 4
+      },
+      {
+        "name": "Emile \"Sid\" Edwards",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 5
+      },
+      {
+        "name": "Nathanial Hearn",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 6
+      },
+      {
+        "name": "Ryan \"Bad Biddness\" Carter",
+        "party": "Independent",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 7
+      },
+      {
+        "name": "William \"Champagne\" Roundtree",
+        "party": "Independent",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 8
+      },
+      {
+        "name": "Gregory Taylor",
+        "party": "Independent",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 9
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:26:01.018Z",
+    "contentHash": "62721d23a868c9146baa6c0f19f44bc2c0860fc309a9d3912e8047cb900fec63",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:1:metro-council-district-1",
+    "type": "General",
+    "office": "Metro Council, District 1",
+    "officeSlug": "metro-council-district-1",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 General Election",
+    "district": {
+      "name": "Metro Council District 1",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:1"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Brandon Noel",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1
+      },
+      {
+        "name": "Gary Price",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 2
+      },
+      {
+        "name": "Eric Smith",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 3
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:26:01.018Z",
+    "contentHash": "c5b6beb72719d7b2c5be49779b095b15bb08dc745531ae34716fa38dbe8bc4d9",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:2:metro-council-district-2",
+    "type": "General",
+    "office": "Metro Council, District 2",
+    "officeSlug": "metro-council-district-2",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 General Election",
+    "district": {
+      "name": "Metro Council District 2",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:2"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Dina Johnson",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1
+      },
+      {
+        "name": "Anthony Kenney",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 2
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:26:01.018Z",
+    "contentHash": "2a8dcd1c6551a6b70d24b0738c0a1d1f8afd76e4357af2690169b0ceef79d87d",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:3:metro-council-district-3",
+    "type": "General",
+    "office": "Metro Council, District 3",
+    "officeSlug": "metro-council-district-3",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 General Election",
+    "district": {
+      "name": "Metro Council District 3",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:3"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Rowdy Gaudet",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:26:01.018Z",
+    "contentHash": "c0c86f35bd114365d157c452d13a2321684a300d53ba9b9a2ced211ba43d7e9c",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:4:metro-council-district-4",
+    "type": "General",
+    "office": "Metro Council, District 4",
+    "officeSlug": "metro-council-district-4",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 General Election",
+    "district": {
+      "name": "Metro Council District 4",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:4"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Aaron Moak",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:26:01.018Z",
+    "contentHash": "439293cfe4a58e4314a310f128a335777128ff2681f17eb9a321551641e452fa",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:5:metro-council-district-5",
+    "type": "General",
+    "office": "Metro Council, District 5",
+    "officeSlug": "metro-council-district-5",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 General Election",
+    "district": {
+      "name": "Metro Council District 5",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:5"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Redell Norman",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1
+      },
+      {
+        "name": "Marcus Randall",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 2
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:26:01.018Z",
+    "contentHash": "20424b68779f6e20889eaa9c7b3cb7060a07dc85bcb3d56a8f1533c7302b513a",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:6:metro-council-district-6",
+    "type": "General",
+    "office": "Metro Council, District 6",
+    "officeSlug": "metro-council-district-6",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 General Election",
+    "district": {
+      "name": "Metro Council District 6",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:6"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Clive Dunn Jr.",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:26:01.018Z",
+    "contentHash": "84e63bb94a78f8e6e641115232fc8d7cd1bd97f18e6d309205de6fa5d0c4e431",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:7:metro-council-district-7",
+    "type": "General",
+    "office": "Metro Council, District 7",
+    "officeSlug": "metro-council-district-7",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 General Election",
+    "district": {
+      "name": "Metro Council District 7",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:7"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Alfred Bell",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1
+      },
+      {
+        "name": "Lamont Cole",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 2
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:26:01.018Z",
+    "contentHash": "92cb57ea76d1253511fe0069f594b385005af72379672863cd42a52ce56fa1b9",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:8:metro-council-district-8",
+    "type": "General",
+    "office": "Metro Council, District 8",
+    "officeSlug": "metro-council-district-8",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 General Election",
+    "district": {
+      "name": "Metro Council District 8",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:8"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Denise Amoroso",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:26:01.018Z",
+    "contentHash": "c576c35dfe6ffc5c0990799f0437c11f43afcbab1bb4827c7d927e8f408a6d7a",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:9:metro-council-district-9",
+    "type": "General",
+    "office": "Metro Council, District 9",
+    "officeSlug": "metro-council-district-9",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 General Election",
+    "district": {
+      "name": "Metro Council District 9",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:9"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Dwight Hudson",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:26:01.018Z",
+    "contentHash": "bfac871ad892ea6619730b888e59e4f4f9dec0bbdf9ed539881b74d9d3dbce43",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:10:metro-council-district-10",
+    "type": "General",
+    "office": "Metro Council, District 10",
+    "officeSlug": "metro-council-district-10",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 General Election",
+    "district": {
+      "name": "Metro Council District 10",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:10"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Carolyn Coleman",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:26:01.018Z",
+    "contentHash": "14e776d9ccc5746ebc028d2a57c630befe8e0d6435bd4f3c027e35db8dbf4081",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:11:metro-council-district-11",
+    "type": "General",
+    "office": "Metro Council, District 11",
+    "officeSlug": "metro-council-district-11",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 General Election",
+    "district": {
+      "name": "Metro Council District 11",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:11"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Laura White \"Laurie\" Adams",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1
+      },
+      {
+        "name": "Pennie May Landry",
+        "party": "No Party",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 2
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:26:01.018Z",
+    "contentHash": "8fe63ada205f74834b9d934a9c295f78d85cc2a95a74f2093fc69fdb62b622b6",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:12:metro-council-district-12",
+    "type": "General",
+    "office": "Metro Council, District 12",
+    "officeSlug": "metro-council-district-12",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 General Election",
+    "district": {
+      "name": "Metro Council District 12",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:12"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Jennifer \"Jen\" Racca",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:26:01.018Z",
+    "contentHash": "5ba4dfa60fa411694b4d97bab14a0026b8e3e423994f23cee0ce4b00bbcced39",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge:family-court-judge-special-election",
+    "type": "Special",
+    "office": "Family Court Judge (Special Election)",
+    "officeSlug": "family-court-judge-special-election",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 General Election",
+    "district": {
+      "name": "East Baton Rouge Parish",
+      "scope": "judicial",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge"
+    },
+    "numberElected": 1,
+    "candidates": [],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:26:01.018Z",
+    "contentHash": "5e5abfedbe796b10b4c7f8e5305b6065d6f76a8195e02747e638da938e12aa9a",
+    "deleted": false
+  }
+]
