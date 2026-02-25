@@ -1,7 +1,10 @@
 
-import React, { useState, useEffect, useCallback, useMemo, useContext, createContext } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useContext, createContext, useRef } from 'react';
 import { BallotEntry, BallotArchive, CandidateSelection, MeasureStance, Cycle, ReminderSettings, Candidate } from '../types';
-import { getAllCycles, getCycleByElectionDate, isElectionPast } from '../services/dataService'; // To determine default election & use centralized isElectionPast
+import { getAllCycles, getCycleByElectionDate, isElectionPast } from '../services/dataService';
+import { useAuth } from './useAuth';
+import { db } from '../firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 interface BallotContextType {
   currentElectionEntries: BallotEntry[];
@@ -19,19 +22,53 @@ interface BallotContextType {
   getSelectedMeasureStance: (measureId: number, electionDate: string) => 'support' | 'oppose' | null;
 
   clearBallotForElection: (electionDate: string) => void;
-  isElectionPast: (electionDate: string) => boolean; // Still exposed for components that use the hook
+  isElectionPast: (electionDate: string) => boolean;
 
-  // Reminder System
   setElectionReminder: (electionDate: string, settings: ReminderSettings | null) => void;
   getElectionReminder: (electionDate: string) => ReminderSettings | null;
+
+  isSyncing: boolean;
 }
 
 const BallotContext = createContext<BallotContextType | undefined>(undefined);
 const BALLOT_ARCHIVE_LOCAL_STORAGE_KEY = 'brVotesBallotArchive';
 const REMINDERS_ARCHIVE_LOCAL_STORAGE_KEY = 'brVotesRemindersArchive';
 
+function readLocalStorage<T>(key: string, fallback: T): T {
+  try {
+    const raw = window.localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function writeLocalStorage(key: string, value: unknown): void {
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } catch (err) {
+    console.error(`Error saving ${key} to localStorage`, err);
+  }
+}
+
+function mergeArchives(local: BallotArchive, remote: BallotArchive): BallotArchive {
+  const merged = { ...remote };
+  for (const dateKey of Object.keys(local)) {
+    if (!merged[dateKey] || merged[dateKey].length === 0) {
+      merged[dateKey] = local[dateKey];
+    }
+  }
+  return merged;
+}
+
+function mergeReminders(
+  local: Record<string, ReminderSettings>,
+  remote: Record<string, ReminderSettings>,
+): Record<string, ReminderSettings> {
+  return { ...local, ...remote };
+}
+
 const getDefaultElectionDate = (allCycles: Cycle[], archivedBallotDates: string[], archivedReminderDates: string[]): string | null => {
-  // isElectionPast (from dataService) is used here implicitly by getAllCycles and then by filtering
   const allKnownDates = Array.from(new Set([
     ...allCycles.map(c => c.electionDate), 
     ...archivedBallotDates,
@@ -40,69 +77,118 @@ const getDefaultElectionDate = (allCycles: Cycle[], archivedBallotDates: string[
 
   if (allKnownDates.length === 0) return null;
 
-  // Sort: upcoming first (chronological), then past (most recent first)
   const sortedUniqueDates = allKnownDates.sort((a, b) => {
     const dateA = new Date(a + 'T00:00:00');
     const dateB = new Date(b + 'T00:00:00');
     const aIsPastCycle = isElectionPast(a);
     const bIsPastCycle = isElectionPast(b);
 
-    if (!aIsPastCycle && !bIsPastCycle) return dateA.getTime() - dateB.getTime(); // Both upcoming: sort ascending
-    if (aIsPastCycle && bIsPastCycle) return dateB.getTime() - dateA.getTime();   // Both past: sort descending
-    if (!aIsPastCycle && bIsPastCycle) return -1; // Upcoming before past
-    if (aIsPastCycle && !bIsPastCycle) return 1;  // Past after upcoming
+    if (!aIsPastCycle && !bIsPastCycle) return dateA.getTime() - dateB.getTime();
+    if (aIsPastCycle && bIsPastCycle) return dateB.getTime() - dateA.getTime();
+    if (!aIsPastCycle && bIsPastCycle) return -1;
+    if (aIsPastCycle && !bIsPastCycle) return 1;
     return 0;
   });
   
-  // Prefer the first upcoming/current date if available
   const firstUpcomingOrCurrent = sortedUniqueDates.find(dateStr => !isElectionPast(dateStr));
   if (firstUpcomingOrCurrent) return firstUpcomingOrCurrent;
   
-  // If all are past, return the most recent past (which will be the first in the sorted list now)
   return sortedUniqueDates.length > 0 ? sortedUniqueDates[0] : null;
 };
 
 export const BallotProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
-  const [ballotArchive, setBallotArchive] = useState<BallotArchive>(() => {
-    try {
-      const archive = window.localStorage.getItem(BALLOT_ARCHIVE_LOCAL_STORAGE_KEY);
-      return archive ? JSON.parse(archive) : {};
-    } catch (error) {
-      console.error("Error reading ballot archive from localStorage", error);
-      return {};
-    }
-  });
+  const { currentUser } = useAuth();
 
-  const [remindersArchive, setRemindersArchive] = useState<Record<string, ReminderSettings>>(() => {
-    try {
-      const archive = window.localStorage.getItem(REMINDERS_ARCHIVE_LOCAL_STORAGE_KEY);
-      return archive ? JSON.parse(archive) : {};
-    } catch (error) {
-      console.error("Error reading reminders archive from localStorage", error);
-      return {};
-    }
-  });
+  const [ballotArchive, setBallotArchive] = useState<BallotArchive>(() =>
+    readLocalStorage(BALLOT_ARCHIVE_LOCAL_STORAGE_KEY, {}),
+  );
 
-  const definedElectionEvents = getAllCycles(); // This gets ALL cycles initially for context
+  const [remindersArchive, setRemindersArchive] = useState<Record<string, ReminderSettings>>(() =>
+    readLocalStorage(REMINDERS_ARCHIVE_LOCAL_STORAGE_KEY, {}),
+  );
+
+  const [isSyncing, setIsSyncing] = useState(false);
+  const firestoreSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const skipNextFirestoreSave = useRef(false);
+
+  const definedElectionEvents = getAllCycles();
   const [selectedElectionDate, setSelectedElectionDateState] = useState<string | null>(() => 
     getDefaultElectionDate(definedElectionEvents, Object.keys(ballotArchive), Object.keys(remindersArchive))
   );
 
+  // --- Firestore load on login ---
   useEffect(() => {
-    try {
-      window.localStorage.setItem(BALLOT_ARCHIVE_LOCAL_STORAGE_KEY, JSON.stringify(ballotArchive));
-    } catch (error) {
-      console.error("Error saving ballot archive to localStorage", error);
-    }
+    if (!currentUser) return;
+
+    let cancelled = false;
+    setIsSyncing(true);
+
+    (async () => {
+      try {
+        const ballotDocRef = doc(db, 'users', currentUser.id, 'appData', 'ballot');
+        const snap = await getDoc(ballotDocRef);
+
+        if (cancelled) return;
+
+        if (snap.exists()) {
+          const remote = snap.data() as { archive?: BallotArchive; reminders?: Record<string, ReminderSettings> };
+          const localBallot = readLocalStorage<BallotArchive>(BALLOT_ARCHIVE_LOCAL_STORAGE_KEY, {});
+          const localReminders = readLocalStorage<Record<string, ReminderSettings>>(REMINDERS_ARCHIVE_LOCAL_STORAGE_KEY, {});
+
+          const mergedBallot = mergeArchives(localBallot, remote.archive ?? {});
+          const mergedReminders = mergeReminders(localReminders, remote.reminders ?? {});
+
+          skipNextFirestoreSave.current = true;
+          setBallotArchive(mergedBallot);
+          setRemindersArchive(mergedReminders);
+        }
+      } catch (err) {
+        console.error('Failed to load ballot from Firestore:', err);
+      } finally {
+        if (!cancelled) setIsSyncing(false);
+      }
+    })();
+
+    return () => { cancelled = true; };
+  }, [currentUser?.id]);
+
+  // --- Persist to localStorage (always) ---
+  useEffect(() => {
+    writeLocalStorage(BALLOT_ARCHIVE_LOCAL_STORAGE_KEY, ballotArchive);
   }, [ballotArchive]);
 
   useEffect(() => {
-    try {
-      window.localStorage.setItem(REMINDERS_ARCHIVE_LOCAL_STORAGE_KEY, JSON.stringify(remindersArchive));
-    } catch (error) { 
-      console.error("Error saving reminders archive to localStorage", error);
-    }
+    writeLocalStorage(REMINDERS_ARCHIVE_LOCAL_STORAGE_KEY, remindersArchive);
   }, [remindersArchive]);
+
+  // --- Persist to Firestore (when logged in, debounced) ---
+  useEffect(() => {
+    if (!currentUser) return;
+
+    if (skipNextFirestoreSave.current) {
+      skipNextFirestoreSave.current = false;
+      return;
+    }
+
+    if (firestoreSaveTimer.current) clearTimeout(firestoreSaveTimer.current);
+
+    firestoreSaveTimer.current = setTimeout(async () => {
+      try {
+        const ballotDocRef = doc(db, 'users', currentUser.id, 'appData', 'ballot');
+        await setDoc(ballotDocRef, {
+          archive: ballotArchive,
+          reminders: remindersArchive,
+          lastUpdated: new Date().toISOString(),
+        });
+      } catch (err) {
+        console.error('Failed to save ballot to Firestore:', err);
+      }
+    }, 1500);
+
+    return () => {
+      if (firestoreSaveTimer.current) clearTimeout(firestoreSaveTimer.current);
+    };
+  }, [ballotArchive, remindersArchive, currentUser?.id]);
 
   const setSelectedElectionDate = (electionDate: string | null) => {
     setSelectedElectionDateState(electionDate);
@@ -122,7 +208,6 @@ export const BallotProvider: React.FC<React.PropsWithChildren<{}>> = ({ children
   const addCandidateSelection = useCallback((candidate: Candidate, electionDate: string) => {
     setBallotArchive(prevArchive => {
       const entriesForDate = prevArchive[electionDate] ? [...prevArchive[electionDate]] : [];
-      // Remove any existing selection for the same office and district (or office if no district)
       const otherEntries = entriesForDate.filter(
         entry => entry.itemType !== 'candidate' || 
                  (entry.itemType === 'candidate' && (entry.officeId !== candidate.officeId || entry.district !== candidate.district))
@@ -138,13 +223,12 @@ export const BallotProvider: React.FC<React.PropsWithChildren<{}>> = ({ children
         [electionDate]: [...otherEntries, newSelection]
       };
     });
-  }, [setBallotArchive]);
+  }, []);
 
   const removeCandidateSelection = useCallback((officeId: number, district: string | undefined, electionDate: string) => {
     setBallotArchive(prevArchive => {
       const entriesForDate = prevArchive[electionDate];
       if (!entriesForDate) return prevArchive;
-      // Keep entries that are not candidates OR are candidates but for a different office/district combo
       const updatedEntries = entriesForDate.filter(
         entry => entry.itemType === 'measure' || 
                  (entry.itemType === 'candidate' && (entry.officeId !== officeId || entry.district !== district))
@@ -155,7 +239,7 @@ export const BallotProvider: React.FC<React.PropsWithChildren<{}>> = ({ children
       }
       return { ...prevArchive, [electionDate]: updatedEntries };
     });
-  }, [remindersArchive, setBallotArchive]); 
+  }, [remindersArchive]); 
 
   const isCandidateSelected = useCallback((candidateId: number, electionDate: string): boolean => {
     const entriesForDate = ballotArchive[electionDate];
@@ -179,7 +263,7 @@ export const BallotProvider: React.FC<React.PropsWithChildren<{}>> = ({ children
         [electionDate]: [...otherEntries, newStance]
       };
     });
-  }, [setBallotArchive]);
+  }, []);
 
   const removeMeasureStance = useCallback((measureId: number, electionDate: string) => {
     setBallotArchive(prevArchive => {
@@ -194,7 +278,7 @@ export const BallotProvider: React.FC<React.PropsWithChildren<{}>> = ({ children
       }
       return { ...prevArchive, [electionDate]: updatedEntries };
     });
-  }, [remindersArchive, setBallotArchive]); 
+  }, [remindersArchive]); 
 
   const getSelectedMeasureStance = useCallback((measureId: number, electionDate: string): 'support' | 'oppose' | null => {
     const entriesForDate = ballotArchive[electionDate];
@@ -209,18 +293,15 @@ export const BallotProvider: React.FC<React.PropsWithChildren<{}>> = ({ children
       const { [electionDate]: _, ...restOfArchive } = prevArchive;
       return restOfArchive;
     });
-    // If clearing the currently selected election and no reminder exists for it, try to pick a new default
     if (selectedElectionDate === electionDate && !remindersArchive[electionDate]) {
         const newBallotArchiveKeys = Object.keys(ballotArchive).filter(key => key !== electionDate);
         setSelectedElectionDateState(getDefaultElectionDate(definedElectionEvents, newBallotArchiveKeys, Object.keys(remindersArchive)));
     }
-  }, [selectedElectionDate, ballotArchive, definedElectionEvents, remindersArchive, setBallotArchive, setSelectedElectionDateState]);
+  }, [selectedElectionDate, ballotArchive, definedElectionEvents, remindersArchive]);
 
-  // Expose isElectionPast from dataService through the context
   const isElectionPastFromService = useCallback((electionDate: string): boolean => {
     return isElectionPast(electionDate);
   }, []);
-
 
   // --- Reminder Functions ---
   const setElectionReminder = useCallback((electionDate: string, settings: ReminderSettings | null) => {
@@ -228,7 +309,6 @@ export const BallotProvider: React.FC<React.PropsWithChildren<{}>> = ({ children
       const newArchive = { ...prevArchive };
       if (settings === null) {
         delete newArchive[electionDate];
-         // If we delete a reminder for an election date that also has no ballot entries, ensure it's removed from default selection pool
         if (selectedElectionDate === electionDate && (!ballotArchive[electionDate] || ballotArchive[electionDate].length === 0)) {
             const newReminderArchiveKeys = Object.keys(newArchive);
             setSelectedElectionDateState(getDefaultElectionDate(definedElectionEvents, Object.keys(ballotArchive), newReminderArchiveKeys));
@@ -238,8 +318,7 @@ export const BallotProvider: React.FC<React.PropsWithChildren<{}>> = ({ children
       }
       return newArchive;
     });
-  }, [selectedElectionDate, ballotArchive, definedElectionEvents, remindersArchive, setRemindersArchive, setSelectedElectionDateState]);
-
+  }, [selectedElectionDate, ballotArchive, definedElectionEvents]);
 
   const getElectionReminder = useCallback((electionDate: string): ReminderSettings | null => {
     return remindersArchive[electionDate] || null;
@@ -260,7 +339,8 @@ export const BallotProvider: React.FC<React.PropsWithChildren<{}>> = ({ children
     clearBallotForElection,
     isElectionPast: isElectionPastFromService,
     setElectionReminder,
-    getElectionReminder
+    getElectionReminder,
+    isSyncing,
   };
 
   return (
