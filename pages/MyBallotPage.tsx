@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useBallot } from '../hooks/useBallot';
+import { useAuth } from '../hooks/useAuth';
 import { 
     getCandidateById, 
     getOfficeById, 
@@ -31,6 +32,7 @@ interface PopulatedMeasureEntry {
 }
 
 const MyBallotPage: React.FC = () => {
+  const { currentUser } = useAuth();
   const { 
     currentElectionEntries, 
     selectedElectionDate, 
@@ -210,6 +212,13 @@ const MyBallotPage: React.FC = () => {
     <div className="max-w-3xl mx-auto">
       <div className="bg-white shadow-xl rounded-lg p-6 md:p-10 border border-slate-100/30">
         <h1 className="text-3xl font-bold text-midnight-navy mb-4 text-center">My Ballot</h1>
+
+        {!currentUser && currentElectionEntries.length > 0 && (
+          <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-center">
+            <Link to="/auth" className="text-civic-blue font-medium underline">Sign in</Link>
+            {' '}to save your ballot across devices and take it to the polls on your phone.
+          </div>
+        )}
         
         <div className="mb-8">
           <label htmlFor="election-select" className="block text-sm font-medium text-midnight-navy mb-1">

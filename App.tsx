@@ -27,7 +27,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/" element={<HomePage />} />
       <Route path="/ballot-measures" element={<BallotMeasuresListPage />} />
       <Route path="/ballot-measure/:id" element={<BallotMeasureDetailPage />} />
-      <Route path="/my-ballot" element={currentUser ? <MyBallotPage /> : <Navigate to="/auth" />} />
+      <Route path="/my-ballot" element={<MyBallotPage />} />
       <Route path="/compare" element={<CompareCandidatesPage />} />
       <Route path="/candidate/:id" element={<CandidateProfilePage />} />
       <Route path="/profile" element={currentUser ? <UserProfilePage /> : <Navigate to="/auth" />} />
@@ -52,8 +52,7 @@ const App: React.FC = () => {
           <div className="min-h-screen flex flex-col">
             <HeaderComponent />
             {uiRefresh && <ElectionBanner />}
-            {/* Adjusted padding: pt-20 for header (h-16 + p-4), px-4 for horizontal, pb-20 for Navbar */}
-            <main className="flex-grow container mx-auto px-4 pt-20 pb-20">
+            <main className={`flex-grow container mx-auto px-4 pb-20 ${uiRefresh ? 'pt-28' : 'pt-20'}`}>
               <AppRoutes />
             </main>
             <Navbar />

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Candidate } from '../../types';
 import { ViewMode } from '../../constants';
 import { getCycleById, getFormattedElectionName, getFormattedCandidateOfficeName } from '../../services/dataService';
-import { BuildingOffice2Icon, CalendarDaysIcon, ArrowRightIcon, CheckBadgeIcon } from '@heroicons/react/24/outline';
+import { BuildingOffice2Icon, CalendarDaysIcon, ArrowRightIcon, CheckBadgeIcon, ScaleIcon } from '@heroicons/react/24/outline';
 import { useNotes } from '../../hooks/useNotes';
 import { useSettings } from '../../hooks/useSettings';
 
@@ -172,6 +172,14 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate, viewMode, onTo
             >
               {selectedForBallot ? 'Remove from Ballot' : 'Add to Ballot'}
             </button>
+            {electionDate && (
+              <Link
+                to={`/compare?electionDate=${electionDate}&officeId=${candidate.officeId}${candidate.district ? `&district=${encodeURIComponent(candidate.district)}` : ''}&candidate1Id=${candidate.id}`}
+                className="w-full flex items-center justify-center border border-civic-blue text-civic-blue hover:bg-civic-blue/10 font-medium py-1.5 px-4 rounded-md transition text-xs"
+              >
+                <ScaleIcon className="h-3.5 w-3.5 mr-1.5" /> Compare in this race
+              </Link>
+            )}
           </div>
         </div>
       </div>
