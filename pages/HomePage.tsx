@@ -10,6 +10,7 @@ import {
 import { getFirestoreCandidates } from '../services/firestoreDataService';
 import { useBallot } from '../hooks/useBallot';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
+import { CardGridSkeleton } from '../components/ui/PageSkeleton';
 
 const HomePage: React.FC = () => {
   const { 
@@ -21,6 +22,7 @@ const HomePage: React.FC = () => {
 
   const [allCandidatesData, setAllCandidatesData] = useState<Candidate[]>([]);
   const [upcomingElections, setUpcomingElections] = useState<Cycle[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedOffice, setSelectedOffice] = useState(''); 
@@ -29,7 +31,11 @@ const HomePage: React.FC = () => {
   const [viewMode, setViewMode] = useState<string>(ViewMode.GRID); 
 
   useEffect(() => {
-    getFirestoreCandidates().then(setAllCandidatesData);
+    setIsLoading(true);
+    getFirestoreCandidates().then((data) => {
+      setAllCandidatesData(data);
+      setIsLoading(false);
+    });
     const cycles = getUpcomingCycles();
     setUpcomingElections(cycles);
 
@@ -96,7 +102,9 @@ const HomePage: React.FC = () => {
         electionEvents={upcomingElections} // Pass only upcomingElections to FilterControls
       />
 
-      {filteredCandidates.length > 0 ? (
+      {isLoading ? (
+        <CardGridSkeleton />
+      ) : filteredCandidates.length > 0 ? (
         <div className={`grid gap-6 ${viewMode === ViewMode.GRID ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'grid-cols-1'}`}>
           {filteredCandidates.map(candidate => (
             <CandidateCard 

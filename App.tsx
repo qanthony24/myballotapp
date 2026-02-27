@@ -1,6 +1,7 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom'; // Removed BrowserRouter
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './hooks/useAuth';
+import ErrorBoundary from './components/ui/ErrorBoundary';
 import { BallotProvider } from './hooks/useBallot';
 import { SettingsProvider } from './hooks/useSettings';
 import Header from './components/layout/Header';
@@ -65,10 +66,15 @@ const App: React.FC = () => {
         <BallotProvider>
           <SettingsProvider>
           <div className="min-h-screen flex flex-col">
+            <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-civic-blue focus:text-white focus:px-4 focus:py-2 focus:rounded-md focus:text-sm">
+              Skip to main content
+            </a>
             <HeaderComponent />
             {uiRefresh && <ElectionBanner />}
-            <main className={`flex-grow container mx-auto px-4 pb-20 ${uiRefresh ? 'pt-28' : 'pt-20'}`}>
-              <AppRoutes />
+            <main id="main-content" className={`flex-grow container mx-auto px-4 pb-20 ${uiRefresh ? 'pt-28' : 'pt-20'}`}>
+              <ErrorBoundary>
+                <AppRoutes />
+              </ErrorBoundary>
             </main>
             <Navbar />
           </div>

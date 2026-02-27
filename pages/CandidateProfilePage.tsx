@@ -10,7 +10,7 @@ import {
   getCandidatesByOfficeAndCycle
 } from '../services/dataService';
 import { getFirestoreCandidateById } from '../services/firestoreDataService';
-import LoadingSpinner from '../components/ui/LoadingSpinner';
+import { ProfileSkeleton } from '../components/ui/PageSkeleton';
 import CollapsibleAnswer from '../components/CollapsibleAnswer';
 import { ArrowLeftIcon, BuildingOffice2Icon, CalendarDaysIcon, GlobeAltIcon, EnvelopeIcon, PhoneIcon, UserGroupIcon, PlusCircleIcon, MinusCircleIcon, ScaleIcon, CheckBadgeIcon, PencilSquareIcon, ChatBubbleOvalLeftEllipsisIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useBallot } from '../hooks/useBallot';
@@ -116,7 +116,7 @@ const CandidateProfilePage: React.FC = () => {
     }
   }, [location, loading]); // Depend on loading to ensure ref is available
 
-  if (loading) return <LoadingSpinner size="lg" />;
+  if (loading) return <ProfileSkeleton />;
   if (!candidate || !candidateCycle) return <div className="text-center py-10 text-sunlight-gold">Candidate or election information not found.</div>;
 
   const surveyQuestions = getSurveyQuestions();

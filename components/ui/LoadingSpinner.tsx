@@ -8,10 +8,11 @@ const LoadingSpinner: React.FC<{ size?: 'sm' | 'md' | 'lg' }> = ({ size = 'md' }
   };
 
   return (
-    <div className="flex justify-center items-center py-4">
+    <div className="flex justify-center items-center py-4" role="status" aria-live="polite">
       <div
         className={`animate-spin rounded-full ${sizeClasses[size]} border-t-4 border-b-4 border-civic-blue`}
       ></div>
+      <span className="sr-only">Loading...</span>
     </div>
   );
 };
