@@ -1,16 +1,14 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
-import { Candidate, Office, Cycle, SurveyQuestion, NoteEntry } from '../types'; // Added NoteEntry
+import { Candidate, Office, Cycle } from '../types';
 import { 
   getCandidateById, 
   getOfficeById, 
-  getCycleById, 
-  getSurveyQuestions, 
+  getSurveyQuestions,
   getCandidatesByOfficeAndCycle,
-  getAllOffices, 
+  getAllOffices,
   getAllCycles,
   getFormattedElectionName,
-  getFormattedCandidateOfficeName,
   getDistrictsForOfficeAndCycle,
   getCycleByElectionDate
 } from '../services/dataService';
@@ -19,7 +17,31 @@ import { useBallot } from '../hooks/useBallot';
 import { ArrowLeftIcon, UsersIcon, CheckBadgeIcon, PlusCircleIcon, MinusCircleIcon, InformationCircleIcon, ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/24/outline';
 import { useNotes } from '../hooks/useNotes';
 
-// NoteRow component for cleaner table structure
+const NoteCell: React.FC<{ candidate: Candidate | null; showBorder: boolean }> = ({ candidate, showBorder }) => {
+  const { notes: candidateNotes, getLatestNote } = useNotes(candidate?.id ?? -1);
+  const latestNote = candidate ? getLatestNote() : null;
+
+  return (
+    <td className={`py-4 px-4 text-sm text-midnight-navy/90 whitespace-pre-line compare-notes-cell ${showBorder ? 'border-r border-midnight-navy/20' : ''}`}>
+      {candidate ? (
+        latestNote ? (
+          <>
+            <p className="font-semibold text-midnight-navy">{latestNote.text}</p>
+            <p className="text-xs text-midnight-navy/60 mt-1">
+              ({new Date(latestNote.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })})
+            </p>
+            {candidateNotes.length > 1 && (
+              <p className="text-xs text-midnight-navy/50 mt-1">(+ {candidateNotes.length - 1} more)</p>
+            )}
+          </>
+        ) : (
+          <em className="text-midnight-navy/70">(no note)</em>
+        )
+      ) : ''}
+    </td>
+  );
+};
+
 const NoteRow: React.FC<{ candidates: (Candidate | null)[] }> = ({ candidates }) => {
   return (
     <tr>
@@ -28,31 +50,13 @@ const NoteRow: React.FC<{ candidates: (Candidate | null)[] }> = ({ candidates })
             <ChatBubbleOvalLeftEllipsisIcon className="h-5 w-5 mr-2 text-civic-blue" /> My Private Notes
         </div>
       </td>
-      {candidates.map((candidate, index) => {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const { notes: candidateNotes, getLatestNote } = candidate ? useNotes(candidate.id) : { notes: [], getLatestNote: () => null };
-        const latestNote = getLatestNote();
-        
-        return (
-          <td key={candidate ? `note-${candidate.id}` : `empty-note-${index}`} className={`py-4 px-4 text-sm text-midnight-navy/90 whitespace-pre-line compare-notes-cell ${index === 0 && candidates.length > 1 ? 'border-r border-midnight-navy/20' : ''}`}>
-            {candidate ? (
-              latestNote ? (
-                <>
-                  <p className="font-semibold text-midnight-navy">{latestNote.text}</p>
-                  <p className="text-xs text-midnight-navy/60 mt-1">
-                    ({new Date(latestNote.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })})
-                  </p>
-                  {candidateNotes.length > 1 && (
-                    <p className="text-xs text-midnight-navy/50 mt-1">(+ {candidateNotes.length - 1} more)</p>
-                  )}
-                </>
-              ) : (
-                <em className="text-midnight-navy/70">(no note)</em>
-              )
-            ) : ''}
-          </td>
-        );
-      })}
+      {candidates.map((candidate, index) => (
+        <NoteCell
+          key={candidate ? `note-${candidate.id}` : `empty-note-${index}`}
+          candidate={candidate}
+          showBorder={index === 0 && candidates.length > 1}
+        />
+      ))}
     </tr>
   );
 };
@@ -357,7 +361,7 @@ const CompareCandidatesPage: React.FC = () => {
 
         {loading && <LoadingSpinner />}
 
-        {!selectedElectionDateParam || !selectedOfficeIdParam && (
+        {(!selectedElectionDateParam || !selectedOfficeIdParam) && (
            <div className="text-center py-10">
             <UsersIcon className="h-16 w-16 text-midnight-navy/30 mx-auto mb-4" />
             <p className="text-xl text-midnight-navy/70">Please select an election and an office to compare candidates.</p>

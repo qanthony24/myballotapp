@@ -1,0 +1,50 @@
+{
+  "electionId": "la-2026-nov",
+  "electionName": "Louisiana 2026 Congressional General / Open Primary",
+  "electionDate": "2026-11-03",
+  "jurisdiction": "East Baton Rouge Parish, LA",
+  "contests": [
+    {
+      "office": "U.S. Senate",
+      "type": "General",
+      "district": {
+        "name": "Louisiana",
+        "scope": "statewide",
+        "ocdDivisionId": "ocd-division/country:us/state:la"
+      },
+      "candidates": [
+        { "name": "Bill Cassidy", "party": "Republican", "isIncumbent": true, "candidateUrl": "https://www.billcassidy.com" },
+        { "name": "Julia Letlow", "party": "Republican" },
+        { "name": "John Fleming", "party": "Republican" },
+        { "name": "Mark Spencer", "party": "Republican" },
+        { "name": "Nick Albares", "party": "Democratic" },
+        { "name": "Gary Crockett", "party": "Democratic" },
+        { "name": "Jamie Davis", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "U.S. Representative, 6th District",
+      "type": "General",
+      "district": {
+        "name": "Louisiana 6th Congressional District",
+        "scope": "congressional",
+        "ocdDivisionId": "ocd-division/country:us/state:la/cd:6"
+      },
+      "candidates": [
+        { "name": "Cleo Fields", "party": "Democratic", "isIncumbent": true },
+        { "name": "Larry Davis", "party": "Democratic" },
+        { "name": "Peter Williams", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "Justice of the Peace, Ward 2, District 3",
+      "type": "Special",
+      "district": {
+        "name": "East Baton Rouge Parish Justice Court Ward 2, District 3",
+        "scope": "township",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge"
+      },
+      "candidates": []
+    }
+  ]
+}

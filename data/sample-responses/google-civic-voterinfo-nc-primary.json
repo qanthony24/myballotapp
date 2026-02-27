@@ -1,0 +1,806 @@
+{
+  "election": {
+    "id": "9505",
+    "name": "North Carolina Primary Election",
+    "electionDay": "2026-03-03",
+    "ocdDivisionId": "ocd-division/country:us/state:nc"
+  },
+  "normalizedInput": {
+    "line1": "600 East Trade Street",
+    "city": "Charlotte",
+    "state": "NC",
+    "zip": "28202"
+  },
+  "pollingLocations": [
+    {
+      "address": {
+        "locationName": "CAROLE HOEFENER CENTER",
+        "line1": "615 E 6th St",
+        "addressLine": [
+          "615 E 6th St"
+        ],
+        "city": "Charlotte",
+        "state": "NC",
+        "zip": "28202"
+      },
+      "pollingHours": "Tue, Mar 3: 6:30 am - 7:30 pm",
+      "latitude": 35.224443799999996,
+      "longitude": -80.8349641,
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ]
+    }
+  ],
+  "earlyVoteSites": [
+    {
+      "address": {
+        "locationName": "HAL MARSHALL ANNEX",
+        "line1": "618 N College St",
+        "addressLine": [
+          "618 N College St"
+        ],
+        "city": "Charlotte",
+        "state": "NC",
+        "zip": "28202"
+      },
+      "pollingHours": "Thu, Feb 12: 8:00 am - 7:30 pm\nFri, Feb 13: 8:00 am - 7:30 pm\nSat, Feb 14: 8 am - 3 pm\nSun, Feb 15: 1 pm - 5 pm\nMon, Feb 16: 8:00 am - 7:30 pm\nTue, Feb 17: 8:00 am - 7:30 pm\nWed, Feb 18: 8:00 am - 7:30 pm\nThu, Feb 19: 8:00 am - 7:30 pm\nFri, Feb 20: 8:00 am - 7:30 pm\nSat, Feb 21: 8 am - 3 pm\nSun, Feb 22: 1 pm - 5 pm\nMon, Feb 23: 8:00 am - 7:30 pm\nTue, Feb 24: 8:00 am - 7:30 pm\nWed, Feb 25: 8:00 am - 7:30 pm\nThu, Feb 26: 8:00 am - 7:30 pm\nFri, Feb 27: 8:00 am - 7:30 pm\nSat, Feb 28: 8 am - 3 pm",
+      "latitude": 35.2300897,
+      "longitude": -80.8358837,
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ]
+    },
+    {
+      "address": {
+        "locationName": "ALLEGRA WESTBROOKS REGIONAL LIBRARY",
+        "line1": "2412 Beatties Ford Rd",
+        "addressLine": [
+          "2412 Beatties Ford Rd"
+        ],
+        "city": "Charlotte",
+        "state": "NC",
+        "zip": "28216"
+      },
+      "pollingHours": "Thu, Feb 12: 8:00 am - 7:30 pm\nFri, Feb 13: 8:00 am - 7:30 pm\nSat, Feb 14: 8 am - 3 pm\nSun, Feb 15: 1 pm - 5 pm\nMon, Feb 16: 8:00 am - 7:30 pm\nTue, Feb 17: 8:00 am - 7:30 pm\nWed, Feb 18: 8:00 am - 7:30 pm\nThu, Feb 19: 8:00 am - 7:30 pm\nFri, Feb 20: 8:00 am - 7:30 pm\nSat, Feb 21: 8 am - 3 pm\nSun, Feb 22: 1 pm - 5 pm\nMon, Feb 23: 8:00 am - 7:30 pm\nTue, Feb 24: 8:00 am - 7:30 pm\nWed, Feb 25: 8:00 am - 7:30 pm\nThu, Feb 26: 8:00 am - 7:30 pm\nFri, Feb 27: 8:00 am - 7:30 pm\nSat, Feb 28: 8 am - 3 pm",
+      "latitude": 35.2677434,
+      "longitude": -80.8534501,
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ]
+    },
+    {
+      "address": {
+        "locationName": "AMAY JAMES RECREATION CENTER",
+        "line1": "2425 Lester St",
+        "addressLine": [
+          "2425 Lester St"
+        ],
+        "city": "Charlotte",
+        "state": "NC",
+        "zip": "28208"
+      },
+      "pollingHours": "Thu, Feb 12: 8:00 am - 7:30 pm\nFri, Feb 13: 8:00 am - 7:30 pm\nSat, Feb 14: 8 am - 3 pm\nSun, Feb 15: 1 pm - 5 pm\nMon, Feb 16: 8:00 am - 7:30 pm\nTue, Feb 17: 8:00 am - 7:30 pm\nWed, Feb 18: 8:00 am - 7:30 pm\nThu, Feb 19: 8:00 am - 7:30 pm\nFri, Feb 20: 8:00 am - 7:30 pm\nSat, Feb 21: 8 am - 3 pm\nSun, Feb 22: 1 pm - 5 pm\nMon, Feb 23: 8:00 am - 7:30 pm\nTue, Feb 24: 8:00 am - 7:30 pm\nWed, Feb 25: 8:00 am - 7:30 pm\nThu, Feb 26: 8:00 am - 7:30 pm\nFri, Feb 27: 8:00 am - 7:30 pm\nSat, Feb 28: 8 am - 3 pm",
+      "latitude": 35.202748199999995,
+      "longitude": -80.901692099999991,
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ]
+    },
+    {
+      "address": {
+        "locationName": "TYVOLA SENIOR CENTER",
+        "line1": "2225 Tyvola Rd",
+        "addressLine": [
+          "2225 Tyvola Rd"
+        ],
+        "city": "Charlotte",
+        "state": "NC",
+        "zip": "28210"
+      },
+      "pollingHours": "Thu, Feb 12: 8:00 am - 7:30 pm\nFri, Feb 13: 8:00 am - 7:30 pm\nSat, Feb 14: 8 am - 3 pm\nSun, Feb 15: 1 pm - 5 pm\nMon, Feb 16: 8:00 am - 7:30 pm\nTue, Feb 17: 8:00 am - 7:30 pm\nWed, Feb 18: 8:00 am - 7:30 pm\nThu, Feb 19: 8:00 am - 7:30 pm\nFri, Feb 20: 8:00 am - 7:30 pm\nSat, Feb 21: 8 am - 3 pm\nSun, Feb 22: 1 pm - 5 pm\nMon, Feb 23: 8:00 am - 7:30 pm\nTue, Feb 24: 8:00 am - 7:30 pm\nWed, Feb 25: 8:00 am - 7:30 pm\nThu, Feb 26: 8:00 am - 7:30 pm\nFri, Feb 27: 8:00 am - 7:30 pm\nSat, Feb 28: 8 am - 3 pm",
+      "latitude": 35.160129,
+      "longitude": -80.8594931,
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ]
+    },
+    {
+      "address": {
+        "locationName": "SOUTHPARK REGIONAL LIBRARY",
+        "line1": "7015 Carnegie Blvd",
+        "addressLine": [
+          "7015 Carnegie Blvd"
+        ],
+        "city": "Charlotte",
+        "state": "NC",
+        "zip": "28211"
+      },
+      "pollingHours": "Thu, Feb 12: 8:00 am - 7:30 pm\nFri, Feb 13: 8:00 am - 7:30 pm\nSat, Feb 14: 8 am - 3 pm\nSun, Feb 15: 1 pm - 5 pm\nMon, Feb 16: 8:00 am - 7:30 pm\nTue, Feb 17: 8:00 am - 7:30 pm\nWed, Feb 18: 8:00 am - 7:30 pm\nThu, Feb 19: 8:00 am - 7:30 pm\nFri, Feb 20: 8:00 am - 7:30 pm\nSat, Feb 21: 8 am - 3 pm\nSun, Feb 22: 1 pm - 5 pm\nMon, Feb 23: 8:00 am - 7:30 pm\nTue, Feb 24: 8:00 am - 7:30 pm\nWed, Feb 25: 8:00 am - 7:30 pm\nThu, Feb 26: 8:00 am - 7:30 pm\nFri, Feb 27: 8:00 am - 7:30 pm\nSat, Feb 28: 8 am - 3 pm",
+      "latitude": 35.1517543,
+      "longitude": -80.8229403,
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ]
+    },
+    {
+      "address": {
+        "locationName": "EASTWAY REGIONAL RECREATION CENTER",
+        "line1": "3150 Eastway Park Dr",
+        "addressLine": [
+          "3150 Eastway Park Dr"
+        ],
+        "city": "Charlotte",
+        "state": "NC",
+        "zip": "28213"
+      },
+      "pollingHours": "Thu, Feb 12: 8:00 am - 7:30 pm\nFri, Feb 13: 8:00 am - 7:30 pm\nSat, Feb 14: 8 am - 3 pm\nSun, Feb 15: 1 pm - 5 pm\nMon, Feb 16: 8:00 am - 7:30 pm\nTue, Feb 17: 8:00 am - 7:30 pm\nWed, Feb 18: 8:00 am - 7:30 pm\nThu, Feb 19: 8:00 am - 7:30 pm\nFri, Feb 20: 8:00 am - 7:30 pm\nSat, Feb 21: 8 am - 3 pm\nSun, Feb 22: 1 pm - 5 pm\nMon, Feb 23: 8:00 am - 7:30 pm\nTue, Feb 24: 8:00 am - 7:30 pm\nWed, Feb 25: 8:00 am - 7:30 pm\nThu, Feb 26: 8:00 am - 7:30 pm\nFri, Feb 27: 8:00 am - 7:30 pm\nSat, Feb 28: 8 am - 3 pm",
+      "latitude": 35.2551142,
+      "longitude": -80.7753747,
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ]
+    },
+    {
+      "address": {
+        "locationName": "INDEPENDENCE REGIONAL LIBRARY",
+        "line1": "6000 Conference Dr",
+        "addressLine": [
+          "6000 Conference Dr"
+        ],
+        "city": "Charlotte",
+        "state": "NC",
+        "zip": "28212"
+      },
+      "pollingHours": "Thu, Feb 12: 8:00 am - 7:30 pm\nFri, Feb 13: 8:00 am - 7:30 pm\nSat, Feb 14: 8 am - 3 pm\nSun, Feb 15: 1 pm - 5 pm\nMon, Feb 16: 8:00 am - 7:30 pm\nTue, Feb 17: 8:00 am - 7:30 pm\nWed, Feb 18: 8:00 am - 7:30 pm\nThu, Feb 19: 8:00 am - 7:30 pm\nFri, Feb 20: 8:00 am - 7:30 pm\nSat, Feb 21: 8 am - 3 pm\nSun, Feb 22: 1 pm - 5 pm\nMon, Feb 23: 8:00 am - 7:30 pm\nTue, Feb 24: 8:00 am - 7:30 pm\nWed, Feb 25: 8:00 am - 7:30 pm\nThu, Feb 26: 8:00 am - 7:30 pm\nFri, Feb 27: 8:00 am - 7:30 pm\nSat, Feb 28: 8 am - 3 pm",
+      "latitude": 35.1764811,
+      "longitude": -80.7554311,
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ]
+    },
+    {
+      "address": {
+        "locationName": "FORMER UNIVERSITY CITY LIBRARY",
+        "line1": "301 E Wt Harris Blvd",
+        "addressLine": [
+          "301 E Wt Harris Blvd"
+        ],
+        "city": "Charlotte",
+        "state": "NC",
+        "zip": "28262"
+      },
+      "pollingHours": "Thu, Feb 12: 8:00 am - 7:30 pm\nFri, Feb 13: 8:00 am - 7:30 pm\nSat, Feb 14: 8 am - 3 pm\nSun, Feb 15: 1 pm - 5 pm\nMon, Feb 16: 8:00 am - 7:30 pm\nTue, Feb 17: 8:00 am - 7:30 pm\nWed, Feb 18: 8:00 am - 7:30 pm\nThu, Feb 19: 8:00 am - 7:30 pm\nFri, Feb 20: 8:00 am - 7:30 pm\nSat, Feb 21: 8 am - 3 pm\nSun, Feb 22: 1 pm - 5 pm\nMon, Feb 23: 8:00 am - 7:30 pm\nTue, Feb 24: 8:00 am - 7:30 pm\nWed, Feb 25: 8:00 am - 7:30 pm\nThu, Feb 26: 8:00 am - 7:30 pm\nFri, Feb 27: 8:00 am - 7:30 pm\nSat, Feb 28: 8 am - 3 pm",
+      "latitude": 35.302923799999995,
+      "longitude": -80.74667749999999,
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ]
+    },
+    {
+      "address": {
+        "locationName": "SOUTH COUNTY REGIONAL LIBRARY",
+        "line1": "5801 Rea Rd",
+        "addressLine": [
+          "5801 Rea Rd"
+        ],
+        "city": "Charlotte",
+        "state": "NC",
+        "zip": "28277"
+      },
+      "pollingHours": "Thu, Feb 12: 8:00 am - 7:30 pm\nFri, Feb 13: 8:00 am - 7:30 pm\nSat, Feb 14: 8 am - 3 pm\nSun, Feb 15: 1 pm - 5 pm\nMon, Feb 16: 8:00 am - 7:30 pm\nTue, Feb 17: 8:00 am - 7:30 pm\nWed, Feb 18: 8:00 am - 7:30 pm\nThu, Feb 19: 8:00 am - 7:30 pm\nFri, Feb 20: 8:00 am - 7:30 pm\nSat, Feb 21: 8 am - 3 pm\nSun, Feb 22: 1 pm - 5 pm\nMon, Feb 23: 8:00 am - 7:30 pm\nTue, Feb 24: 8:00 am - 7:30 pm\nWed, Feb 25: 8:00 am - 7:30 pm\nThu, Feb 26: 8:00 am - 7:30 pm\nFri, Feb 27: 8:00 am - 7:30 pm\nSat, Feb 28: 8 am - 3 pm",
+      "latitude": 35.0865355,
+      "longitude": -80.8115633,
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ]
+    },
+    {
+      "address": {
+        "locationName": "THE BRADSHAW CENTER AT HILLCREST",
+        "line1": "8501 Bellhaven Blvd",
+        "addressLine": [
+          "8501 Bellhaven Blvd"
+        ],
+        "city": "Charlotte",
+        "state": "NC",
+        "zip": "28214"
+      },
+      "pollingHours": "Thu, Feb 12: 8:00 am - 7:30 pm\nFri, Feb 13: 8:00 am - 7:30 pm\nSat, Feb 14: 8 am - 3 pm\nSun, Feb 15: 1 pm - 5 pm\nMon, Feb 16: 8:00 am - 7:30 pm\nTue, Feb 17: 8:00 am - 7:30 pm\nWed, Feb 18: 8:00 am - 7:30 pm\nThu, Feb 19: 8:00 am - 7:30 pm\nFri, Feb 20: 8:00 am - 7:30 pm\nSat, Feb 21: 8 am - 3 pm\nSun, Feb 22: 1 pm - 5 pm\nMon, Feb 23: 8:00 am - 7:30 pm\nTue, Feb 24: 8:00 am - 7:30 pm\nWed, Feb 25: 8:00 am - 7:30 pm\nThu, Feb 26: 8:00 am - 7:30 pm\nFri, Feb 27: 8:00 am - 7:30 pm\nSat, Feb 28: 8 am - 3 pm",
+      "latitude": 35.3049629,
+      "longitude": -80.9388087,
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ]
+    },
+    {
+      "address": {
+        "locationName": "DAVID B. WAYMER RECREATION CENTER",
+        "line1": "14008 Holbrooks Rd",
+        "addressLine": [
+          "14008 Holbrooks Rd"
+        ],
+        "city": "Huntersville",
+        "state": "NC",
+        "zip": "28078"
+      },
+      "pollingHours": "Thu, Feb 12: 8:00 am - 7:30 pm\nFri, Feb 13: 8:00 am - 7:30 pm\nSat, Feb 14: 8 am - 3 pm\nSun, Feb 15: 1 pm - 5 pm\nMon, Feb 16: 8:00 am - 7:30 pm\nTue, Feb 17: 8:00 am - 7:30 pm\nWed, Feb 18: 8:00 am - 7:30 pm\nThu, Feb 19: 8:00 am - 7:30 pm\nFri, Feb 20: 8:00 am - 7:30 pm\nSat, Feb 21: 8 am - 3 pm\nSun, Feb 22: 1 pm - 5 pm\nMon, Feb 23: 8:00 am - 7:30 pm\nTue, Feb 24: 8:00 am - 7:30 pm\nWed, Feb 25: 8:00 am - 7:30 pm\nThu, Feb 26: 8:00 am - 7:30 pm\nFri, Feb 27: 8:00 am - 7:30 pm\nSat, Feb 28: 8 am - 3 pm",
+      "latitude": 35.3988574,
+      "longitude": -80.8354753,
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ]
+    },
+    {
+      "address": {
+        "locationName": "MINT HILL MASONIC LODGE",
+        "line1": "10224 Lawyers Rd",
+        "addressLine": [
+          "10224 Lawyers Rd"
+        ],
+        "city": "Charlotte",
+        "state": "NC",
+        "zip": "28227"
+      },
+      "pollingHours": "Thu, Feb 12: 8:00 am - 7:30 pm\nFri, Feb 13: 8:00 am - 7:30 pm\nSat, Feb 14: 8 am - 3 pm\nSun, Feb 15: 1 pm - 5 pm\nMon, Feb 16: 8:00 am - 7:30 pm\nTue, Feb 17: 8:00 am - 7:30 pm\nWed, Feb 18: 8:00 am - 7:30 pm\nThu, Feb 19: 8:00 am - 7:30 pm\nFri, Feb 20: 8:00 am - 7:30 pm\nSat, Feb 21: 8 am - 3 pm\nSun, Feb 22: 1 pm - 5 pm\nMon, Feb 23: 8:00 am - 7:30 pm\nTue, Feb 24: 8:00 am - 7:30 pm\nWed, Feb 25: 8:00 am - 7:30 pm\nThu, Feb 26: 8:00 am - 7:30 pm\nFri, Feb 27: 8:00 am - 7:30 pm\nSat, Feb 28: 8 am - 3 pm",
+      "latitude": 35.1775753,
+      "longitude": -80.6734318,
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ]
+    },
+    {
+      "address": {
+        "locationName": "PINEVILLE LIBRARY",
+        "line1": "505 Main St",
+        "addressLine": [
+          "505 Main St"
+        ],
+        "city": "Pineville",
+        "state": "NC",
+        "zip": "28134"
+      },
+      "pollingHours": "Thu, Feb 12: 8:00 am - 7:30 pm\nFri, Feb 13: 8:00 am - 7:30 pm\nSat, Feb 14: 8 am - 3 pm\nSun, Feb 15: 1 pm - 5 pm\nMon, Feb 16: 8:00 am - 7:30 pm\nTue, Feb 17: 8:00 am - 7:30 pm\nWed, Feb 18: 8:00 am - 7:30 pm\nThu, Feb 19: 8:00 am - 7:30 pm\nFri, Feb 20: 8:00 am - 7:30 pm\nSat, Feb 21: 8 am - 3 pm\nSun, Feb 22: 1 pm - 5 pm\nMon, Feb 23: 8:00 am - 7:30 pm\nTue, Feb 24: 8:00 am - 7:30 pm\nWed, Feb 25: 8:00 am - 7:30 pm\nThu, Feb 26: 8:00 am - 7:30 pm\nFri, Feb 27: 8:00 am - 7:30 pm\nSat, Feb 28: 8 am - 3 pm",
+      "latitude": 35.086579199999996,
+      "longitude": -80.8929193,
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ]
+    },
+    {
+      "address": {
+        "locationName": "MATTHEWS LIBRARY",
+        "line1": "230 Matthews Station St",
+        "addressLine": [
+          "230 Matthews Station St"
+        ],
+        "city": "Matthews",
+        "state": "NC",
+        "zip": "28105"
+      },
+      "pollingHours": "Thu, Feb 12: 8:00 am - 7:30 pm\nFri, Feb 13: 8:00 am - 7:30 pm\nSat, Feb 14: 8 am - 3 pm\nSun, Feb 15: 1 pm - 5 pm\nMon, Feb 16: 8:00 am - 7:30 pm\nTue, Feb 17: 8:00 am - 7:30 pm\nWed, Feb 18: 8:00 am - 7:30 pm\nThu, Feb 19: 8:00 am - 7:30 pm\nFri, Feb 20: 8:00 am - 7:30 pm\nSat, Feb 21: 8 am - 3 pm\nSun, Feb 22: 1 pm - 5 pm\nMon, Feb 23: 8:00 am - 7:30 pm\nTue, Feb 24: 8:00 am - 7:30 pm\nWed, Feb 25: 8:00 am - 7:30 pm\nThu, Feb 26: 8:00 am - 7:30 pm\nFri, Feb 27: 8:00 am - 7:30 pm\nSat, Feb 28: 8 am - 3 pm",
+      "latitude": 35.1158603,
+      "longitude": -80.7185238,
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ]
+    },
+    {
+      "address": {
+        "locationName": "REA VILLAGE SHOPPING CENTER",
+        "line1": "11508 Providence Rd Ste E",
+        "addressLine": [
+          "11508 Providence Rd Ste E"
+        ],
+        "city": "Charlotte",
+        "state": "NC",
+        "zip": "28277"
+      },
+      "pollingHours": "Thu, Feb 12: 8:00 am - 7:30 pm\nFri, Feb 13: 8:00 am - 7:30 pm\nSat, Feb 14: 8 am - 3 pm\nSun, Feb 15: 1 pm - 5 pm\nMon, Feb 16: 8:00 am - 7:30 pm\nTue, Feb 17: 8:00 am - 7:30 pm\nWed, Feb 18: 8:00 am - 7:30 pm\nThu, Feb 19: 8:00 am - 7:30 pm\nFri, Feb 20: 8:00 am - 7:30 pm\nSat, Feb 21: 8 am - 3 pm\nSun, Feb 22: 1 pm - 5 pm\nMon, Feb 23: 8:00 am - 7:30 pm\nTue, Feb 24: 8:00 am - 7:30 pm\nWed, Feb 25: 8:00 am - 7:30 pm\nThu, Feb 26: 8:00 am - 7:30 pm\nFri, Feb 27: 8:00 am - 7:30 pm\nSat, Feb 28: 8 am - 3 pm",
+      "latitude": 35.0531438,
+      "longitude": -80.7707477,
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ]
+    },
+    {
+      "address": {
+        "locationName": "STEELE CREEK AREA",
+        "line1": "13611 Steele Creek Rd",
+        "addressLine": [
+          "13611 Steele Creek Rd"
+        ],
+        "city": "Charlotte",
+        "state": "NC",
+        "zip": "28273"
+      },
+      "notes": "STEELE CREEK MASONIC TEMPLE #737",
+      "pollingHours": "Thu, Feb 12: 8:00 am - 7:30 pm\nFri, Feb 13: 8:00 am - 7:30 pm\nSat, Feb 14: 8 am - 3 pm\nSun, Feb 15: 1 pm - 5 pm\nMon, Feb 16: 8:00 am - 7:30 pm\nTue, Feb 17: 8:00 am - 7:30 pm\nWed, Feb 18: 8:00 am - 7:30 pm\nThu, Feb 19: 8:00 am - 7:30 pm\nFri, Feb 20: 8:00 am - 7:30 pm\nSat, Feb 21: 8 am - 3 pm\nSun, Feb 22: 1 pm - 5 pm\nMon, Feb 23: 8:00 am - 7:30 pm\nTue, Feb 24: 8:00 am - 7:30 pm\nWed, Feb 25: 8:00 am - 7:30 pm\nThu, Feb 26: 8:00 am - 7:30 pm\nFri, Feb 27: 8:00 am - 7:30 pm\nSat, Feb 28: 8 am - 3 pm",
+      "latitude": 35.1082922,
+      "longitude": -80.9875734,
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ]
+    },
+    {
+      "address": {
+        "locationName": "NORTH COUNTY REGIONAL LIBRARY",
+        "line1": "16500 Holly Crest Ln",
+        "addressLine": [
+          "16500 Holly Crest Ln"
+        ],
+        "city": "Huntersville",
+        "state": "NC",
+        "zip": "28078"
+      },
+      "pollingHours": "Thu, Feb 12: 8:00 am - 7:30 pm\nFri, Feb 13: 8:00 am - 7:30 pm\nSat, Feb 14: 8 am - 3 pm\nSun, Feb 15: 1 pm - 5 pm\nMon, Feb 16: 8:00 am - 7:30 pm\nTue, Feb 17: 8:00 am - 7:30 pm\nWed, Feb 18: 8:00 am - 7:30 pm\nThu, Feb 19: 8:00 am - 7:30 pm\nFri, Feb 20: 8:00 am - 7:30 pm\nSat, Feb 21: 8 am - 3 pm\nSun, Feb 22: 1 pm - 5 pm\nMon, Feb 23: 8:00 am - 7:30 pm\nTue, Feb 24: 8:00 am - 7:30 pm\nWed, Feb 25: 8:00 am - 7:30 pm\nThu, Feb 26: 8:00 am - 7:30 pm\nFri, Feb 27: 8:00 am - 7:30 pm\nSat, Feb 28: 8 am - 3 pm",
+      "latitude": 35.440694799999996,
+      "longitude": -80.8639949,
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ]
+    },
+    {
+      "address": {
+        "locationName": "BIRKDALE POINT BUSINESS PARK",
+        "line1": "8936 N Pointe Executive Park Dr",
+        "addressLine": [
+          "8936 N Pointe Executive Park Dr"
+        ],
+        "city": "Huntersville",
+        "state": "NC",
+        "zip": "28078"
+      },
+      "pollingHours": "Thu, Feb 12: 8:00 am - 7:30 pm\nFri, Feb 13: 8:00 am - 7:30 pm\nSat, Feb 14: 8 am - 3 pm\nSun, Feb 15: 1 pm - 5 pm\nMon, Feb 16: 8:00 am - 7:30 pm\nTue, Feb 17: 8:00 am - 7:30 pm\nWed, Feb 18: 8:00 am - 7:30 pm\nThu, Feb 19: 8:00 am - 7:30 pm\nFri, Feb 20: 8:00 am - 7:30 pm\nSat, Feb 21: 8 am - 3 pm\nSun, Feb 22: 1 pm - 5 pm\nMon, Feb 23: 8:00 am - 7:30 pm\nTue, Feb 24: 8:00 am - 7:30 pm\nWed, Feb 25: 8:00 am - 7:30 pm\nThu, Feb 26: 8:00 am - 7:30 pm\nFri, Feb 27: 8:00 am - 7:30 pm\nSat, Feb 28: 8 am - 3 pm",
+      "latitude": 35.4461814,
+      "longitude": -80.8747692,
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ]
+    },
+    {
+      "address": {
+        "locationName": "CORNELIUS TOWN HALL",
+        "line1": "21445 Catawba Ave",
+        "addressLine": [
+          "21445 Catawba Ave"
+        ],
+        "city": "Cornelius",
+        "state": "NC",
+        "zip": "28031"
+      },
+      "pollingHours": "Thu, Feb 12: 8:00 am - 7:30 pm\nFri, Feb 13: 8:00 am - 7:30 pm\nSat, Feb 14: 8 am - 3 pm\nSun, Feb 15: 1 pm - 5 pm\nMon, Feb 16: 8:00 am - 7:30 pm\nTue, Feb 17: 8:00 am - 7:30 pm\nWed, Feb 18: 8:00 am - 7:30 pm\nThu, Feb 19: 8:00 am - 7:30 pm\nFri, Feb 20: 8:00 am - 7:30 pm\nSat, Feb 21: 8 am - 3 pm\nSun, Feb 22: 1 pm - 5 pm\nMon, Feb 23: 8:00 am - 7:30 pm\nTue, Feb 24: 8:00 am - 7:30 pm\nWed, Feb 25: 8:00 am - 7:30 pm\nThu, Feb 26: 8:00 am - 7:30 pm\nFri, Feb 27: 8:00 am - 7:30 pm\nSat, Feb 28: 8 am - 3 pm",
+      "latitude": 35.4818857,
+      "longitude": -80.858933499999992,
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ]
+    }
+  ],
+  "contests": [
+    {
+      "type": "General",
+      "ballotTitle": "US SENATE",
+      "office": "US SENATE",
+      "district": {
+        "name": "US SENATE",
+        "scope": "statewide",
+        "id": "0"
+      },
+      "numberElected": "1",
+      "ballotPlacement": "2",
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ],
+      "candidates": [
+        {
+          "name": "Roy Cooper",
+          "party": "DEMOCRATIC"
+        },
+        {
+          "name": "Daryl Farrow",
+          "party": "DEMOCRATIC"
+        },
+        {
+          "name": "Marcus W. Williams",
+          "party": "DEMOCRATIC"
+        },
+        {
+          "name": "Orrick Quick",
+          "party": "DEMOCRATIC"
+        },
+        {
+          "name": "Justin E. Dues",
+          "party": "DEMOCRATIC"
+        },
+        {
+          "name": "Robert Colon",
+          "party": "DEMOCRATIC"
+        }
+      ]
+    },
+    {
+      "type": "General",
+      "ballotTitle": "US SENATE",
+      "office": "US SENATE",
+      "district": {
+        "name": "US SENATE",
+        "scope": "statewide",
+        "id": "0"
+      },
+      "numberElected": "1",
+      "ballotPlacement": "2",
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ],
+      "candidates": [
+        {
+          "name": "Elizabeth A. Temple",
+          "party": "REPUBLICAN"
+        },
+        {
+          "name": "Donald M. (Don) Brown",
+          "party": "REPUBLICAN"
+        },
+        {
+          "name": "Michael Whatley",
+          "party": "REPUBLICAN"
+        },
+        {
+          "name": "Margot Dupre",
+          "party": "REPUBLICAN"
+        },
+        {
+          "name": "Thomas Johnson",
+          "party": "REPUBLICAN"
+        },
+        {
+          "name": "Michele Morrow",
+          "party": "REPUBLICAN"
+        },
+        {
+          "name": "Richard Dansie",
+          "party": "REPUBLICAN"
+        }
+      ]
+    },
+    {
+      "type": "General",
+      "ballotTitle": "US HOUSE OF REPRESENTATIVES DISTRICT 12",
+      "office": "US HOUSE OF REPRESENTATIVES DISTRICT 12",
+      "district": {
+        "name": "US HOUSE OF REPRESENTATIVES DISTRICT 12",
+        "id": "0"
+      },
+      "numberElected": "1",
+      "ballotPlacement": "3",
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ],
+      "candidates": [
+        {
+          "name": "Jack Codiga",
+          "party": "REPUBLICAN"
+        },
+        {
+          "name": "Addul Ali",
+          "party": "REPUBLICAN"
+        }
+      ]
+    },
+    {
+      "type": "General",
+      "ballotTitle": "US HOUSE OF REPRESENTATIVES DISTRICT 12",
+      "office": "US HOUSE OF REPRESENTATIVES DISTRICT 12",
+      "district": {
+        "name": "US HOUSE OF REPRESENTATIVES DISTRICT 12",
+        "id": "0"
+      },
+      "numberElected": "1",
+      "ballotPlacement": "3",
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ],
+      "candidates": [
+        {
+          "name": "Alma Shealey Adams",
+          "party": "DEMOCRATIC"
+        },
+        {
+          "name": "Monaca Maye Williamson",
+          "party": "DEMOCRATIC"
+        }
+      ]
+    },
+    {
+      "type": "General",
+      "ballotTitle": "MECKLENBURG COUNTY BOARD OF COMMISSIONERS AT-LARGE",
+      "office": "MECKLENBURG COUNTY BOARD OF COMMISSIONERS AT-LARGE",
+      "district": {
+        "name": "MECKLENBURG MECKLENBURG COUNTY BOARD OF COMMISSIONERS AT-LARGE",
+        "scope": "countywide",
+        "id": "0"
+      },
+      "numberElected": "3",
+      "ballotPlacement": "18",
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ],
+      "candidates": [
+        {
+          "name": "Arthur Griffin Jr.",
+          "party": "DEMOCRATIC"
+        },
+        {
+          "name": "Leigh Altman",
+          "party": "DEMOCRATIC"
+        },
+        {
+          "name": "Felicia R. Thompkins",
+          "party": "DEMOCRATIC"
+        },
+        {
+          "name": "Olivia Scott",
+          "party": "DEMOCRATIC"
+        },
+        {
+          "name": "Yvette Townsend-Ingram",
+          "party": "DEMOCRATIC"
+        },
+        {
+          "name": "Heather Morrow",
+          "party": "DEMOCRATIC"
+        },
+        {
+          "name": "Sharif R. Hannan",
+          "party": "DEMOCRATIC"
+        },
+        {
+          "name": "Leslie Allen",
+          "party": "DEMOCRATIC"
+        },
+        {
+          "name": "Toni Emehel",
+          "party": "DEMOCRATIC"
+        },
+        {
+          "name": "Nichel Dunlap",
+          "party": "DEMOCRATIC"
+        }
+      ]
+    },
+    {
+      "type": "General",
+      "ballotTitle": "MECKLENBURG COUNTY SHERIFF",
+      "office": "MECKLENBURG COUNTY SHERIFF",
+      "district": {
+        "name": "MECKLENBURG MECKLENBURG COUNTY SHERIFF",
+        "scope": "countywide",
+        "id": "0"
+      },
+      "numberElected": "1",
+      "ballotPlacement": "22",
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ],
+      "candidates": [
+        {
+          "name": "Rodney M. Collins",
+          "party": "DEMOCRATIC"
+        },
+        {
+          "name": "Ricky Ricardo Robbins",
+          "party": "DEMOCRATIC"
+        },
+        {
+          "name": "Antwain Nance",
+          "party": "DEMOCRATIC"
+        },
+        {
+          "name": "Garry L. McFadden",
+          "party": "DEMOCRATIC"
+        }
+      ]
+    },
+    {
+      "type": "General",
+      "ballotTitle": "NC COURT OF APPEALS JUDGE SEAT 03",
+      "office": "NC COURT OF APPEALS JUDGE SEAT 03",
+      "district": {
+        "name": "NC COURT OF APPEALS JUDGE SEAT 03",
+        "scope": "statewide",
+        "id": "0"
+      },
+      "numberElected": "1",
+      "ballotPlacement": "26",
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ],
+      "candidates": [
+        {
+          "name": "James Weldon Whalen",
+          "party": "DEMOCRATIC"
+        },
+        {
+          "name": "Christine Marie Walczyk",
+          "party": "DEMOCRATIC"
+        }
+      ]
+    },
+    {
+      "type": "General",
+      "ballotTitle": "NC COURT OF APPEALS JUDGE SEAT 01",
+      "office": "NC COURT OF APPEALS JUDGE SEAT 01",
+      "district": {
+        "name": "NC COURT OF APPEALS JUDGE SEAT 01",
+        "scope": "statewide",
+        "id": "0"
+      },
+      "numberElected": "1",
+      "ballotPlacement": "26",
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ],
+      "candidates": [
+        {
+          "name": "Matt Smith",
+          "party": "REPUBLICAN"
+        },
+        {
+          "name": "Michael C. Byrne",
+          "party": "REPUBLICAN"
+        }
+      ]
+    },
+    {
+      "type": "General",
+      "ballotTitle": "NC DISTRICT COURT JUDGE DISTRICT 26 SEAT 18",
+      "office": "NC DISTRICT COURT JUDGE DISTRICT 26 SEAT 18",
+      "district": {
+        "name": "NC DISTRICT COURT JUDGE DISTRICT 26 SEAT 18",
+        "scope": "judicial",
+        "id": "0"
+      },
+      "numberElected": "1",
+      "ballotPlacement": "28",
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ],
+      "candidates": [
+        {
+          "name": "Habekah Cannon",
+          "party": "DEMOCRATIC"
+        },
+        {
+          "name": "Cecilia Oseguera",
+          "party": "DEMOCRATIC"
+        }
+      ]
+    }
+  ],
+  "state": [
+    {
+      "name": "ALEXANDER COUNTY BOARD OF ELECTIONS",
+      "electionAdministrationBody": {
+        "electionInfoUrl": "https://www.ncsbe.gov/about-elections",
+        "electionRegistrationUrl": "https://www.ncsbe.gov/about-elections",
+        "electionRegistrationConfirmationUrl": "https://vt.ncsbe.gov/RegLkup/",
+        "absenteeVotingInfoUrl": "https://www.ncsbe.gov/voting/vote-mail",
+        "votingLocationFinderUrl": "https://www.ncsbe.gov/voting",
+        "ballotInfoUrl": "https://vt.ncsbe.gov/RegLkup/",
+        "electionRulesUrl": "http://www.ncsbe.gov"
+      },
+      "local_jurisdiction": {
+        "name": "MECKLENBURG COUNTY BOARD OF ELECTIONS",
+        "electionAdministrationBody": {
+          "electionInfoUrl": "https://www.ncsbe.gov/about-elections",
+          "electionRegistrationUrl": "https://www.ncsbe.gov/about-elections",
+          "electionRegistrationConfirmationUrl": "https://vt.ncsbe.gov/RegLkup/",
+          "absenteeVotingInfoUrl": "https://www.ncsbe.gov/voting/vote-mail",
+          "votingLocationFinderUrl": "https://www.ncsbe.gov/voting",
+          "ballotInfoUrl": "https://vt.ncsbe.gov/RegLkup/",
+          "electionRulesUrl": "http://www.ncsbe.gov"
+        },
+        "sources": [
+          {
+            "name": "Voting Information Project",
+            "official": true
+          }
+        ]
+      },
+      "sources": [
+        {
+          "name": "Voting Information Project",
+          "official": true
+        }
+      ]
+    }
+  ],
+  "kind": "civicinfo#voterInfoResponse"
+}

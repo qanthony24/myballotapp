@@ -1,0 +1,205 @@
+[
+  {
+    "id": "la-2026-may-primary:ocd-division/country:us/state:la:u-s-senate-republican-primary",
+    "type": "Primary",
+    "office": "U.S. Senate (Republican Primary)",
+    "officeSlug": "u-s-senate-republican-primary",
+    "ballotTitle": null,
+    "electionId": "la-2026-may-primary",
+    "electionDate": "2026-05-16",
+    "electionName": "Louisiana 2026 Closed Party Primary",
+    "district": {
+      "name": "Louisiana",
+      "scope": "statewide",
+      "ocdDivisionId": "ocd-division/country:us/state:la"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Bill Cassidy",
+        "party": "Republican",
+        "candidateUrl": "https://www.billcassidy.com",
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1
+      },
+      {
+        "name": "Julia Letlow",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 2
+      },
+      {
+        "name": "John Fleming",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 3
+      },
+      {
+        "name": "Mark Spencer",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 4
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:45:57.259Z",
+    "contentHash": "e9fb2202c9b98b40e600d2942d045109808733c5a68e88a1c72749facf21c201",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-may-primary:ocd-division/country:us/state:la:u-s-senate-democratic-primary",
+    "type": "Primary",
+    "office": "U.S. Senate (Democratic Primary)",
+    "officeSlug": "u-s-senate-democratic-primary",
+    "ballotTitle": null,
+    "electionId": "la-2026-may-primary",
+    "electionDate": "2026-05-16",
+    "electionName": "Louisiana 2026 Closed Party Primary",
+    "district": {
+      "name": "Louisiana",
+      "scope": "statewide",
+      "ocdDivisionId": "ocd-division/country:us/state:la"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Nick Albares",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1
+      },
+      {
+        "name": "Gary Crockett",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 2
+      },
+      {
+        "name": "Jamie Davis",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 3
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:45:57.259Z",
+    "contentHash": "9c76e4ae919bbb0349d2ae709d5deb9cb3806e37845e2aa717da82050186d3d1",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-may-primary:ocd-division/country:us/state:la/cd:6:u-s-representative-6th-district-democratic-primary",
+    "type": "Primary",
+    "office": "U.S. Representative, 6th District (Democratic Primary)",
+    "officeSlug": "u-s-representative-6th-district-democratic-primary",
+    "ballotTitle": null,
+    "electionId": "la-2026-may-primary",
+    "electionDate": "2026-05-16",
+    "electionName": "Louisiana 2026 Closed Party Primary",
+    "district": {
+      "name": "Louisiana 6th Congressional District",
+      "scope": "congressional",
+      "ocdDivisionId": "ocd-division/country:us/state:la/cd:6"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Cleo Fields",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1
+      },
+      {
+        "name": "Larry Davis",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 2
+      },
+      {
+        "name": "Peter Williams",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 3
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:45:57.259Z",
+    "contentHash": "462b525ba66fdc07c83f2394c9b21608a491fb33677d90153ab305a2bed2063b",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-may-primary:ocd-division/country:us/state:la/parish:east_baton_rouge:family-court-judge-special-election",
+    "type": "Special",
+    "office": "Family Court Judge (Special Election)",
+    "officeSlug": "family-court-judge-special-election",
+    "ballotTitle": null,
+    "electionId": "la-2026-may-primary",
+    "electionDate": "2026-05-16",
+    "electionName": "Louisiana 2026 Closed Party Primary",
+    "district": {
+      "name": "East Baton Rouge Parish Family Court",
+      "scope": "judicial",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge"
+    },
+    "numberElected": 1,
+    "candidates": [],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-25T00:45:57.259Z",
+    "contentHash": "c88471f6b9a6e53866541f6767c73cd57067f253058363293707e689eb768661",
+    "deleted": false
+  }
+]

@@ -1,18 +1,20 @@
-tailwind.config = {
-  content: ['./index.html', './src/**/*.{tsx,ts,jsx,js}'],
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    './index.html',
+    './**/*.{tsx,ts,jsx,js}',
+    '!./node_modules/**',
+    '!./data-pipeline/**',
+    '!./dist/**',
+  ],
   theme: {
     extend: {
       colors: {
         civic: '#2155FF',
         gold: '#F7B339',
-        slate: {
-          50: '#F5F7FA',
-        },
-        // keep existing palette
         'civic-blue': '#2155FF',
         'sunlight-gold': '#F7B339',
         'midnight-navy': '#1A2138',
-        'slate-100': '#F5F7FA',
         'brand-red': '#C7002B',
         'brand-dark-blue': '#1E3A5F',
         'brand-medium-blue': '#5A7698',
@@ -38,4 +40,5 @@ tailwind.config = {
       },
     },
   },
-}
+  plugins: [],
+};
