@@ -24,6 +24,8 @@ import AdminSetupPage from './pages/admin/AdminSetupPage';
 import AdminCsvImportPage from './pages/admin/AdminCsvImportPage';
 import AdminBallotMeasuresPage from './pages/admin/AdminBallotMeasuresPage';
 import AdminBallotMeasureEditPage from './pages/admin/AdminBallotMeasureEditPage';
+import AdminSurveyQuestionsPage from './pages/admin/AdminSurveyQuestionsPage';
+import AdminSurveyResponsesPage from './pages/admin/AdminSurveyResponsesPage';
 
 const AppRoutes: React.FC = () => {
   const { currentUser } = useAuth();
@@ -47,6 +49,8 @@ const AppRoutes: React.FC = () => {
       <Route path="/admin/csv-import" element={currentUser ? <AdminCsvImportPage /> : <Navigate to="/auth" />} />
       <Route path="/admin/ballot-measures" element={currentUser ? <AdminBallotMeasuresPage /> : <Navigate to="/auth" />} />
       <Route path="/admin/ballot-measures/:id" element={currentUser ? <AdminBallotMeasureEditPage /> : <Navigate to="/auth" />} />
+      <Route path="/admin/survey-questions" element={currentUser ? <AdminSurveyQuestionsPage /> : <Navigate to="/auth" />} />
+      <Route path="/admin/survey-responses" element={currentUser ? <AdminSurveyResponsesPage /> : <Navigate to="/auth" />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

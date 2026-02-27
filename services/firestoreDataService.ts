@@ -373,6 +373,105 @@ export function getLocalSurveyQuestions(): SurveyQuestion[] {
   return SURVEY_QUESTIONS_DATA;
 }
 
+// ---- Survey Question CRUD ----
+
+export async function getFirestoreSurveyQuestions(): Promise<SurveyQuestion[]> {
+  try {
+    const snap = await getDocs(collection(db, 'surveyQuestions'));
+    if (snap.empty) return SURVEY_QUESTIONS_DATA;
+    const questions: SurveyQuestion[] = [];
+    snap.forEach((d) => questions.push(d.data() as SurveyQuestion));
+    return questions.length > 0 ? questions : SURVEY_QUESTIONS_DATA;
+  } catch {
+    return SURVEY_QUESTIONS_DATA;
+  }
+}
+
+export async function saveSurveyQuestion(question: SurveyQuestion): Promise<void> {
+  await setDoc(doc(db, 'surveyQuestions', question.key), stripUndefined({
+    ...question,
+    _updatedAt: new Date().toISOString(),
+  } as Record<string, unknown>));
+}
+
+export async function deleteSurveyQuestion(key: string): Promise<void> {
+  const { deleteDoc: delDoc } = await import('firebase/firestore');
+  await delDoc(doc(db, 'surveyQuestions', key));
+}
+
+export async function importSurveyResponsesCsv(
+  csvText: string,
+): Promise<CsvImportResult> {
+  const lines = csvText.split('\n').map((l) => l.trim()).filter(Boolean);
+  if (lines.length < 2) return { imported: 0, skipped: 0, errors: ['CSV must have a header row and at least one data row'] };
+
+  const headers = parseCsvLine(lines[0]).map((h) => h.trim().toLowerCase());
+  const result: CsvImportResult = { imported: 0, skipped: 0, errors: [] };
+
+  const idCol = headers.findIndex((h) => h === 'candidateid' || h === 'candidate_id' || h === 'id');
+  if (idCol === -1) {
+    return { imported: 0, skipped: 0, errors: ['CSV must have a candidateId or id column'] };
+  }
+
+  const questionCols: { headerIdx: number; questionKey: string }[] = [];
+  for (let hi = 0; hi < headers.length; hi++) {
+    const h = headers[hi];
+    if (h.startsWith('q_') || h.startsWith('question_')) {
+      questionCols.push({ headerIdx: hi, questionKey: h.replace(/^(q_|question_)/, '') });
+    }
+  }
+
+  if (questionCols.length === 0) {
+    return { imported: 0, skipped: 0, errors: ['No survey question columns found. Prefix question columns with q_ (e.g. q_why_running)'] };
+  }
+
+  for (let i = 1; i < lines.length; i++) {
+    try {
+      const values = parseCsvLine(lines[i]);
+      const candidateId = parseInt(values[idCol]);
+      if (!candidateId) {
+        result.errors.push(`Row ${i + 1}: missing or invalid candidateId`);
+        result.skipped++;
+        continue;
+      }
+
+      const responses: Record<string, string> = {};
+      for (const qc of questionCols) {
+        const val = (values[qc.headerIdx] || '').trim();
+        if (val) responses[qc.questionKey] = val;
+      }
+
+      if (Object.keys(responses).length === 0) {
+        result.skipped++;
+        continue;
+      }
+
+      const docRef = doc(db, 'candidates', String(candidateId));
+      const existing = await getDoc(docRef);
+      if (existing.exists()) {
+        const prev = (existing.data() as Record<string, unknown>).surveyResponses as Record<string, string> || {};
+        await updateDoc(docRef, stripUndefined({
+          surveyResponses: { ...prev, ...responses },
+          _updatedAt: new Date().toISOString(),
+        } as Record<string, unknown>));
+      } else {
+        await setDoc(docRef, stripUndefined({
+          id: candidateId,
+          surveyResponses: responses,
+          _updatedAt: new Date().toISOString(),
+        } as Record<string, unknown>));
+      }
+      result.imported++;
+    } catch (err) {
+      result.errors.push(`Row ${i + 1}: ${err instanceof Error ? err.message : String(err)}`);
+      result.skipped++;
+    }
+  }
+
+  invalidateCandidateCache();
+  return result;
+}
+
 export function getLocalBallotMeasures(): BallotMeasure[] {
   return BALLOT_MEASURES_DATA;
 }

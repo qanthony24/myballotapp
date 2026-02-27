@@ -101,7 +101,9 @@ const AdminSetupPage: React.FC = () => {
         <ul className="space-y-2 text-sm">
           <li><Link to="/admin/candidates" className="text-civic-blue underline">Manage Candidates</Link></li>
           <li><Link to="/admin/ballot-measures" className="text-civic-blue underline">Manage Ballot Measures</Link></li>
-          <li><Link to="/admin/csv-import" className="text-civic-blue underline">CSV Import</Link></li>
+          <li><Link to="/admin/survey-questions" className="text-civic-blue underline">Manage Survey Questions</Link></li>
+          <li><Link to="/admin/survey-responses" className="text-civic-blue underline">Upload Survey Responses (by race)</Link></li>
+          <li><Link to="/admin/csv-import" className="text-civic-blue underline">CSV Candidate Import</Link></li>
           <li><a href="https://console.firebase.google.com/project/myballot-app/firestore" target="_blank" rel="noopener noreferrer" className="text-civic-blue underline">Firebase Console (Firestore)</a></li>
           <li><Link to="/debug/ballot-feed" className="text-civic-blue underline">Debug Ballot Feed</Link></li>
         </ul>
