@@ -222,7 +222,8 @@ export async function seedAllToFirestore(): Promise<string> {
   const elections = await seedElectionsToFirestore();
   const offices = await seedOfficesToFirestore();
   const questions = await seedSurveyQuestionsToFirestore();
-  return `Seeded: ${candidates} candidates, ${elections} elections, ${offices} offices, ${questions} survey questions`;
+  const measures = await seedBallotMeasuresToFirestore();
+  return `Seeded: ${candidates} candidates, ${elections} elections, ${offices} offices, ${questions} survey questions, ${measures} ballot measures`;
 }
 
 // ---- CSV import ----
@@ -374,4 +375,94 @@ export function getLocalSurveyQuestions(): SurveyQuestion[] {
 
 export function getLocalBallotMeasures(): BallotMeasure[] {
   return BALLOT_MEASURES_DATA;
+}
+
+// ---- Ballot Measure CRUD ----
+
+let measureCache: BallotMeasure[] | null = null;
+let measureCacheTime = 0;
+
+export function invalidateMeasureCache(): void {
+  measureCache = null;
+  measureCacheTime = 0;
+}
+
+export async function getFirestoreBallotMeasures(): Promise<BallotMeasure[]> {
+  if (measureCache && Date.now() - measureCacheTime < CACHE_TTL) {
+    return measureCache;
+  }
+
+  try {
+    const snap = await getDocs(collection(db, 'ballotMeasures'));
+    if (snap.empty) return BALLOT_MEASURES_DATA;
+
+    const firestoreMeasures = new Map<number, BallotMeasure>();
+    snap.forEach((d) => {
+      const data = d.data() as BallotMeasure;
+      firestoreMeasures.set(data.id, data);
+    });
+
+    const merged = BALLOT_MEASURES_DATA.map((m) => {
+      const override = firestoreMeasures.get(m.id);
+      return override ? { ...m, ...override } : m;
+    });
+
+    for (const [id, fm] of firestoreMeasures) {
+      if (!BALLOT_MEASURES_DATA.find((m) => m.id === id)) {
+        merged.push(fm);
+      }
+    }
+
+    measureCache = merged;
+    measureCacheTime = Date.now();
+    return merged;
+  } catch (err) {
+    console.warn('Firestore ballot measures read failed, using local data:', err);
+    return BALLOT_MEASURES_DATA;
+  }
+}
+
+export async function getFirestoreBallotMeasureById(
+  id: number,
+): Promise<BallotMeasure | undefined> {
+  try {
+    const docSnap = await getDoc(doc(db, 'ballotMeasures', String(id)));
+    if (docSnap.exists()) {
+      const local = BALLOT_MEASURES_DATA.find((m) => m.id === id);
+      return local
+        ? { ...local, ...(docSnap.data() as BallotMeasure) }
+        : (docSnap.data() as BallotMeasure);
+    }
+  } catch {
+    // fall through
+  }
+  return BALLOT_MEASURES_DATA.find((m) => m.id === id);
+}
+
+export async function saveBallotMeasure(measure: BallotMeasure): Promise<void> {
+  const docRef = doc(db, 'ballotMeasures', String(measure.id));
+  await setDoc(docRef, stripUndefined({
+    ...measure,
+    _updatedAt: new Date().toISOString(),
+  } as Record<string, unknown>));
+  invalidateMeasureCache();
+}
+
+export async function seedBallotMeasuresToFirestore(): Promise<number> {
+  const batchSize = 400;
+  let count = 0;
+  for (let i = 0; i < BALLOT_MEASURES_DATA.length; i += batchSize) {
+    const batch = writeBatch(db);
+    const chunk = BALLOT_MEASURES_DATA.slice(i, i + batchSize);
+    for (const m of chunk) {
+      batch.set(doc(db, 'ballotMeasures', String(m.id)), stripUndefined({
+        ...m,
+        _updatedAt: new Date().toISOString(),
+      } as Record<string, unknown>));
+      count++;
+    }
+    await batch.commit();
+  }
+  invalidateMeasureCache();
+  return count;
 }

@@ -2,12 +2,12 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BallotMeasure, Cycle } from '../types';
 import { 
-  getAllBallotMeasures, 
-  getUpcomingCycles, // Use this for upcoming elections
+  getUpcomingCycles,
   getFormattedElectionName, 
   getFormattedElectionNameFromDate,
-  isElectionPast // Use centralized version
+  isElectionPast
 } from '../services/dataService';
+import { getFirestoreBallotMeasures } from '../services/firestoreDataService';
 import { DocumentCheckIcon, InformationCircleIcon, CalendarDaysIcon } from '@heroicons/react/24/outline';
 import { useBallot } from '../hooks/useBallot';
 import { useSettings } from '../hooks/useSettings';
@@ -20,7 +20,7 @@ const BallotMeasuresListPage: React.FC = () => {
   const { uiDensity } = useSettings();
 
   useEffect(() => {
-    setAllMeasures(getAllBallotMeasures());
+    getFirestoreBallotMeasures().then(setAllMeasures);
     const upcomingCycles = getUpcomingCycles();
     setUpcomingElectionEvents(upcomingCycles);
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { BallotMeasure } from '../types';
 import { getBallotMeasureById, getFormattedElectionNameFromDate } from '../services/dataService';
+import { getFirestoreBallotMeasureById } from '../services/firestoreDataService';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import { useBallot } from '../hooks/useBallot';
 import { ArrowLeftIcon, DocumentTextIcon, ChatBubbleLeftEllipsisIcon, CheckCircleIcon, XCircleIcon, QuestionMarkCircleIcon, HandThumbUpIcon, HandThumbDownIcon, NoSymbolIcon } from '@heroicons/react/24/outline';
@@ -20,16 +21,18 @@ const BallotMeasureDetailPage: React.FC = () => {
   } = useBallot();
 
   useEffect(() => {
-    setLoading(true); 
-    if (measureIdParam) { 
-      const id = parseInt(measureIdParam);
-      const fetchedMeasure = getBallotMeasureById(id);
-      setMeasure(fetchedMeasure);
-    } else {
-      setMeasure(null); // Explicitly set to null if no ID
+    if (!measureIdParam) {
+      setMeasure(null);
+      setLoading(false);
+      return;
     }
-    setLoading(false);
-  }, [measureIdParam]); // Depend on the renamed param
+    setLoading(true);
+    const id = parseInt(measureIdParam);
+    getFirestoreBallotMeasureById(id).then((fetched) => {
+      setMeasure(fetched ?? getBallotMeasureById(id) ?? null);
+      setLoading(false);
+    });
+  }, [measureIdParam]);
 
   if (loading) return <LoadingSpinner size="lg" />;
   if (!measure) return <div className="text-center py-10 text-sunlight-gold">Ballot measure not found.</div>; // Updated text color
