@@ -25,6 +25,21 @@ import {
   writeBatch,
 } from 'firebase/firestore';
 import { Candidate, Office, Cycle, BallotMeasure, SurveyQuestion } from '../types';
+
+/** Recursively strip undefined values — Firestore rejects them. */
+function stripUndefined<T extends Record<string, unknown>>(obj: T): T {
+  const clean = {} as Record<string, unknown>;
+  for (const [key, value] of Object.entries(obj)) {
+    if (value === undefined) continue;
+    if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+      clean[key] = stripUndefined(value as Record<string, unknown>);
+    } else {
+      clean[key] = value;
+    }
+  }
+  return clean as T;
+}
+
 import {
   CANDIDATES_DATA,
   OFFICES_DATA,
@@ -104,10 +119,10 @@ export async function getFirestoreCandidateById(
 
 export async function saveCandidate(candidate: Candidate): Promise<void> {
   const docRef = doc(db, 'candidates', String(candidate.id));
-  await setDoc(docRef, {
+  await setDoc(docRef, stripUndefined({
     ...candidate,
     _updatedAt: new Date().toISOString(),
-  });
+  } as Record<string, unknown>));
   invalidateCandidateCache();
 }
 
@@ -116,10 +131,10 @@ export async function updateCandidateFields(
   fields: Partial<Candidate>,
 ): Promise<void> {
   const docRef = doc(db, 'candidates', String(id));
-  await updateDoc(docRef, {
+  await updateDoc(docRef, stripUndefined({
     ...fields,
     _updatedAt: new Date().toISOString(),
-  });
+  } as Record<string, unknown>));
   invalidateCandidateCache();
 }
 
@@ -136,11 +151,11 @@ export async function seedCandidatesToFirestore(
     const batch = writeBatch(db);
     const chunk = data.slice(i, i + batchSize);
     for (const c of chunk) {
-      batch.set(doc(db, 'candidates', String(c.id)), {
+      batch.set(doc(db, 'candidates', String(c.id)), stripUndefined({
         ...c,
         _updatedAt: new Date().toISOString(),
         _seededFromConstants: true,
-      });
+      } as Record<string, unknown>));
       count++;
     }
     await batch.commit();
@@ -153,10 +168,10 @@ export async function seedCandidatesToFirestore(
 export async function seedElectionsToFirestore(): Promise<number> {
   const batch = writeBatch(db);
   for (const cycle of CYCLES_DATA) {
-    batch.set(doc(db, 'elections', String(cycle.id)), {
+    batch.set(doc(db, 'elections', String(cycle.id)), stripUndefined({
       ...cycle,
       _updatedAt: new Date().toISOString(),
-    });
+    } as Record<string, unknown>));
   }
   await batch.commit();
   return CYCLES_DATA.length;
@@ -165,10 +180,10 @@ export async function seedElectionsToFirestore(): Promise<number> {
 export async function seedOfficesToFirestore(): Promise<number> {
   const batch = writeBatch(db);
   for (const office of OFFICES_DATA) {
-    batch.set(doc(db, 'offices', String(office.id)), {
+    batch.set(doc(db, 'offices', String(office.id)), stripUndefined({
       ...office,
       _updatedAt: new Date().toISOString(),
-    });
+    } as Record<string, unknown>));
   }
   await batch.commit();
   return OFFICES_DATA.length;
@@ -177,10 +192,10 @@ export async function seedOfficesToFirestore(): Promise<number> {
 export async function seedSurveyQuestionsToFirestore(): Promise<number> {
   const batch = writeBatch(db);
   for (const q of SURVEY_QUESTIONS_DATA) {
-    batch.set(doc(db, 'surveyQuestions', q.key), {
+    batch.set(doc(db, 'surveyQuestions', q.key), stripUndefined({
       ...q,
       _updatedAt: new Date().toISOString(),
-    });
+    } as Record<string, unknown>));
   }
   await batch.commit();
   return SURVEY_QUESTIONS_DATA.length;
@@ -211,10 +226,10 @@ export async function isUserAdmin(email: string | undefined): Promise<boolean> {
 }
 
 export async function setAdminEmails(emails: string[]): Promise<void> {
-  await setDoc(doc(db, 'config', 'admin'), {
+  await setDoc(doc(db, 'config', 'admin'), stripUndefined({
     adminEmails: emails.map((e) => e.toLowerCase()),
     _updatedAt: new Date().toISOString(),
-  });
+  } as Record<string, unknown>));
 }
 
 // ---- Passthrough reads (these stay local for now, can migrate later) ----
