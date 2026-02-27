@@ -4,12 +4,13 @@ import { Candidate, SurveyQuestion } from '../../types';
 import {
   getFirestoreCandidateById,
   saveCandidate,
+  uploadCandidatePhoto,
   getLocalOffices,
   getLocalCycles,
   getLocalSurveyQuestions,
 } from '../../services/firestoreDataService';
 import { getOfficeById } from '../../services/dataService';
-import { ArrowLeftIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, CheckCircleIcon, ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 
 const AdminCandidateEditPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,6 +20,7 @@ const AdminCandidateEditPage: React.FC = () => {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
 
   const offices = getLocalOffices();
   const cycles = getLocalCycles();
@@ -52,6 +54,21 @@ const AdminCandidateEditPage: React.FC = () => {
       setError(err instanceof Error ? err.message : 'Failed to save');
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handlePhotoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!candidate || !e.target.files?.[0]) return;
+    setUploading(true);
+    setError(null);
+    try {
+      const url = await uploadCandidatePhoto(candidate.id, e.target.files[0]);
+      setCandidate({ ...candidate, photoUrl: url });
+      setSaved(false);
+    } catch (err) {
+      setError(`Photo upload failed: ${err instanceof Error ? err.message : String(err)}`);
+    } finally {
+      setUploading(false);
     }
   }
 
@@ -162,24 +179,40 @@ const AdminCandidateEditPage: React.FC = () => {
 
         {/* Photo & Media */}
         <Section title="Photo & Media">
-          <Field
-            label="Photo URL"
-            value={candidate.photoUrl || ''}
-            onChange={(v) => updateField('photoUrl', v)}
-            placeholder="https://example.com/photo.jpg"
-          />
-          {candidate.photoUrl && (
-            <div className="mt-2">
+          <div className="flex gap-4 items-start">
+            <div className="flex-1">
+              <Field
+                label="Photo URL (paste a link)"
+                value={candidate.photoUrl || ''}
+                onChange={(v) => updateField('photoUrl', v)}
+                placeholder="https://example.com/photo.jpg"
+              />
+              <div className="mt-3 flex items-center gap-2">
+                <span className="text-xs text-gray-400">— or —</span>
+                <label className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium cursor-pointer transition ${uploading ? 'bg-gray-200 text-gray-400' : 'bg-civic-blue/10 text-civic-blue hover:bg-civic-blue/20 border border-civic-blue/30'}`}>
+                  <ArrowUpTrayIcon className="h-3.5 w-3.5" />
+                  {uploading ? 'Uploading...' : 'Upload a file'}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handlePhotoUpload}
+                    disabled={uploading}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+              <div className="mt-2 text-xs text-gray-400">
+                Paste a URL from the candidate's site or social media, or upload an image file directly.
+              </div>
+            </div>
+            {candidate.photoUrl && (
               <img
                 src={candidate.photoUrl}
                 alt="Preview"
-                className="w-24 h-24 rounded-lg object-cover border"
+                className="w-24 h-24 rounded-lg object-cover border flex-shrink-0"
                 onError={(e) => { e.currentTarget.style.display = 'none'; }}
               />
-            </div>
-          )}
-          <div className="mt-3 text-xs text-gray-400">
-            Tip: Use a direct link to a candidate headshot from their campaign site, social media, or a news article.
+            )}
           </div>
         </Section>
 

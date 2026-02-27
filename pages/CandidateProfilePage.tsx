@@ -9,6 +9,7 @@ import {
   getFormattedCandidateOfficeName,
   getCandidatesByOfficeAndCycle
 } from '../services/dataService';
+import { getFirestoreCandidateById } from '../services/firestoreDataService';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import CollapsibleAnswer from '../components/CollapsibleAnswer';
 import { ArrowLeftIcon, BuildingOffice2Icon, CalendarDaysIcon, GlobeAltIcon, EnvelopeIcon, PhoneIcon, UserGroupIcon, PlusCircleIcon, MinusCircleIcon, ScaleIcon, CheckBadgeIcon, PencilSquareIcon, ChatBubbleOvalLeftEllipsisIcon, TrashIcon } from '@heroicons/react/24/outline';
@@ -78,30 +79,36 @@ const CandidateProfilePage: React.FC = () => {
   } = useBallot();
 
   useEffect(() => {
+    if (!candidateIdParam) {
+      setCandidate(null);
+      setCandidateCycle(null);
+      setOpponents([]);
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
-    if (candidateIdParam) {
-      const id = parseInt(candidateIdParam);
-      const fetchedCandidate = getCandidateById(id);
-      setCandidate(fetchedCandidate);
-      if (fetchedCandidate) {
-        const cycle = getCycleById(fetchedCandidate.cycleId);
+    const id = parseInt(candidateIdParam);
+
+    getFirestoreCandidateById(id).then((fetchedCandidate) => {
+      // Fall back to local if Firestore returns nothing
+      const resolved = fetchedCandidate ?? getCandidateById(id);
+      setCandidate(resolved ?? null);
+      if (resolved) {
+        const cycle = getCycleById(resolved.cycleId);
         setCandidateCycle(cycle);
         const otherCandidatesInRace = getCandidatesByOfficeAndCycle(
-          fetchedCandidate.officeId,
-          fetchedCandidate.cycleId,
-          fetchedCandidate.district
-        ).filter(op => op.id !== fetchedCandidate.id);
+          resolved.officeId,
+          resolved.cycleId,
+          resolved.district
+        ).filter(op => op.id !== resolved.id);
         setOpponents(otherCandidatesInRace);
       } else {
         setOpponents([]);
       }
-    } else {
-        setCandidate(null);
-        setCandidateCycle(null);
-        setOpponents([]);
-    }
-    setLoading(false);
-  }, [candidateIdParam]); // Depend on the renamed param
+      setLoading(false);
+    });
+  }, [candidateIdParam]);
 
   useEffect(() => {
     if (location.hash === '#notes-section' && notesSectionRef.current) {

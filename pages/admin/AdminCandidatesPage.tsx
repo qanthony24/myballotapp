@@ -59,7 +59,11 @@ const AdminCandidatesPage: React.FC = () => {
           <h1 className="text-2xl font-bold text-midnight-navy">Admin: Candidates</h1>
           <p className="text-sm text-midnight-navy/60 mt-1">Edit candidate details, photos, bios, and survey responses</p>
         </div>
-        <Link to="/" className="text-sm text-civic-blue underline">← Back to app</Link>
+        <div className="flex items-center gap-4">
+          <Link to="/admin/csv-import" className="text-sm bg-midnight-navy text-white px-3 py-1.5 rounded-md hover:bg-opacity-90 font-medium">CSV Import</Link>
+          <Link to="/admin" className="text-sm text-civic-blue underline">Setup</Link>
+          <Link to="/" className="text-sm text-gray-500 underline">← App</Link>
+        </div>
       </div>
 
       {/* Stats */}

@@ -12,7 +12,7 @@
  *   surveyQuestions/{key} — survey question definitions
  *   config/admin       — { adminEmails: string[] }
  */
-import { db } from '../firebase';
+import { db, storage } from '../firebase';
 import {
   collection,
   doc,
@@ -24,6 +24,7 @@ import {
   orderBy,
   writeBatch,
 } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { Candidate, Office, Cycle, BallotMeasure, SurveyQuestion } from '../types';
 
 /** Recursively strip undefined values — Firestore rejects them. */
@@ -138,6 +139,21 @@ export async function updateCandidateFields(
   invalidateCandidateCache();
 }
 
+// ---- Photo upload ----
+
+export async function uploadCandidatePhoto(
+  candidateId: number,
+  file: File,
+): Promise<string> {
+  const ext = file.name.split('.').pop() || 'jpg';
+  const path = `candidates/${candidateId}/photo.${ext}`;
+  const storageRef = ref(storage, path);
+  await uploadBytes(storageRef, file);
+  const url = await getDownloadURL(storageRef);
+  await updateCandidateFields(candidateId, { photoUrl: url });
+  return url;
+}
+
 // ---- Seed: bulk-import constants into Firestore ----
 
 export async function seedCandidatesToFirestore(
@@ -207,6 +223,116 @@ export async function seedAllToFirestore(): Promise<string> {
   const offices = await seedOfficesToFirestore();
   const questions = await seedSurveyQuestionsToFirestore();
   return `Seeded: ${candidates} candidates, ${elections} elections, ${offices} offices, ${questions} survey questions`;
+}
+
+// ---- CSV import ----
+
+export interface CsvImportResult {
+  imported: number;
+  skipped: number;
+  errors: string[];
+}
+
+export async function importCandidatesFromCsv(
+  csvText: string,
+): Promise<CsvImportResult> {
+  const lines = csvText.split('\n').map((l) => l.trim()).filter(Boolean);
+  if (lines.length < 2) return { imported: 0, skipped: 0, errors: ['CSV must have a header row and at least one data row'] };
+
+  const headers = parseCsvLine(lines[0]).map((h) => h.trim().toLowerCase());
+  const result: CsvImportResult = { imported: 0, skipped: 0, errors: [] };
+
+  const batchSize = 400;
+  const candidates: Record<string, unknown>[] = [];
+
+  for (let i = 1; i < lines.length; i++) {
+    try {
+      const values = parseCsvLine(lines[i]);
+      const row: Record<string, string> = {};
+      headers.forEach((h, idx) => { row[h] = (values[idx] || '').trim(); });
+
+      const id = parseInt(row['id']);
+      if (!id) {
+        result.errors.push(`Row ${i + 1}: missing or invalid id`);
+        result.skipped++;
+        continue;
+      }
+
+      const candidate: Record<string, unknown> = {
+        id,
+        firstName: row['firstname'] || row['first_name'] || row['first name'] || '',
+        lastName: row['lastname'] || row['last_name'] || row['last name'] || '',
+        slug: (row['slug'] || `${row['firstname'] || ''}-${row['lastname'] || ''}`).toLowerCase().replace(/\s+/g, '-'),
+        party: row['party'] || '',
+        officeId: parseInt(row['officeid'] || row['office_id'] || '0') || 0,
+        cycleId: parseInt(row['cycleid'] || row['cycle_id'] || '0') || 0,
+        district: row['district'] || undefined,
+        photoUrl: row['photourl'] || row['photo_url'] || row['photo'] || '',
+        website: row['website'] || row['url'] || undefined,
+        email: row['email'] || undefined,
+        phone: row['phone'] || undefined,
+        bio: row['bio'] || row['biography'] || '',
+        ballotOrder: parseInt(row['ballotorder'] || row['ballot_order'] || '1') || 1,
+        isIncumbent: row['isincumbent'] === 'true' || row['incumbent'] === 'true' || row['isincumbent'] === '1',
+        runningMateName: row['runningmatename'] || row['running_mate'] || undefined,
+        socialLinks: {
+          facebook: row['facebook'] || undefined,
+          twitter: row['twitter'] || row['x'] || undefined,
+          instagram: row['instagram'] || undefined,
+        },
+        surveyResponses: {
+          why_running: row['why_running'] || row['q_why_running'] || '',
+          top_priority: row['top_priority'] || row['q_top_priority'] || '',
+          experience: row['experience'] || row['q_experience'] || '',
+          fiscal_approach: row['fiscal_approach'] || row['q_fiscal_approach'] || '',
+        },
+        _updatedAt: new Date().toISOString(),
+        _importedFromCsv: true,
+      };
+
+      candidates.push(stripUndefined(candidate));
+      result.imported++;
+    } catch (err) {
+      result.errors.push(`Row ${i + 1}: ${err instanceof Error ? err.message : String(err)}`);
+      result.skipped++;
+    }
+  }
+
+  for (let i = 0; i < candidates.length; i += batchSize) {
+    const batch = writeBatch(db);
+    const chunk = candidates.slice(i, i + batchSize);
+    for (const c of chunk) {
+      batch.set(doc(db, 'candidates', String(c.id)), c);
+    }
+    await batch.commit();
+  }
+
+  invalidateCandidateCache();
+  return result;
+}
+
+function parseCsvLine(line: string): string[] {
+  const result: string[] = [];
+  let current = '';
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') {
+      if (inQuotes && line[i + 1] === '"') {
+        current += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (ch === ',' && !inQuotes) {
+      result.push(current);
+      current = '';
+    } else {
+      current += ch;
+    }
+  }
+  result.push(current);
+  return result;
 }
 
 // ---- Admin auth ----

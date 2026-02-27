@@ -4,10 +4,10 @@ import FilterControls from '../components/candidates/FilterControls';
 import { Candidate, Cycle } from '../types'; // Removed CandidateSelection
 import { ViewMode } from '../constants'; // Changed import
 import { 
-  getAllCandidates, 
   getCycleById, 
   getUpcomingCycles, 
-} from '../services/dataService'; // Removed getFormattedElectionNameFromDate, isElectionPast
+} from '../services/dataService';
+import { getFirestoreCandidates } from '../services/firestoreDataService';
 import { useBallot } from '../hooks/useBallot';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 
@@ -29,7 +29,7 @@ const HomePage: React.FC = () => {
   const [viewMode, setViewMode] = useState<string>(ViewMode.GRID); 
 
   useEffect(() => {
-    setAllCandidatesData(getAllCandidates());
+    getFirestoreCandidates().then(setAllCandidatesData);
     const cycles = getUpcomingCycles();
     setUpcomingElections(cycles);
 
