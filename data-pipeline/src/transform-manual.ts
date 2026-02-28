@@ -49,6 +49,7 @@ export function transformManualContests(
           phone: c.phone ?? null,
           channels: c.channels ?? [],
           orderOnBallot: c.orderOnBallot ?? i + 1,
+          isIncumbent: c.isIncumbent ?? false,
         }));
 
     const record: ContestV1 = {

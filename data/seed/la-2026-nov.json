@@ -23,6 +23,23 @@
       ]
     },
     {
+      "office": "U.S. Representative, 5th District",
+      "type": "General",
+      "district": {
+        "name": "Louisiana 5th Congressional District",
+        "scope": "congressional",
+        "ocdDivisionId": "ocd-division/country:us/state:la/cd:5"
+      },
+      "candidates": [
+        { "name": "Blake Miguez", "party": "Republican", "isIncumbent": true },
+        { "name": "Jesse Cathey", "party": "Republican" },
+        { "name": "Rob Edmonds", "party": "Republican" },
+        { "name": "Scotty McMakin", "party": "Republican" },
+        { "name": "Martin Cordell", "party": "Democratic" },
+        { "name": "Marguerite Foy", "party": "Democratic" }
+      ]
+    },
+    {
       "office": "U.S. Representative, 6th District",
       "type": "General",
       "district": {
@@ -37,14 +54,164 @@
       ]
     },
     {
-      "office": "Justice of the Peace, Ward 2, District 3",
+      "office": "Mayor-President",
+      "type": "General",
+      "district": {
+        "name": "East Baton Rouge Parish",
+        "scope": "countywide",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge"
+      },
+      "candidates": [
+        { "name": "Sharon Weston Broome", "party": "Democratic", "isIncumbent": true }
+      ]
+    },
+    {
+      "office": "Metro Council, District 1",
+      "type": "General",
+      "district": {
+        "name": "East Baton Rouge Metro Council District 1",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:1"
+      },
+      "candidates": []
+    },
+    {
+      "office": "Metro Council, District 2",
+      "type": "General",
+      "district": {
+        "name": "East Baton Rouge Metro Council District 2",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:2"
+      },
+      "candidates": []
+    },
+    {
+      "office": "Metro Council, District 3",
+      "type": "General",
+      "district": {
+        "name": "East Baton Rouge Metro Council District 3",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:3"
+      },
+      "candidates": []
+    },
+    {
+      "office": "Metro Council, District 4",
+      "type": "General",
+      "district": {
+        "name": "East Baton Rouge Metro Council District 4",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:4"
+      },
+      "candidates": []
+    },
+    {
+      "office": "Metro Council, District 5",
+      "type": "General",
+      "district": {
+        "name": "East Baton Rouge Metro Council District 5",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:5"
+      },
+      "candidates": []
+    },
+    {
+      "office": "Metro Council, District 6",
+      "type": "General",
+      "district": {
+        "name": "East Baton Rouge Metro Council District 6",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:6"
+      },
+      "candidates": []
+    },
+    {
+      "office": "Metro Council, District 7",
+      "type": "General",
+      "district": {
+        "name": "East Baton Rouge Metro Council District 7",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:7"
+      },
+      "candidates": []
+    },
+    {
+      "office": "Metro Council, District 8",
+      "type": "General",
+      "district": {
+        "name": "East Baton Rouge Metro Council District 8",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:8"
+      },
+      "candidates": []
+    },
+    {
+      "office": "Metro Council, District 9",
+      "type": "General",
+      "district": {
+        "name": "East Baton Rouge Metro Council District 9",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:9"
+      },
+      "candidates": []
+    },
+    {
+      "office": "Metro Council, District 10",
+      "type": "General",
+      "district": {
+        "name": "East Baton Rouge Metro Council District 10",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:10"
+      },
+      "candidates": []
+    },
+    {
+      "office": "Metro Council, District 11",
+      "type": "General",
+      "district": {
+        "name": "East Baton Rouge Metro Council District 11",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:11"
+      },
+      "candidates": []
+    },
+    {
+      "office": "Metro Council, District 12",
+      "type": "General",
+      "district": {
+        "name": "East Baton Rouge Metro Council District 12",
+        "scope": "countyCouncil",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:12"
+      },
+      "candidates": []
+    },
+    {
+      "office": "Family Court Judge (Special Election)",
       "type": "Special",
       "district": {
-        "name": "East Baton Rouge Parish Justice Court Ward 2, District 3",
-        "scope": "township",
+        "name": "East Baton Rouge Parish Family Court",
+        "scope": "judicial",
         "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge"
       },
       "candidates": []
+    },
+    {
+      "office": "Library System Millage Renewal",
+      "type": "Referendum",
+      "district": {
+        "name": "East Baton Rouge Parish",
+        "scope": "countywide",
+        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge"
+      },
+      "referendumInfo": {
+        "title": "Proposition L: Library System Millage Renewal",
+        "subtitle": "East Baton Rouge Parish Library Millage",
+        "brief": "Continue an existing 2.5 mills property tax for ten years to fund public libraries.",
+        "fullText": "Shall the Parish of East Baton Rouge continue to levy a special tax of 2.5 mills on all property subject to taxation in the Parish for a period of ten (10) years, beginning with the year 2027 and ending with the year 2036, for the purpose of acquiring, constructing, improving, maintaining and operating public libraries in the Parish, including the purchase of books, periodicals, and equipment, and providing library services to the public?",
+        "ballotResponses": ["YES", "NO"],
+        "proStatement": "Continues existing funding for the parish library system without increasing taxes; essential for maintaining literacy programs, digital access, and community resources.",
+        "conStatement": "Locks in a property tax for another decade; some argue library budgets could be trimmed or consolidated."
+      }
     }
   ]
 }

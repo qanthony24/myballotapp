@@ -124,6 +124,7 @@ function mapCandidates(
     })),
     orderOnBallot:
       c.orderOnBallot != null ? parseInt(c.orderOnBallot, 10) : i + 1,
+    isIncumbent: false,
   }));
 }
 

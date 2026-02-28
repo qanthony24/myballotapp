@@ -23,7 +23,8 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 1
+        "orderOnBallot": 1,
+        "isIncumbent": true
       },
       {
         "name": "Julia Letlow",
@@ -33,7 +34,8 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 2
+        "orderOnBallot": 2,
+        "isIncumbent": false
       },
       {
         "name": "John Fleming",
@@ -43,7 +45,8 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 3
+        "orderOnBallot": 3,
+        "isIncumbent": false
       },
       {
         "name": "Mark Spencer",
@@ -53,7 +56,8 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 4
+        "orderOnBallot": 4,
+        "isIncumbent": false
       }
     ],
     "referendumInfo": null,
@@ -61,7 +65,7 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-25T00:45:57.259Z",
+    "fetchedAt": "2026-02-28T05:35:14.706Z",
     "contentHash": "e9fb2202c9b98b40e600d2942d045109808733c5a68e88a1c72749facf21c201",
     "deleted": false
   },
@@ -89,7 +93,8 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 1
+        "orderOnBallot": 1,
+        "isIncumbent": false
       },
       {
         "name": "Gary Crockett",
@@ -99,7 +104,8 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 2
+        "orderOnBallot": 2,
+        "isIncumbent": false
       },
       {
         "name": "Jamie Davis",
@@ -109,7 +115,8 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 3
+        "orderOnBallot": 3,
+        "isIncumbent": false
       }
     ],
     "referendumInfo": null,
@@ -117,8 +124,126 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-25T00:45:57.259Z",
+    "fetchedAt": "2026-02-28T05:35:14.706Z",
     "contentHash": "9c76e4ae919bbb0349d2ae709d5deb9cb3806e37845e2aa717da82050186d3d1",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-may-primary:ocd-division/country:us/state:la/cd:5:u-s-representative-5th-district-republican-primary",
+    "type": "Primary",
+    "office": "U.S. Representative, 5th District (Republican Primary)",
+    "officeSlug": "u-s-representative-5th-district-republican-primary",
+    "ballotTitle": null,
+    "electionId": "la-2026-may-primary",
+    "electionDate": "2026-05-16",
+    "electionName": "Louisiana 2026 Closed Party Primary",
+    "district": {
+      "name": "Louisiana 5th Congressional District",
+      "scope": "congressional",
+      "ocdDivisionId": "ocd-division/country:us/state:la/cd:5"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Blake Miguez",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1,
+        "isIncumbent": true
+      },
+      {
+        "name": "Jesse Cathey",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 2,
+        "isIncumbent": false
+      },
+      {
+        "name": "Rob Edmonds",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 3,
+        "isIncumbent": false
+      },
+      {
+        "name": "Scotty McMakin",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 4,
+        "isIncumbent": false
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-28T05:35:14.706Z",
+    "contentHash": "4c96276e0956dd7815498093bd6d2e3719eeadfedd98e1b91debed186d6023b9",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-may-primary:ocd-division/country:us/state:la/cd:5:u-s-representative-5th-district-democratic-primary",
+    "type": "Primary",
+    "office": "U.S. Representative, 5th District (Democratic Primary)",
+    "officeSlug": "u-s-representative-5th-district-democratic-primary",
+    "ballotTitle": null,
+    "electionId": "la-2026-may-primary",
+    "electionDate": "2026-05-16",
+    "electionName": "Louisiana 2026 Closed Party Primary",
+    "district": {
+      "name": "Louisiana 5th Congressional District",
+      "scope": "congressional",
+      "ocdDivisionId": "ocd-division/country:us/state:la/cd:5"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Martin Cordell",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1,
+        "isIncumbent": false
+      },
+      {
+        "name": "Marguerite Foy",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 2,
+        "isIncumbent": false
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-28T05:35:14.706Z",
+    "contentHash": "9f720656a084652e4f96cc0adac6511d132b5e9493b5ab8e03f0a6bbdf93b78e",
     "deleted": false
   },
   {
@@ -145,7 +270,8 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 1
+        "orderOnBallot": 1,
+        "isIncumbent": true
       },
       {
         "name": "Larry Davis",
@@ -155,7 +281,8 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 2
+        "orderOnBallot": 2,
+        "isIncumbent": false
       },
       {
         "name": "Peter Williams",
@@ -165,7 +292,8 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 3
+        "orderOnBallot": 3,
+        "isIncumbent": false
       }
     ],
     "referendumInfo": null,
@@ -173,7 +301,7 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-25T00:45:57.259Z",
+    "fetchedAt": "2026-02-28T05:35:14.706Z",
     "contentHash": "462b525ba66fdc07c83f2394c9b21608a491fb33677d90153ab305a2bed2063b",
     "deleted": false
   },
@@ -198,7 +326,7 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-25T00:45:57.259Z",
+    "fetchedAt": "2026-02-28T05:35:14.706Z",
     "contentHash": "c88471f6b9a6e53866541f6767c73cd57067f253058363293707e689eb768661",
     "deleted": false
   }
