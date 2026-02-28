@@ -3,7 +3,7 @@
 ## Cursor Cloud specific instructions
 
 ### Project overview
-MyBallot is a React/TypeScript single-page application (Vite 6) for East Baton Rouge Parish voters. There is no backend server; the app uses Firebase Auth + Firestore (hardcoded config) and static mock data in `constants.tsx`.
+MyBallot is a React/TypeScript single-page application (Vite 6) for East Baton Rouge Parish voters. There is no backend server; the app uses Firebase Auth + Firestore (hardcoded config) and pipeline-generated election data imported via `constants.tsx`.
 
 ### Dev server
 ```
@@ -24,15 +24,27 @@ The app is served at `http://localhost:5173/`. See `package.json` for standard s
 
 ### Data pipeline
 
-The `data-pipeline/` directory contains a Node.js/TypeScript CLI for fetching ballot data from the Google Civic Information API. See `docs/DATA_SOURCES.md` for full details.
+The `data-pipeline/` directory contains a two-stage Node.js/TypeScript CLI:
+
+1. **Extract + normalize** (`runner.ts`): Reads seed files or Google Civic API → produces `data/contests/*.json` (ContestV1 format).
+2. **Adapt** (`seed-app.ts`): Converts ContestV1 → app data model → produces `data/app/candidates.json` and `data/app/ballot-measures.json`, which `constants.tsx` imports.
 
 ```bash
-# List available elections
-GOOGLE_CIVIC_API_KEY=<key> npx tsx data-pipeline/src/runner.ts --list-elections
+# Full pipeline: seed → contests → app data (no API key needed for manual source)
+npx tsx data-pipeline/src/runner.ts --source manual
+npx tsx data-pipeline/src/seed-app.ts
 
-# Fetch and normalize contest data
+# Google Civic (when LA data becomes available)
 GOOGLE_CIVIC_API_KEY=<key> npx tsx data-pipeline/src/runner.ts \
-  --address "600 E Trade St Charlotte NC" --election-id 9505
+  --source google-civic --address "..." --election-id ...
+npx tsx data-pipeline/src/seed-app.ts
 ```
 
-Output goes to `data/contests/`. The debug route at `/#/debug/ballot-feed` reads these JSON files. The API key must **never** be committed or sent to the browser. The pipeline uses file-based caching in `data/.cache/` (gitignored, 24h TTL).
+See `docs/DATA_SOURCES.md` for full details. The debug route `/#/debug/ballot-feed` shows raw pipeline output. API keys must **never** be committed or sent to the browser. The pipeline uses file-based caching in `data/.cache/` (gitignored, 24h TTL).
+
+**To add new candidates or races**: edit JSON seed files in `data/seed/`, then re-run the two pipeline commands above. For editorial content (bios, photos, survey responses), use the admin UI or CSV import.
+
+**Key directories:**
+- `data/seed/` — manual seed files (input, checked into git)
+- `data/contests/` — normalized ContestV1 records (intermediate, checked into git)
+- `data/app/` — app-ready JSON (output consumed by `constants.tsx`, checked into git)

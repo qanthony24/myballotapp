@@ -45,17 +45,34 @@ stack them without touching the UI layer.
 This is the **primary data source** for Louisiana elections because Google
 Civic API does not currently carry Louisiana election data (no VIP feed).
 
-The seed file `data/seed/la-2026-nov.json` contains **17 contests** and
-**39 real candidates** for the November 3, 2026 General Election:
+The seed file `data/seed/la-2026-nov.json` contains **18 contests**
+(17 races + 1 referendum) for the November 3, 2026 General Election:
 
-- **U.S. Senate** — Cassidy, Letlow, Fleming, Spencer, Davis
-- **U.S. House 5th District** — Miguez, Cathey, Edmonds, McMakin, Cordell, Foy
-- **U.S. House 6th District** — Cleo Fields (incumbent)
-- **Mayor-President** — Broome + 8 challengers (9 total)
-- **Metro Council Districts 1–12** — all qualified candidates
-- **Family Court Judge** — special election (candidates TBD)
+- **U.S. Senate** — Cassidy (R, incumbent), Letlow, Fleming, Spencer (R), Albares, Crockett, Davis (D)
+- **U.S. House 5th District** — Miguez (R, incumbent), Cathey, Edmonds, McMakin (R), Cordell, Foy (D)
+- **U.S. House 6th District** — Cleo Fields (D, incumbent), Davis, Williams
+- **Mayor-President** — Broome (D, incumbent), challengers TBD as they qualify
+- **Metro Council Districts 1–12** — contest structure in place, candidates TBD
+- **Family Court Judge** — special election, candidates TBD
+- **Proposition L: Library System Millage Renewal** — referendum with full ballot text
 
-To add new races or candidates, edit the seed file and re-run the pipeline.
+The seed file `data/seed/la-2026-may-primary.json` contains **6 contests**
+for the May 16, 2026 Closed Party Primary:
+
+- **U.S. Senate** — Republican and Democratic primaries
+- **U.S. House 5th District** — Republican and Democratic primaries
+- **U.S. House 6th District** — Democratic primary
+- **Family Court Judge** — special election
+
+To add new races or candidates, edit the seed file and re-run:
+```bash
+npx tsx data-pipeline/src/runner.ts --source manual
+npx tsx data-pipeline/src/seed-app.ts
+```
+
+The second command (`seed-app.ts`) converts pipeline output to the app's data
+model and writes `data/app/candidates.json` + `data/app/ballot-measures.json`,
+which `constants.tsx` imports directly.
 
 ### Louisiana Secretary of State (`sos-la`)
 
@@ -68,12 +85,13 @@ A dedicated extractor will parse their feeds when available.
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│               CLI: data-pipeline/src/runner.ts       │
+│          Stage 1: data-pipeline/src/runner.ts        │
 │                                                     │
-│  1. EXTRACT   →  GoogleCivicExtractor.fetch()       │
+│  1. EXTRACT   →  ManualExtractor / GoogleCivic      │
 │                  (with file-based 24h cache)         │
 │                                                     │
-│  2. TRANSFORM →  transformGoogleCivicContests()     │
+│  2. TRANSFORM →  transformManualContests() /         │
+│                  transformGoogleCivicContests()      │
 │                  Raw JSON → ContestV1 schema         │
 │                  Generates OCD-style IDs             │
 │                  Computes SHA-256 content hashes     │
@@ -84,21 +102,35 @@ A dedicated extractor will parse their feeds when available.
 │                                                     │
 │  4. WRITE     →  data/contests/{electionId}.json    │
 │                  + data/contests/manifest.json       │
-└─────────────────────────────────────────────────────┘
-          │
-          ▼
-┌──────────────────────────┐
-│  Frontend (Vite serves)  │
-│  /data/contests/*.json   │
-│  ▸ /#/debug/ballot-feed  │
-└──────────────────────────┘
+└───────────────────────┬─────────────────────────────┘
+                        │
+                        ▼
+┌─────────────────────────────────────────────────────┐
+│         Stage 2: data-pipeline/src/seed-app.ts      │
+│                                                     │
+│  5. ADAPT     →  ContestV1 → Candidate[]            │
+│                  ContestV1 → BallotMeasure[]         │
+│                  Office mapping, name parsing,       │
+│                  stable IDs, social link conversion  │
+│                                                     │
+│  6. WRITE     →  data/app/candidates.json           │
+│                  data/app/ballot-measures.json       │
+└───────────────────────┬─────────────────────────────┘
+                        │
+                        ▼
+┌──────────────────────────────────────────────────────┐
+│  Frontend (constants.tsx imports data/app/*.json)     │
+│  + Firestore overlay for editorial enrichment        │
+│  + Debug route: /#/debug/ballot-feed                 │
+└──────────────────────────────────────────────────────┘
 ```
 
 ## Running the Pipeline
 
 ```bash
-# Process Louisiana seed data (default, no API key needed)
+# Full pipeline: extract + normalize + adapt (no API key needed for manual)
 npx tsx data-pipeline/src/runner.ts --source manual
+npx tsx data-pipeline/src/seed-app.ts
 
 # List available seed elections
 npx tsx data-pipeline/src/runner.ts --source manual --list-elections
@@ -106,10 +138,16 @@ npx tsx data-pipeline/src/runner.ts --source manual --list-elections
 # Google Civic (when LA data becomes available)
 GOOGLE_CIVIC_API_KEY=<key> npx tsx data-pipeline/src/runner.ts \
   --source google-civic --address "..." --election-id ...
+npx tsx data-pipeline/src/seed-app.ts
 
-# Output:
-#   data/contests/la-2026-nov.json  ← normalized contest records
-#   data/contests/manifest.json     ← metadata summary
+# Output (Stage 1 — runner.ts):
+#   data/contests/la-2026-nov.json         ← normalized ContestV1 records
+#   data/contests/la-2026-may-primary.json ← normalized ContestV1 records
+#   data/contests/manifest.json            ← metadata summary
+#
+# Output (Stage 2 — seed-app.ts):
+#   data/app/candidates.json       ← Candidate[] for the app
+#   data/app/ballot-measures.json  ← BallotMeasure[] for the app
 ```
 
 ## Schema
