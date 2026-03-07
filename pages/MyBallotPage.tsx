@@ -261,6 +261,10 @@ const MyBallotPage: React.FC = () => {
                 <div className="mb-8 p-4 bg-slate-100 rounded-md border border-slate-100/30 text-center">
                     <InformationCircleIcon className="h-8 w-8 mx-auto mb-2 text-midnight-navy/70" />
                     <p className="text-midnight-navy/70">Official results for this past election are not available at this time.</p>
+                    <Link to="/info/results" className="inline-flex items-center mt-3 text-sm text-civic-blue hover:text-sunlight-gold hover:underline font-medium">
+                      <ChartBarIcon className="h-4 w-4 mr-1" />
+                      Browse Past Election Results
+                    </Link>
                 </div>
             )}
 
