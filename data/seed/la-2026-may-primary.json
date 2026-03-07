@@ -34,6 +34,34 @@
       ]
     },
     {
+      "office": "U.S. Representative, 5th District (Republican Primary)",
+      "type": "Primary",
+      "district": {
+        "name": "Louisiana 5th Congressional District",
+        "scope": "congressional",
+        "ocdDivisionId": "ocd-division/country:us/state:la/cd:5"
+      },
+      "candidates": [
+        { "name": "Blake Miguez", "party": "Republican", "isIncumbent": true },
+        { "name": "Jesse Cathey", "party": "Republican" },
+        { "name": "Rob Edmonds", "party": "Republican" },
+        { "name": "Scotty McMakin", "party": "Republican" }
+      ]
+    },
+    {
+      "office": "U.S. Representative, 5th District (Democratic Primary)",
+      "type": "Primary",
+      "district": {
+        "name": "Louisiana 5th Congressional District",
+        "scope": "congressional",
+        "ocdDivisionId": "ocd-division/country:us/state:la/cd:5"
+      },
+      "candidates": [
+        { "name": "Martin Cordell", "party": "Democratic" },
+        { "name": "Marguerite Foy", "party": "Democratic" }
+      ]
+    },
+    {
       "office": "U.S. Representative, 6th District (Democratic Primary)",
       "type": "Primary",
       "district": {

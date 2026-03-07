@@ -25,6 +25,7 @@ export interface ContestCandidate {
   phone: string | null;
   channels: CandidateChannel[];
   orderOnBallot: number | null;
+  isIncumbent: boolean;
 }
 
 export interface ContestDistrict {

@@ -23,7 +23,8 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 1
+        "orderOnBallot": 1,
+        "isIncumbent": true
       },
       {
         "name": "Julia Letlow",
@@ -33,7 +34,8 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 2
+        "orderOnBallot": 2,
+        "isIncumbent": false
       },
       {
         "name": "John Fleming",
@@ -43,7 +45,8 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 3
+        "orderOnBallot": 3,
+        "isIncumbent": false
       },
       {
         "name": "Mark Spencer",
@@ -53,7 +56,8 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 4
+        "orderOnBallot": 4,
+        "isIncumbent": false
       },
       {
         "name": "Nick Albares",
@@ -63,7 +67,8 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 5
+        "orderOnBallot": 5,
+        "isIncumbent": false
       },
       {
         "name": "Gary Crockett",
@@ -73,7 +78,8 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 6
+        "orderOnBallot": 6,
+        "isIncumbent": false
       },
       {
         "name": "Jamie Davis",
@@ -83,7 +89,8 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 7
+        "orderOnBallot": 7,
+        "isIncumbent": false
       }
     ],
     "referendumInfo": null,
@@ -91,8 +98,100 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-25T00:45:57.265Z",
+    "fetchedAt": "2026-02-28T05:35:14.710Z",
     "contentHash": "e8c82a00be720b11e5a2533be161a4c20d0679d43c0626f33fd109e9ed5d5004",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/cd:5:u-s-representative-5th-district",
+    "type": "General",
+    "office": "U.S. Representative, 5th District",
+    "officeSlug": "u-s-representative-5th-district",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 Congressional General / Open Primary",
+    "district": {
+      "name": "Louisiana 5th Congressional District",
+      "scope": "congressional",
+      "ocdDivisionId": "ocd-division/country:us/state:la/cd:5"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Blake Miguez",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1,
+        "isIncumbent": true
+      },
+      {
+        "name": "Jesse Cathey",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 2,
+        "isIncumbent": false
+      },
+      {
+        "name": "Rob Edmonds",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 3,
+        "isIncumbent": false
+      },
+      {
+        "name": "Scotty McMakin",
+        "party": "Republican",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 4,
+        "isIncumbent": false
+      },
+      {
+        "name": "Martin Cordell",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 5,
+        "isIncumbent": false
+      },
+      {
+        "name": "Marguerite Foy",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 6,
+        "isIncumbent": false
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-28T05:35:14.710Z",
+    "contentHash": "0763d83bd7420d7c2737285340be9a2b1fa2d09dc8c24074f3747e966362216a",
     "deleted": false
   },
   {
@@ -119,7 +218,8 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 1
+        "orderOnBallot": 1,
+        "isIncumbent": true
       },
       {
         "name": "Larry Davis",
@@ -129,7 +229,8 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 2
+        "orderOnBallot": 2,
+        "isIncumbent": false
       },
       {
         "name": "Peter Williams",
@@ -139,7 +240,8 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 3
+        "orderOnBallot": 3,
+        "isIncumbent": false
       }
     ],
     "referendumInfo": null,
@@ -147,22 +249,359 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-25T00:45:57.265Z",
+    "fetchedAt": "2026-02-28T05:35:14.710Z",
     "contentHash": "7dc095f2b0586d4d5e845e1f7077f8d6ed895933009f741895ac67d9f0d7b9c1",
     "deleted": false
   },
   {
-    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge:justice-of-the-peace-ward-2-district-3",
-    "type": "Special",
-    "office": "Justice of the Peace, Ward 2, District 3",
-    "officeSlug": "justice-of-the-peace-ward-2-district-3",
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge:mayor-president",
+    "type": "General",
+    "office": "Mayor-President",
+    "officeSlug": "mayor-president",
     "ballotTitle": null,
     "electionId": "la-2026-nov",
     "electionDate": "2026-11-03",
     "electionName": "Louisiana 2026 Congressional General / Open Primary",
     "district": {
-      "name": "East Baton Rouge Parish Justice Court Ward 2, District 3",
-      "scope": "township",
+      "name": "East Baton Rouge Parish",
+      "scope": "countywide",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge"
+    },
+    "numberElected": 1,
+    "candidates": [
+      {
+        "name": "Sharon Weston Broome",
+        "party": "Democratic",
+        "candidateUrl": null,
+        "photoUrl": null,
+        "email": null,
+        "phone": null,
+        "channels": [],
+        "orderOnBallot": 1,
+        "isIncumbent": true
+      }
+    ],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-28T05:35:14.710Z",
+    "contentHash": "f45104bf409799306635ad70d28671cd457c2b96c3e0b0aae4d270f20541f582",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:1:metro-council-district-1",
+    "type": "General",
+    "office": "Metro Council, District 1",
+    "officeSlug": "metro-council-district-1",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 Congressional General / Open Primary",
+    "district": {
+      "name": "East Baton Rouge Metro Council District 1",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:1"
+    },
+    "numberElected": 1,
+    "candidates": [],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-28T05:35:14.710Z",
+    "contentHash": "ed55ef794b3580ecafbbb9cd60595a3a3c0c2f39623a7dc27af3d04e50984f2f",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:2:metro-council-district-2",
+    "type": "General",
+    "office": "Metro Council, District 2",
+    "officeSlug": "metro-council-district-2",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 Congressional General / Open Primary",
+    "district": {
+      "name": "East Baton Rouge Metro Council District 2",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:2"
+    },
+    "numberElected": 1,
+    "candidates": [],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-28T05:35:14.710Z",
+    "contentHash": "56f0c0885cff2ece30227f89cda32fc61495928d8c9d9ca410451fc9b70cb8f1",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:3:metro-council-district-3",
+    "type": "General",
+    "office": "Metro Council, District 3",
+    "officeSlug": "metro-council-district-3",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 Congressional General / Open Primary",
+    "district": {
+      "name": "East Baton Rouge Metro Council District 3",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:3"
+    },
+    "numberElected": 1,
+    "candidates": [],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-28T05:35:14.710Z",
+    "contentHash": "0a69e2c2463c551ba43a5b85c990d9c25b70bb781d000c8e0aaa9ebcf5923824",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:4:metro-council-district-4",
+    "type": "General",
+    "office": "Metro Council, District 4",
+    "officeSlug": "metro-council-district-4",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 Congressional General / Open Primary",
+    "district": {
+      "name": "East Baton Rouge Metro Council District 4",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:4"
+    },
+    "numberElected": 1,
+    "candidates": [],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-28T05:35:14.710Z",
+    "contentHash": "0f86746f8ace876b848143f148afa1dc06082dfc12582c1a43ebd8bc494a5978",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:5:metro-council-district-5",
+    "type": "General",
+    "office": "Metro Council, District 5",
+    "officeSlug": "metro-council-district-5",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 Congressional General / Open Primary",
+    "district": {
+      "name": "East Baton Rouge Metro Council District 5",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:5"
+    },
+    "numberElected": 1,
+    "candidates": [],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-28T05:35:14.710Z",
+    "contentHash": "53d72f59e4fb27f5a6d20671a6b29ff42f8578407bd73ce43f47ffbf9e2dfd96",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:6:metro-council-district-6",
+    "type": "General",
+    "office": "Metro Council, District 6",
+    "officeSlug": "metro-council-district-6",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 Congressional General / Open Primary",
+    "district": {
+      "name": "East Baton Rouge Metro Council District 6",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:6"
+    },
+    "numberElected": 1,
+    "candidates": [],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-28T05:35:14.710Z",
+    "contentHash": "921841f99ca21a4ae697fc622199103d975aa432daed324337cba704466468b3",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:7:metro-council-district-7",
+    "type": "General",
+    "office": "Metro Council, District 7",
+    "officeSlug": "metro-council-district-7",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 Congressional General / Open Primary",
+    "district": {
+      "name": "East Baton Rouge Metro Council District 7",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:7"
+    },
+    "numberElected": 1,
+    "candidates": [],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-28T05:35:14.710Z",
+    "contentHash": "430cc37269a3bdf3ab9d52d262898289d7728174be3c736b8944d871290bf948",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:8:metro-council-district-8",
+    "type": "General",
+    "office": "Metro Council, District 8",
+    "officeSlug": "metro-council-district-8",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 Congressional General / Open Primary",
+    "district": {
+      "name": "East Baton Rouge Metro Council District 8",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:8"
+    },
+    "numberElected": 1,
+    "candidates": [],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-28T05:35:14.710Z",
+    "contentHash": "f1106c127bd0ea251b4c2992735135202a0c1938985c3409041fb9863d6f2184",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:9:metro-council-district-9",
+    "type": "General",
+    "office": "Metro Council, District 9",
+    "officeSlug": "metro-council-district-9",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 Congressional General / Open Primary",
+    "district": {
+      "name": "East Baton Rouge Metro Council District 9",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:9"
+    },
+    "numberElected": 1,
+    "candidates": [],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-28T05:35:14.710Z",
+    "contentHash": "213310384a2c9fc3cdf22db283de49db67e4bb2f165e7aee001619b8a1329e21",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:10:metro-council-district-10",
+    "type": "General",
+    "office": "Metro Council, District 10",
+    "officeSlug": "metro-council-district-10",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 Congressional General / Open Primary",
+    "district": {
+      "name": "East Baton Rouge Metro Council District 10",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:10"
+    },
+    "numberElected": 1,
+    "candidates": [],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-28T05:35:14.710Z",
+    "contentHash": "b34343bd42c332cefa032e29dcbb54149b4a39d1c98c345d514169fd9ac487b6",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:11:metro-council-district-11",
+    "type": "General",
+    "office": "Metro Council, District 11",
+    "officeSlug": "metro-council-district-11",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 Congressional General / Open Primary",
+    "district": {
+      "name": "East Baton Rouge Metro Council District 11",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:11"
+    },
+    "numberElected": 1,
+    "candidates": [],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-28T05:35:14.710Z",
+    "contentHash": "8b788a5fcf6389e8862e28af63a17b8e0e06173d19878c6f5748e56856845227",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:12:metro-council-district-12",
+    "type": "General",
+    "office": "Metro Council, District 12",
+    "officeSlug": "metro-council-district-12",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 Congressional General / Open Primary",
+    "district": {
+      "name": "East Baton Rouge Metro Council District 12",
+      "scope": "countyCouncil",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:12"
+    },
+    "numberElected": 1,
+    "candidates": [],
+    "referendumInfo": null,
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-28T05:35:14.710Z",
+    "contentHash": "4a176a3f43bf56530c2e774dc09868df5abe33481758724a135f13ac550df4aa",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge:family-court-judge-special-election",
+    "type": "Special",
+    "office": "Family Court Judge (Special Election)",
+    "officeSlug": "family-court-judge-special-election",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 Congressional General / Open Primary",
+    "district": {
+      "name": "East Baton Rouge Parish Family Court",
+      "scope": "judicial",
       "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge"
     },
     "numberElected": 1,
@@ -172,8 +611,45 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-25T00:45:57.265Z",
-    "contentHash": "8020efc5364d85a722bf19c1004062cfd007583371ddcab9028f74711192b598",
+    "fetchedAt": "2026-02-28T05:35:14.710Z",
+    "contentHash": "bef7836cc9ef8e56cc3fd8a521d606def3322b6d1e0805a5b2127b74df0f3a10",
+    "deleted": false
+  },
+  {
+    "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge:proposition-l-library-system-millage-renewal",
+    "type": "Referendum",
+    "office": "Proposition L: Library System Millage Renewal",
+    "officeSlug": "proposition-l-library-system-millage-renewal",
+    "ballotTitle": null,
+    "electionId": "la-2026-nov",
+    "electionDate": "2026-11-03",
+    "electionName": "Louisiana 2026 Congressional General / Open Primary",
+    "district": {
+      "name": "East Baton Rouge Parish",
+      "scope": "countywide",
+      "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge"
+    },
+    "numberElected": 1,
+    "candidates": [],
+    "referendumInfo": {
+      "title": "Proposition L: Library System Millage Renewal",
+      "subtitle": "East Baton Rouge Parish Library Millage",
+      "brief": "Continue an existing 2.5 mills property tax for ten years to fund public libraries.",
+      "fullText": "Shall the Parish of East Baton Rouge continue to levy a special tax of 2.5 mills on all property subject to taxation in the Parish for a period of ten (10) years, beginning with the year 2027 and ending with the year 2036, for the purpose of acquiring, constructing, improving, maintaining and operating public libraries in the Parish, including the purchase of books, periodicals, and equipment, and providing library services to the public?",
+      "url": null,
+      "ballotResponses": [
+        "YES",
+        "NO"
+      ],
+      "proStatement": "Continues existing funding for the parish library system without increasing taxes; essential for maintaining literacy programs, digital access, and community resources.",
+      "conStatement": "Locks in a property tax for another decade; some argue library budgets could be trimmed or consolidated."
+    },
+    "source": "manual",
+    "sourceMetadata": {
+      "jurisdiction": "East Baton Rouge Parish, LA"
+    },
+    "fetchedAt": "2026-02-28T05:35:14.710Z",
+    "contentHash": "e7f0d4790ce0b486ae27be0e95342cdc9236de5c718c9b76d3194961fa2b3965",
     "deleted": false
   }
 ]
