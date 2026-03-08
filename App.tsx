@@ -15,6 +15,12 @@ import CompareCandidatesPage from './pages/CompareCandidatesPage';
 import UserProfilePage from './pages/UserProfilePage';
 import AuthPage from './pages/AuthPage';
 import ElectionInfoPage from './pages/ElectionInfoPage';
+import InfoHubPage from './pages/info/InfoHubPage';
+import InfoEssentialsPage from './pages/info/InfoEssentialsPage';
+import InfoNewsPage from './pages/info/InfoNewsPage';
+import InfoResultsHomePage from './pages/info/InfoResultsHomePage';
+import InfoElectionResultsPage from './pages/info/InfoElectionResultsPage';
+import InfoContestResultsPage from './pages/info/InfoContestResultsPage';
 import OnboardingPage from './pages/OnboardingPage';
 import CandidateProfilePage from './pages/CandidateProfilePage';
 import BallotMeasureDetailPage from './pages/BallotMeasureDetailPage';
@@ -41,7 +47,14 @@ const AppRoutes: React.FC = () => {
       <Route path="/candidate/:id" element={<CandidateProfilePage />} />
       <Route path="/profile" element={currentUser ? <UserProfilePage /> : <Navigate to="/auth" />} />
       <Route path="/auth" element={!currentUser ? <AuthPage /> : <Navigate to="/" />} />
-      <Route path="/election-info" element={<ElectionInfoPage />} />
+      <Route path="/election-info" element={<Navigate to="/info" />} />
+      <Route path="/info" element={<InfoHubPage />} />
+      <Route path="/info/essentials" element={<InfoEssentialsPage />} />
+      <Route path="/info/qa" element={<ElectionInfoPage />} />
+      <Route path="/info/news" element={<InfoNewsPage />} />
+      <Route path="/info/results" element={<InfoResultsHomePage />} />
+      <Route path="/info/results/:electionId" element={<InfoElectionResultsPage />} />
+      <Route path="/info/results/:electionId/:contestId" element={<InfoContestResultsPage />} />
       <Route path="/onboarding" element={currentUser ? <OnboardingPage /> : <Navigate to="/auth" />} />
       <Route path="/debug/ballot-feed" element={<DebugBallotFeedPage />} />
       <Route path="/admin" element={currentUser ? <AdminSetupPage /> : <Navigate to="/auth" />} />

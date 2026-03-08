@@ -20,7 +20,7 @@ const Navbar: React.FC = () => {
         
         <NavLink to="/compare" icon={<ScaleIcon className="h-5 w-5 mb-0.5" />}>Compare</NavLink>
         
-         <NavLink to="/election-info" icon={<InformationCircleIcon className="h-5 w-5 mb-0.5" />}>Info</NavLink>
+         <NavLink to="/info" icon={<InformationCircleIcon className="h-5 w-5 mb-0.5" />}>Info</NavLink>
       </div>
     </nav>
   );
@@ -50,7 +50,9 @@ const NavLink: React.FC<NavLinkProps> = ({ to, children, icon }) => {
     else if (location.pathname !== '/') isActive = false; // Ensure only exact / or /candidate/* activates it
   } else if (to === "/ballot-measures") {
     isActive = measureRelatedPaths.some(p => location.pathname.startsWith(p));
-  } else if (to === "/my-ballot") { // Prevent My Ballot from using default active styling
+  } else if (to === "/info") {
+    isActive = location.pathname === '/info' || location.pathname.startsWith('/info/');
+  } else if (to === "/my-ballot") {
     isActive = false;
   } else if (to === "/auth" && currentUser) {
     // If logged in, the "Login" link should not appear active, even if on /auth somehow

@@ -1,0 +1,163 @@
+[
+  {
+    "electionId": "2023-10-14-state-general",
+    "electionName": "October 14, 2023 State General Election",
+    "electionDate": "2023-10-14",
+    "electionType": "general",
+    "jurisdiction": "East Baton Rouge Parish",
+    "turnout": {
+      "ballotsCast": 98450,
+      "registeredVoters": 275000,
+      "turnoutPercent": 35.8
+    },
+    "contests": [
+      {
+        "contestId": "2023-gov",
+        "title": "Governor",
+        "officeName": "Governor",
+        "contestType": "candidate",
+        "totalVotes": 96200,
+        "called": true,
+        "winnerId": "gov-landry",
+        "resultItems": [
+          { "id": "gov-landry", "name": "Jeff Landry", "party": "Republican", "votes": 51800, "votePercent": 53.8, "isWinner": true },
+          { "id": "gov-edwards-s", "name": "Shawn Wilson", "party": "Democratic", "votes": 25100, "votePercent": 26.1 },
+          { "id": "gov-nungesser", "name": "Billy Nungesser", "party": "Republican", "votes": 12300, "votePercent": 12.8 },
+          { "id": "gov-other", "name": "Other Candidates", "party": "Various", "votes": 7000, "votePercent": 7.3 }
+        ]
+      },
+      {
+        "contestId": "2023-ag",
+        "title": "Attorney General",
+        "officeName": "Attorney General",
+        "contestType": "candidate",
+        "totalVotes": 89500,
+        "called": true,
+        "winnerId": "ag-murrill",
+        "resultItems": [
+          { "id": "ag-murrill", "name": "Liz Murrill", "party": "Republican", "votes": 52400, "votePercent": 58.5, "isWinner": true },
+          { "id": "ag-carter", "name": "Lindsey Cheek", "party": "Democratic", "votes": 37100, "votePercent": 41.5 }
+        ]
+      },
+      {
+        "contestId": "2023-sos",
+        "title": "Secretary of State",
+        "officeName": "Secretary of State",
+        "contestType": "candidate",
+        "totalVotes": 87200,
+        "called": true,
+        "winnerId": "sos-ardoin",
+        "resultItems": [
+          { "id": "sos-ardoin", "name": "Nancy Landry", "party": "Republican", "votes": 48900, "votePercent": 56.1, "isWinner": true },
+          { "id": "sos-jones", "name": "Gwen Collins-Greenup", "party": "Democratic", "votes": 38300, "votePercent": 43.9 }
+        ]
+      },
+      {
+        "contestId": "2023-library-millage",
+        "title": "EBR Library System Millage Renewal",
+        "contestType": "measure",
+        "totalVotes": 85000,
+        "called": true,
+        "resultItems": [
+          { "id": "lib-yes", "name": "YES", "votes": 55250, "votePercent": 65.0, "isWinner": true },
+          { "id": "lib-no", "name": "NO", "votes": 29750, "votePercent": 35.0 }
+        ]
+      }
+    ]
+  },
+  {
+    "electionId": "2022-11-08-midterm",
+    "electionName": "November 8, 2022 Midterm Election",
+    "electionDate": "2022-11-08",
+    "electionType": "federal",
+    "jurisdiction": "East Baton Rouge Parish",
+    "turnout": {
+      "ballotsCast": 112300,
+      "registeredVoters": 268000,
+      "turnoutPercent": 41.9
+    },
+    "contests": [
+      {
+        "contestId": "2022-us-senate",
+        "title": "U.S. Senate",
+        "officeName": "U.S. Senate",
+        "contestType": "candidate",
+        "totalVotes": 110500,
+        "called": true,
+        "winnerId": "sen-kennedy",
+        "resultItems": [
+          { "id": "sen-kennedy", "name": "John Kennedy", "party": "Republican", "votes": 64900, "votePercent": 58.7, "isWinner": true, "incumbent": true },
+          { "id": "sen-chambers", "name": "Gary Chambers", "party": "Democratic", "votes": 32400, "votePercent": 29.3 },
+          { "id": "sen-other", "name": "Other Candidates", "party": "Various", "votes": 13200, "votePercent": 12.0 }
+        ]
+      },
+      {
+        "contestId": "2022-us-house-6",
+        "title": "U.S. Representative, 6th District",
+        "officeName": "U.S. Representative",
+        "district": "6th District",
+        "contestType": "candidate",
+        "totalVotes": 108000,
+        "called": true,
+        "winnerId": "house6-fields",
+        "resultItems": [
+          { "id": "house6-fields", "name": "Cleo Fields", "party": "Democratic", "votes": 59400, "votePercent": 55.0, "isWinner": true },
+          { "id": "house6-opp", "name": "Elbert Guillory", "party": "Republican", "votes": 48600, "votePercent": 45.0 }
+        ]
+      },
+      {
+        "contestId": "2022-school-tax",
+        "title": "EBR School Board Technology Tax",
+        "contestType": "measure",
+        "totalVotes": 100200,
+        "called": true,
+        "resultItems": [
+          { "id": "school-yes", "name": "YES", "votes": 58100, "votePercent": 58.0, "isWinner": true },
+          { "id": "school-no", "name": "NO", "votes": 42100, "votePercent": 42.0 }
+        ]
+      }
+    ]
+  },
+  {
+    "electionId": "2020-11-03-presidential",
+    "electionName": "November 3, 2020 Presidential Election",
+    "electionDate": "2020-11-03",
+    "electionType": "general",
+    "jurisdiction": "East Baton Rouge Parish",
+    "turnout": {
+      "ballotsCast": 198500,
+      "registeredVoters": 260000,
+      "turnoutPercent": 76.3
+    },
+    "contests": [
+      {
+        "contestId": "2020-president",
+        "title": "President of the United States",
+        "officeName": "President",
+        "contestType": "candidate",
+        "totalVotes": 197200,
+        "called": true,
+        "winnerId": "pres-biden",
+        "resultItems": [
+          { "id": "pres-biden", "name": "Joe Biden / Kamala Harris", "party": "Democratic", "votes": 108460, "votePercent": 55.0, "isWinner": true },
+          { "id": "pres-trump", "name": "Donald Trump / Mike Pence", "party": "Republican", "votes": 84800, "votePercent": 43.0 },
+          { "id": "pres-other", "name": "Other Candidates", "party": "Various", "votes": 3940, "votePercent": 2.0 }
+        ]
+      },
+      {
+        "contestId": "2020-us-senate",
+        "title": "U.S. Senate",
+        "officeName": "U.S. Senate",
+        "contestType": "candidate",
+        "totalVotes": 190800,
+        "called": true,
+        "winnerId": "sen-cassidy-2020",
+        "resultItems": [
+          { "id": "sen-cassidy-2020", "name": "Bill Cassidy", "party": "Republican", "votes": 114480, "votePercent": 60.0, "isWinner": true, "incumbent": true },
+          { "id": "sen-perkins", "name": "Adrian Perkins", "party": "Democratic", "votes": 57240, "votePercent": 30.0 },
+          { "id": "sen-other-2020", "name": "Other Candidates", "party": "Various", "votes": 19080, "votePercent": 10.0 }
+        ]
+      }
+    ]
+  }
+]
