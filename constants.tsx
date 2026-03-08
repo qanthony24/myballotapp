@@ -145,7 +145,7 @@ export const CYCLES_DATA = PREDEFINED_CYCLES_DATA_RAW
 export const SURVEY_QUESTIONS_DATA = RAW_DATA.surveyQuestions;
 export const CANDIDATES_DATA = RAW_DATA.candidates.map(c => ({
     ...c,
-    photoUrl: c.photoUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(c.firstName + '+' + c.lastName)}&size=200&background=random`,
+    photoUrl: c.photoUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(c.firstName + ' ' + c.lastName)}&size=200&background=random`,
     isIncumbent: c.isIncumbent || false,
     bio: c.bio || '',
     surveyResponses: c.surveyResponses || {},
