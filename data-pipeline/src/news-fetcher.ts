@@ -51,7 +51,8 @@ const RELEVANCE_KEYWORDS = [
 const EXCLUDE_KEYWORDS = [
   'sports', 'football', 'basketball', 'baseball', 'lsu tigers',
   'saints score', 'pelicans score', 'recipe', 'entertainment',
-  'weather forecast', 'traffic update',
+  'weather forecast', 'traffic update', 'flash flood', 'tornado warning',
+  'severe thunderstorm', 'amber alert', 'obituar',
 ];
 
 interface RawArticle {

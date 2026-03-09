@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeftIcon, NewspaperIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
+import {
+  NewspaperIcon,
+  ArrowPathIcon,
+  CalendarDaysIcon,
+  ChatBubbleLeftRightIcon,
+  ChartBarIcon,
+} from '@heroicons/react/24/outline';
 import { NewsArticle } from '../../types/info';
 import { fetchNewsFeed, formatRelativeTime } from '../../services/newsService';
 import NewsFeedCard from '../../components/info/NewsFeedCard';
@@ -20,6 +26,12 @@ const SkeletonCard: React.FC = () => (
   </div>
 );
 
+const INFO_SECTIONS = [
+  { to: '/info/essentials', icon: CalendarDaysIcon, label: 'Essentials' },
+  { to: '/info/results', icon: ChartBarIcon, label: 'Results' },
+  { to: '/info/qa', icon: ChatBubbleLeftRightIcon, label: 'Q\u00A0&\u00A0A' },
+];
+
 const InfoNewsPage: React.FC = () => {
   const [articles, setArticles] = useState<NewsArticle[]>([]);
   const [lastRefreshedAt, setLastRefreshedAt] = useState<string | null>(null);
@@ -33,7 +45,7 @@ const InfoNewsPage: React.FC = () => {
       const data = await fetchNewsFeed();
       setArticles(data.items);
       setLastRefreshedAt(data.lastRefreshedAt);
-    } catch (err) {
+    } catch {
       setError('Unable to load the news feed. Please try again.');
     } finally {
       setLoading(false);
@@ -46,15 +58,22 @@ const InfoNewsPage: React.FC = () => {
 
   return (
     <div className="max-w-3xl mx-auto">
+      {/* Quick-nav strip for other Info sections */}
+      <div className="flex items-center gap-2 mb-5 overflow-x-auto pb-1 -mx-1 px-1">
+        {INFO_SECTIONS.map(({ to, icon: Icon, label }) => (
+          <Link
+            key={to}
+            to={to}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-midnight-navy/15 bg-white text-midnight-navy/80 text-xs font-medium whitespace-nowrap hover:bg-civic-blue hover:text-white hover:border-civic-blue transition-colors shadow-sm"
+          >
+            <Icon className="h-3.5 w-3.5" />
+            {label}
+          </Link>
+        ))}
+      </div>
+
       {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <Link
-          to="/election-info"
-          className="text-civic-blue hover:text-sunlight-gold transition-colors"
-          aria-label="Back to Election Info"
-        >
-          <ArrowLeftIcon className="h-5 w-5" />
-        </Link>
+      <div className="flex items-center gap-3 mb-1">
         <NewspaperIcon className="h-7 w-7 text-civic-blue" />
         <h1 className="text-2xl font-display font-bold text-midnight-navy">
           Louisiana Political News
@@ -62,7 +81,7 @@ const InfoNewsPage: React.FC = () => {
       </div>
 
       {/* Meta bar */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-5">
         {lastRefreshedAt && (
           <p className="text-xs text-midnight-navy/50">
             Last updated {formatRelativeTime(lastRefreshedAt)}
