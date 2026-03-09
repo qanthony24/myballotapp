@@ -139,6 +139,30 @@ export async function updateCandidateFields(
   invalidateCandidateCache();
 }
 
+// ---- Candidate delete ----
+
+export async function deleteCandidate(candidateId: number): Promise<void> {
+  const { deleteDoc: delDoc } = await import('firebase/firestore');
+  await delDoc(doc(db, 'candidates', String(candidateId)));
+  invalidateCandidateCache();
+}
+
+export async function deleteCandidatesBulk(candidateIds: number[]): Promise<number> {
+  const batchSize = 400;
+  let count = 0;
+  for (let i = 0; i < candidateIds.length; i += batchSize) {
+    const batch = writeBatch(db);
+    const chunk = candidateIds.slice(i, i + batchSize);
+    for (const id of chunk) {
+      batch.delete(doc(db, 'candidates', String(id)));
+      count++;
+    }
+    await batch.commit();
+  }
+  invalidateCandidateCache();
+  return count;
+}
+
 // ---- Photo upload ----
 
 export async function uploadCandidatePhoto(
