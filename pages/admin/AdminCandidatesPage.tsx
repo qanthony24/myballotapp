@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Candidate, Office, Cycle } from '../../types';
-import { getFirestoreCandidates, getLocalOffices, getLocalCycles } from '../../services/firestoreDataService';
-import { MagnifyingGlassIcon, PencilSquareIcon, PhotoIcon, ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/outline';
+import { getFirestoreCandidates, deleteCandidatesBulk, getLocalOffices, getLocalCycles } from '../../services/firestoreDataService';
+import { MagnifyingGlassIcon, PencilSquareIcon, PhotoIcon, ChatBubbleBottomCenterTextIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 const AdminCandidatesPage: React.FC = () => {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
@@ -10,6 +10,9 @@ const AdminCandidatesPage: React.FC = () => {
   const [search, setSearch] = useState('');
   const [officeFilter, setOfficeFilter] = useState('');
   const [cycleFilter, setCycleFilter] = useState('');
+  const [selected, setSelected] = useState<Set<number>>(new Set());
+  const [bulkDeleting, setBulkDeleting] = useState(false);
+  const [confirmBulkDelete, setConfirmBulkDelete] = useState(false);
 
   const offices = getLocalOffices();
   const cycles = getLocalCycles();
@@ -25,6 +28,37 @@ const AdminCandidatesPage: React.FC = () => {
     const data = await getFirestoreCandidates();
     setCandidates(data);
     setLoading(false);
+  }
+
+  function toggleSelect(id: number) {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }
+
+  function toggleSelectAll() {
+    if (selected.size === filtered.length) {
+      setSelected(new Set());
+    } else {
+      setSelected(new Set(filtered.map((c) => c.id)));
+    }
+  }
+
+  async function handleBulkDelete() {
+    if (selected.size === 0) return;
+    setBulkDeleting(true);
+    try {
+      await deleteCandidatesBulk(Array.from(selected));
+      setSelected(new Set());
+      setConfirmBulkDelete(false);
+      await loadCandidates();
+    } catch {
+      // silently handled — candidates will reload
+    } finally {
+      setBulkDeleting(false);
+    }
   }
 
   const filtered = useMemo(() => {
@@ -96,6 +130,49 @@ const AdminCandidatesPage: React.FC = () => {
         </select>
       </div>
 
+      {/* Bulk action bar */}
+      {selected.size > 0 && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 flex items-center justify-between">
+          <span className="text-sm text-red-800 font-medium">
+            {selected.size} candidate{selected.size !== 1 ? 's' : ''} selected
+          </span>
+          <div className="flex items-center gap-2">
+            {!confirmBulkDelete ? (
+              <button
+                onClick={() => setConfirmBulkDelete(true)}
+                className="inline-flex items-center gap-1.5 bg-red-600 text-white text-sm font-semibold px-4 py-1.5 rounded-md hover:bg-red-700 transition"
+              >
+                <TrashIcon className="h-4 w-4" />
+                Delete Selected
+              </button>
+            ) : (
+              <>
+                <span className="text-xs text-red-600">This cannot be undone.</span>
+                <button
+                  onClick={handleBulkDelete}
+                  disabled={bulkDeleting}
+                  className="bg-red-700 text-white text-sm font-semibold px-4 py-1.5 rounded-md hover:bg-red-800 disabled:opacity-50 transition"
+                >
+                  {bulkDeleting ? 'Deleting...' : `Confirm Delete ${selected.size}`}
+                </button>
+                <button
+                  onClick={() => setConfirmBulkDelete(false)}
+                  className="text-gray-500 hover:text-gray-700 text-sm transition"
+                >
+                  Cancel
+                </button>
+              </>
+            )}
+            <button
+              onClick={() => { setSelected(new Set()); setConfirmBulkDelete(false); }}
+              className="text-gray-500 hover:text-gray-700 text-sm ml-2 transition"
+            >
+              Clear selection
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Candidate table */}
       {loading ? (
         <div className="text-center py-12 text-gray-400">Loading candidates...</div>
@@ -104,6 +181,15 @@ const AdminCandidatesPage: React.FC = () => {
           <table className="w-full text-sm">
             <thead className="bg-gray-50 border-b">
               <tr>
+                <th className="w-10 px-3 py-3">
+                  <input
+                    type="checkbox"
+                    checked={filtered.length > 0 && selected.size === filtered.length}
+                    onChange={toggleSelectAll}
+                    className="rounded border-gray-300 text-civic-blue focus:ring-civic-blue"
+                    title="Select all"
+                  />
+                </th>
                 <th className="text-left px-4 py-3 font-medium text-gray-600">Candidate</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-600 hidden md:table-cell">Office</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-600 hidden md:table-cell">Election</th>
@@ -116,7 +202,15 @@ const AdminCandidatesPage: React.FC = () => {
                 const office = officeMap.get(c.officeId);
                 const cycle = (c.cycleIds || []).map((id: number) => cycleMap.get(id)).find(Boolean);
                 return (
-                  <tr key={c.id} className="border-b last:border-0 hover:bg-gray-50">
+                  <tr key={c.id} className={`border-b last:border-0 hover:bg-gray-50 ${selected.has(c.id) ? 'bg-red-50/50' : ''}`}>
+                    <td className="w-10 px-3 py-3">
+                      <input
+                        type="checkbox"
+                        checked={selected.has(c.id)}
+                        onChange={() => toggleSelect(c.id)}
+                        className="rounded border-gray-300 text-civic-blue focus:ring-civic-blue"
+                      />
+                    </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         <img

@@ -4,6 +4,7 @@ import { Candidate, SurveyQuestion } from '../../types';
 import {
   getFirestoreCandidateById,
   saveCandidate,
+  deleteCandidate,
   uploadCandidatePhoto,
   getLocalOffices,
   getLocalCycles,
@@ -23,6 +24,8 @@ const AdminCandidateEditPage: React.FC = () => {
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const offices = getLocalOffices();
   const cycles = getLocalCycles();
@@ -56,6 +59,19 @@ const AdminCandidateEditPage: React.FC = () => {
       setError(err instanceof Error ? err.message : 'Failed to save');
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handleDelete() {
+    if (!candidate) return;
+    setDeleting(true);
+    setError(null);
+    try {
+      await deleteCandidate(candidate.id);
+      navigate('/admin/candidates');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete');
+      setDeleting(false);
     }
   }
 
@@ -327,6 +343,33 @@ const AdminCandidateEditPage: React.FC = () => {
           >
             {saving ? 'Saving...' : 'Save Changes'}
           </button>
+          <div className="ml-auto">
+            {!confirmDelete ? (
+              <button
+                onClick={() => setConfirmDelete(true)}
+                className="text-red-500 hover:text-red-700 text-sm font-medium transition"
+              >
+                Delete Candidate
+              </button>
+            ) : (
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-red-600">Are you sure?</span>
+                <button
+                  onClick={handleDelete}
+                  disabled={deleting}
+                  className="bg-red-600 text-white text-sm font-semibold px-4 py-1.5 rounded-md hover:bg-red-700 disabled:opacity-50 transition"
+                >
+                  {deleting ? 'Deleting...' : 'Confirm Delete'}
+                </button>
+                <button
+                  onClick={() => setConfirmDelete(false)}
+                  className="text-gray-500 hover:text-gray-700 text-sm transition"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
