@@ -38,7 +38,7 @@ export const getCandidateById = (id) => {
 export const getCandidatesByOfficeAndCycle = (officeId, cycleId, district) => {
   return CANDIDATES_DATA.filter(c => {
     const officeMatch = c.officeId === officeId;
-    const cycleMatch = c.cycleId === cycleId;
+    const cycleMatch = (c.cycleIds || []).includes(cycleId);
     const districtMatch = district ? c.district === district : true; // If district is provided, match it. Otherwise, true.
     // For offices without districts, c.district will be undefined. 
     // If a district is passed for such an office, it won't match, which is correct.
@@ -55,7 +55,7 @@ export const getCandidatesByOfficeAndCycle = (officeId, cycleId, district) => {
  */
 export const getDistrictsForOfficeAndCycle = (officeId, cycleId) => {
   const candidatesInOfficeCycle = CANDIDATES_DATA.filter(
-    c => c.officeId === officeId && c.cycleId === cycleId && c.district
+    c => c.officeId === officeId && (c.cycleIds || []).includes(cycleId) && c.district
   );
   // FIX: Ensure correct type for uniqueDistricts by explicitly typing intermediate map and using spread syntax
   const mappedDistricts = candidatesInOfficeCycle.map(c => c.district); // c.district! removed

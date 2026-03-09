@@ -19,7 +19,7 @@ interface CandidateCardProps {
 import { getPartyInfo } from '../../lib/parties';
 
 const CandidateCard: React.FC<CandidateCardProps> = ({ candidate, viewMode, onToggleCandidateBallotStatus, isCandidateSelected }) => {
-  const cycle = getCycleById(candidate.cycleId); 
+  const cycle = (candidate.cycleIds || []).map((cid: number) => getCycleById(cid)).find(Boolean) ?? null;
   const electionDate = cycle?.electionDate; 
   const formattedElectionName = getFormattedElectionName(cycle);
   const formattedOfficeName = getFormattedCandidateOfficeName(candidate);

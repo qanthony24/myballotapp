@@ -266,7 +266,7 @@ export async function importCandidatesFromCsv(
         slug: (row['slug'] || `${row['firstname'] || ''}-${row['lastname'] || ''}`).toLowerCase().replace(/\s+/g, '-'),
         party: row['party'] || '',
         officeId: parseInt(row['officeid'] || row['office_id'] || '0') || 0,
-        cycleId: parseInt(row['cycleid'] || row['cycle_id'] || '0') || 0,
+        cycleIds: [parseInt(row['cycleid'] || row['cycle_id'] || '0') || 0],
         district: row['district'] || undefined,
         photoUrl: row['photourl'] || row['photo_url'] || row['photo'] || '',
         website: row['website'] || row['url'] || undefined,

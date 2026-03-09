@@ -32,7 +32,7 @@ const AdminCandidatesPage: React.FC = () => {
       const name = `${c.firstName} ${c.lastName}`.toLowerCase();
       const matchesSearch = !search || name.includes(search.toLowerCase());
       const matchesOffice = !officeFilter || c.officeId === parseInt(officeFilter);
-      const matchesCycle = !cycleFilter || c.cycleId === parseInt(cycleFilter);
+      const matchesCycle = !cycleFilter || (c.cycleIds || []).includes(parseInt(cycleFilter));
       return matchesSearch && matchesOffice && matchesCycle;
     });
   }, [candidates, search, officeFilter, cycleFilter]);
@@ -114,7 +114,7 @@ const AdminCandidatesPage: React.FC = () => {
             <tbody>
               {filtered.map((c) => {
                 const office = officeMap.get(c.officeId);
-                const cycle = cycleMap.get(c.cycleId);
+                const cycle = (c.cycleIds || []).map((id: number) => cycleMap.get(id)).find(Boolean);
                 return (
                   <tr key={c.id} className="border-b last:border-0 hover:bg-gray-50">
                     <td className="px-4 py-3">

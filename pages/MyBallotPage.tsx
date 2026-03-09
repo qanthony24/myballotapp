@@ -150,7 +150,7 @@ const MyBallotPage: React.FC = () => {
     if (!selectedElectionDate) return 0;
     const cycle = getCycleByElectionDate(selectedElectionDate);
     if (!cycle) return 0;
-    const candidatesForCycle = getAllCandidates().filter(c => c.cycleId === cycle.id);
+    const candidatesForCycle = getAllCandidates().filter(c => (c.cycleIds || []).includes(cycle.id));
     const uniqueRaces = new Set(candidatesForCycle.map(c => `${c.officeId}-${c.district || 'no-district'}`));
     return uniqueRaces.size;
   }, [selectedElectionDate]);
