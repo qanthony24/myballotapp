@@ -46,7 +46,7 @@ export interface Candidate {
   officeId: number;
   runningMateName?: string;
   district?: string;
-  cycleId: number;
+  cycleIds: number[];
   website?: string;
   email?: string;
   phone?: string;

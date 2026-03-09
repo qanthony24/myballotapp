@@ -103,7 +103,7 @@ const AdminCandidateEditPage: React.FC = () => {
   if (!candidate) return null;
 
   const office = getOfficeById(candidate.officeId);
-  const cycle = cycles.find((c) => c.id === candidate.cycleId);
+  const cycle = cycles.find((c) => (candidate.cycleIds || []).includes(c.id));
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -168,14 +168,26 @@ const AdminCandidateEditPage: React.FC = () => {
             </div>
             <Field label="District" value={candidate.district || ''} onChange={(v) => updateField('district', v || undefined)} placeholder="e.g. District 1" />
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Election</label>
-              <select
-                value={candidate.cycleId}
-                onChange={(e) => updateField('cycleId', parseInt(e.target.value))}
-                className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm"
-              >
-                {cycles.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-              </select>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Elections</label>
+              <div className="space-y-1 max-h-40 overflow-y-auto border border-gray-200 rounded-md p-2">
+                {cycles.map((c) => (
+                  <label key={c.id} className="flex items-center gap-2 text-sm cursor-pointer hover:bg-gray-50 px-1 rounded">
+                    <input
+                      type="checkbox"
+                      checked={(candidate.cycleIds || []).includes(c.id)}
+                      onChange={(e) => {
+                        const current = candidate.cycleIds || [];
+                        const updated = e.target.checked
+                          ? [...current, c.id]
+                          : current.filter((id: number) => id !== c.id);
+                        updateField('cycleIds', updated);
+                      }}
+                      className="rounded border-gray-300 text-civic-blue focus:ring-civic-blue"
+                    />
+                    {c.name}
+                  </label>
+                ))}
+              </div>
             </div>
             <Field label="Ballot Order" value={String(candidate.ballotOrder)} onChange={(v) => updateField('ballotOrder', parseInt(v) || 1)} />
             <div className="flex items-center gap-2 pt-5">

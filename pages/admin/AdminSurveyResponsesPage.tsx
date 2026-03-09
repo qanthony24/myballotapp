@@ -45,7 +45,7 @@ const AdminSurveyResponsesPage: React.FC = () => {
     const cycle = cycles.find((c) => c.electionDate === selectedElection);
     if (!cycle) return [];
     return candidates.filter((c) => {
-      if (c.cycleId !== cycle.id) return false;
+      if (!(c.cycleIds || []).includes(cycle.id)) return false;
       if (c.officeId !== parseInt(selectedOffice)) return false;
       if (selectedDistrict && c.district !== selectedDistrict) return false;
       return true;
@@ -58,7 +58,7 @@ const AdminSurveyResponsesPage: React.FC = () => {
     if (!cycle) return [];
     const districts = new Set<string>();
     candidates
-      .filter((c) => c.cycleId === cycle.id && c.officeId === parseInt(selectedOffice) && c.district)
+      .filter((c) => (c.cycleIds || []).includes(cycle.id) && c.officeId === parseInt(selectedOffice) && c.district)
       .forEach((c) => districts.add(c.district!));
     return Array.from(districts).sort();
   }, [candidates, selectedElection, selectedOffice, cycles]);

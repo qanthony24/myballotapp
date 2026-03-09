@@ -66,12 +66,18 @@ const HomePage: React.FC = () => {
 
   const filteredCandidates = useMemo(() => {
     return allCandidatesData.filter(candidate => {
-      const candidateCycle = getCycleById(candidate.cycleId);
-      if (!candidateCycle) return false; 
+      const candidateCycleIds = candidate.cycleIds || [];
+      if (candidateCycleIds.length === 0) return false;
 
       const electionDateMatch = selectedElectionDateForFilter 
-        ? candidateCycle.electionDate === selectedElectionDateForFilter // Filter by specific selected upcoming election
-        : upcomingElections.some(uc => uc.electionDate === candidateCycle.electionDate); // Or, if "All Upcoming" is chosen, candidate is in ANY upcoming election
+        ? candidateCycleIds.some((cid: number) => {
+            const cyc = getCycleById(cid);
+            return cyc && cyc.electionDate === selectedElectionDateForFilter;
+          })
+        : candidateCycleIds.some((cid: number) => {
+            const cyc = getCycleById(cid);
+            return cyc && upcomingElections.some(uc => uc.electionDate === cyc.electionDate);
+          });
       
       if (!electionDateMatch) return false; 
 

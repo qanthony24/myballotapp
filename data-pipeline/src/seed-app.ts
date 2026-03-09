@@ -188,7 +188,7 @@ interface AppCandidate {
   officeId: number;
   runningMateName?: string;
   district?: string;
-  cycleId: number;
+  cycleIds: number[];
   website?: string;
   email?: string;
   phone?: string;
@@ -255,7 +255,7 @@ function contestToCandidates(
       party: normalizePartyValue(c.party),
       officeId,
       district: district ?? (mappedDistrict ? undefined : extractDistrictFallback(contest)),
-      cycleId,
+      cycleIds: cycleId ? [cycleId] : [],
       website: c.candidateUrl ?? undefined,
       email: c.email ?? undefined,
       phone: c.phone ?? undefined,
@@ -312,11 +312,32 @@ async function main(): Promise<void> {
 
   // Build candidates
   const candidateIds = new Set<number>();
-  const candidates: AppCandidate[] = [];
+  const rawCandidates: AppCandidate[] = [];
   for (const contest of active) {
-    candidates.push(...contestToCandidates(contest, candidateIds));
+    rawCandidates.push(...contestToCandidates(contest, candidateIds));
   }
-  console.log(`\n👤 Candidates: ${candidates.length}`);
+  console.log(`\n👤 Raw candidate records: ${rawCandidates.length}`);
+
+  // Deduplicate: merge same person across elections into one record
+  const dedupeMap = new Map<string, AppCandidate>();
+  for (const c of rawCandidates) {
+    const key = `${c.firstName.toLowerCase()}|${c.lastName.toLowerCase()}|${c.officeId}`;
+    const existing = dedupeMap.get(key);
+    if (existing) {
+      for (const cid of c.cycleIds) {
+        if (!existing.cycleIds.includes(cid)) existing.cycleIds.push(cid);
+      }
+      if (!existing.website && c.website) existing.website = c.website;
+      if (!existing.email && c.email) existing.email = c.email;
+      if (!existing.phone && c.phone) existing.phone = c.phone;
+      if (!existing.isIncumbent && c.isIncumbent) existing.isIncumbent = true;
+      if (!existing.socialLinks && c.socialLinks) existing.socialLinks = c.socialLinks;
+    } else {
+      dedupeMap.set(key, { ...c });
+    }
+  }
+  const candidates = Array.from(dedupeMap.values());
+  console.log(`   Deduplicated: ${candidates.length} unique candidates (merged ${rawCandidates.length - candidates.length} duplicates)`);
 
   // Build ballot measures
   const measureIds = new Set<number>();
@@ -350,9 +371,9 @@ async function main(): Promise<void> {
     for (const o of offices) console.log(`   - ${o}`);
   }
 
-  const unmappedCycles = candidates.filter((c) => c.cycleId === 0);
+  const unmappedCycles = candidates.filter((c) => c.cycleIds.length === 0 || c.cycleIds.includes(0));
   if (unmappedCycles.length > 0) {
-    console.log(`\n⚠️  ${unmappedCycles.length} candidates with unmapped cycle (cycleId=0)`);
+    console.log(`\n⚠️  ${unmappedCycles.length} candidates with unmapped cycle`);
   }
 
   // Show fields requiring manual entry

@@ -28,7 +28,7 @@ export function useAllNotesSummary(): NoteSummaryItem[] {
                   const candidate = getCandidateById(candidateIdNum);
                   if (candidate) {
                     const office = getOfficeById(candidate.officeId);
-                    const cycle = getCycleById(candidate.cycleId);
+                    const cycle = candidate.cycleIds?.length ? getCycleById(candidate.cycleIds[0]) : null;
                     
                     let candidateDisplayName = `${candidate.firstName} ${candidate.lastName}`;
                     if (candidate.officeId === 5 && candidate.runningMateName) { // Office ID 5 for US President
