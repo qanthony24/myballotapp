@@ -6,6 +6,7 @@ import { getCycleById, getFormattedElectionName, getFormattedCandidateOfficeName
 import { BuildingOffice2Icon, CalendarDaysIcon, ArrowRightIcon, CheckBadgeIcon, ScaleIcon } from '@heroicons/react/24/outline';
 import { useNotes } from '../../hooks/useNotes';
 import { useSettings } from '../../hooks/useSettings';
+import CandidatePhoto from './CandidatePhoto';
 
 interface CandidateCardProps {
   candidate: Candidate;
@@ -131,11 +132,11 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate, viewMode, onTo
     return (
       <div className={`${cardBaseClasses} flex flex-col`}>
         <Link to={`/candidate/${candidate.id}`} className="block hover:opacity-90 transition-opacity">
-          <img 
-            src={candidate.photoUrl || `https://picsum.photos/seed/${candidate.slug}/400/300`} 
-            alt={displayName} 
-            className="w-full h-48 object-cover" 
-            onError={(e) => (e.currentTarget.src = 'https://picsum.photos/400/300?grayscale')}
+          <CandidatePhoto
+            src={candidate.photoUrl}
+            alt={displayName}
+            focalPoint={candidate.photoFocalPoint}
+            className="w-full h-48"
           />
         </Link>
         <div className={`${paddingClasses} flex flex-col flex-grow`}>

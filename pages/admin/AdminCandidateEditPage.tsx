@@ -11,6 +11,7 @@ import {
 } from '../../services/firestoreDataService';
 import { getOfficeById } from '../../services/dataService';
 import { ArrowLeftIcon, CheckCircleIcon, ArrowUpTrayIcon } from '@heroicons/react/24/outline';
+import FocalPointPicker from '../../components/admin/FocalPointPicker';
 
 const AdminCandidateEditPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -124,6 +125,7 @@ const AdminCandidateEditPage: React.FC = () => {
             src={candidate.photoUrl || 'https://via.placeholder.com/80'}
             alt=""
             className="w-20 h-20 rounded-full object-cover bg-gray-200 border-2 border-civic-blue"
+            style={candidate.photoFocalPoint ? { objectPosition: `${candidate.photoFocalPoint.x}% ${candidate.photoFocalPoint.y}%` } : { objectPosition: '50% 25%' }}
             onError={(e) => { e.currentTarget.src = 'https://via.placeholder.com/80'; }}
           />
           <div>
@@ -179,38 +181,44 @@ const AdminCandidateEditPage: React.FC = () => {
 
         {/* Photo & Media */}
         <Section title="Photo & Media">
-          <div className="flex gap-4 items-start">
-            <div className="flex-1">
-              <Field
-                label="Photo URL (paste a link)"
-                value={candidate.photoUrl || ''}
-                onChange={(v) => updateField('photoUrl', v)}
-                placeholder="https://example.com/photo.jpg"
-              />
-              <div className="mt-3 flex items-center gap-2">
-                <span className="text-xs text-gray-400">— or —</span>
-                <label className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium cursor-pointer transition ${uploading ? 'bg-gray-200 text-gray-400' : 'bg-civic-blue/10 text-civic-blue hover:bg-civic-blue/20 border border-civic-blue/30'}`}>
-                  <ArrowUpTrayIcon className="h-3.5 w-3.5" />
-                  {uploading ? 'Uploading...' : 'Upload a file'}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handlePhotoUpload}
-                    disabled={uploading}
-                    className="hidden"
-                  />
-                </label>
-              </div>
-              <div className="mt-2 text-xs text-gray-400">
-                Paste a URL from the candidate's site or social media, or upload an image file directly.
+          <div className="space-y-4">
+            <div className="flex gap-4 items-start">
+              <div className="flex-1">
+                <Field
+                  label="Photo URL (paste a link)"
+                  value={candidate.photoUrl || ''}
+                  onChange={(v) => updateField('photoUrl', v)}
+                  placeholder="https://example.com/photo.jpg"
+                />
+                <div className="mt-3 flex items-center gap-2">
+                  <span className="text-xs text-gray-400">— or —</span>
+                  <label className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium cursor-pointer transition ${uploading ? 'bg-gray-200 text-gray-400' : 'bg-civic-blue/10 text-civic-blue hover:bg-civic-blue/20 border border-civic-blue/30'}`}>
+                    <ArrowUpTrayIcon className="h-3.5 w-3.5" />
+                    {uploading ? 'Uploading...' : 'Upload a file'}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handlePhotoUpload}
+                      disabled={uploading}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+                <div className="mt-2 text-xs text-gray-400">
+                  Paste a URL from the candidate's site or social media, or upload an image file directly.
+                </div>
               </div>
             </div>
+
+            {/* Focal point picker — shown when photo exists */}
             {candidate.photoUrl && (
-              <img
-                src={candidate.photoUrl}
-                alt="Preview"
-                className="w-24 h-24 rounded-lg object-cover border flex-shrink-0"
-                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+              <FocalPointPicker
+                imageUrl={candidate.photoUrl}
+                focalPoint={candidate.photoFocalPoint ?? { x: 50, y: 25 }}
+                onChange={(fp) => {
+                  setCandidate({ ...candidate, photoFocalPoint: fp });
+                  setSaved(false);
+                }}
               />
             )}
           </div>

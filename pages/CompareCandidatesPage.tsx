@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { Candidate, Office, Cycle } from '../types';
+import CandidatePhoto from '../components/candidates/CandidatePhoto';
 import { 
   getCandidateById, 
   getOfficeById, 
@@ -404,7 +405,7 @@ const CompareCandidatesPage: React.FC = () => {
                     return (
                       <th key={candidate.id} scope="col" className={`py-3.5 px-4 text-left text-sm font-semibold text-midnight-navy ${index === 0 ? 'border-r border-midnight-navy/20' : ''}`}>
                         <Link to={`/candidate/${candidate.id}`} className="hover:text-sunlight-gold group">
-                            <img src={candidate.photoUrl || `https://picsum.photos/seed/${candidate.slug}/100/100`} alt={headerDisplayName} className="h-16 w-16 rounded-full object-cover mx-auto mb-2 border-2 border-civic-blue group-hover:border-sunlight-gold transition-colors"/>
+                            <CandidatePhoto src={candidate.photoUrl} alt={headerDisplayName} focalPoint={candidate.photoFocalPoint} className="h-16 w-16 rounded-full mx-auto mb-2 border-2 border-civic-blue group-hover:border-sunlight-gold transition-colors" />
                             {headerDisplayName} {renderIncumbentBadge(candidate)}
                             <p className="text-xs text-midnight-navy/80 font-normal">{candidate.party}</p>
                         </Link>
