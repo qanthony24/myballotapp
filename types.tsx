@@ -30,24 +30,30 @@ export interface SocialLinks {
   tiktok?: string;
 }
 
+export interface PhotoFocalPoint {
+  x: number; // 0-100, horizontal percentage (50 = center)
+  y: number; // 0-100, vertical percentage (25 = upper quarter, good default for headshots)
+}
+
 export interface Candidate {
   id: number;
   firstName: string;
   lastName: string;
   slug: string;
   photoUrl: string;
+  photoFocalPoint?: PhotoFocalPoint;
   party: string;
   officeId: number;
-  runningMateName?: string; // Added for presidential candidates
-  district?: string; // Added for jurisdictional specificity
-  cycleId: number; // Refers to Cycle.id (the election event's numeric ID)
+  runningMateName?: string;
+  district?: string;
+  cycleId: number;
   website?: string;
   email?: string;
   phone?: string;
   socialLinks?: SocialLinks;
   bio: string;
   mailingAddress?: string;
-  surveyResponses: Record<string, string>; // key from SurveyQuestion.key
+  surveyResponses: Record<string, string>;
   ballotOrder: number;
   isIncumbent?: boolean;
 }

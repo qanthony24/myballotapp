@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Cycle, Candidate } from '../../types';
 import { OFFICES_DATA, PARTIES, ViewMode } from '../../constants';
 import { getAllCandidates, getFormattedElectionName } from '../../services/dataService';
+import CandidatePhoto from './CandidatePhoto';
 import { MagnifyingGlassIcon, ListBulletIcon, Squares2X2Icon } from '@heroicons/react/24/outline';
 
 interface FilterControlsProps {
@@ -98,11 +99,11 @@ const FilterControls: React.FC<FilterControlsProps> = ({
                   onClick={() => handleSuggestionClick(candidate)}
                   onMouseDown={(e) => e.preventDefault()}
                 >
-                  <img 
-                    src={candidate.photoUrl || `https://picsum.photos/seed/${candidate.slug}/40/40`} 
-                    alt={`${candidate.firstName} ${candidate.lastName}`} 
-                    className="w-8 h-8 rounded-full mr-3 object-cover"
-                    onError={(e) => (e.currentTarget.src = 'https://picsum.photos/40/40?grayscale')}
+                  <CandidatePhoto
+                    src={candidate.photoUrl}
+                    alt={`${candidate.firstName} ${candidate.lastName}`}
+                    focalPoint={candidate.photoFocalPoint}
+                    className="w-8 h-8 rounded-full mr-3"
                   />
                   <div>
                     <span className="font-medium text-midnight-navy">{candidate.firstName} ${candidate.lastName}</span>

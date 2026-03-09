@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { Candidate, Cycle, NoteEntry } from '../types';
+import CandidatePhoto from '../components/candidates/CandidatePhoto';
 import { 
   getCandidateById, 
   getCycleById, 
@@ -200,11 +201,11 @@ const CandidateProfilePage: React.FC = () => {
 
       {/* Main Candidate Info */}
       <div className="flex flex-col md:flex-row items-center md:items-start mb-8">
-        <img
-          src={candidate.photoUrl || `https://picsum.photos/seed/${candidate.slug}/200/200`}
+        <CandidatePhoto
+          src={candidate.photoUrl}
           alt={displayName}
-          className="w-40 h-40 rounded-full object-cover border-4 border-civic-blue shadow-md mb-4 md:mb-0 md:mr-8"
-          onError={(e) => (e.currentTarget.src = 'https://picsum.photos/200/200?grayscale')}
+          focalPoint={candidate.photoFocalPoint}
+          className="w-40 h-40 rounded-full border-4 border-civic-blue shadow-md mb-4 md:mb-0 md:mr-8"
         />
         <div className="text-center md:text-left flex-grow">
           <h1 className="text-4xl font-display font-bold text-midnight-navy">
@@ -423,11 +424,11 @@ const CandidateProfilePage: React.FC = () => {
                   className="block bg-slate-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-midnight-navy/10 hover:border-sunlight-gold focus:outline-none focus:ring-2 focus:ring-sunlight-gold"
                 >
                   <div className="flex items-center">
-                    <img 
-                      src={op.photoUrl || `https://picsum.photos/seed/${op.slug}/60/60`} 
-                      alt={opponentDisplayName} 
-                      className="w-12 h-12 rounded-full object-cover mr-4 border-2 border-slate-300"
-                      onError={(e) => (e.currentTarget.src = 'https://picsum.photos/60/60?grayscale')}
+                    <CandidatePhoto
+                      src={op.photoUrl}
+                      alt={opponentDisplayName}
+                      focalPoint={op.photoFocalPoint}
+                      className="w-12 h-12 rounded-full mr-4 border-2 border-slate-300"
                     />
                     <div>
                       <p className="font-semibold text-midnight-navy leading-tight font-display">
