@@ -7,6 +7,7 @@ import { BuildingOffice2Icon, CalendarDaysIcon, ArrowRightIcon, CheckBadgeIcon, 
 import { useNotes } from '../../hooks/useNotes';
 import { useSettings } from '../../hooks/useSettings';
 import CandidatePhoto from './CandidatePhoto';
+import PartyBadge from './PartyBadge';
 
 interface CandidateCardProps {
   candidate: Candidate;
@@ -15,16 +16,7 @@ interface CandidateCardProps {
   isCandidateSelected: (candidateId: number, electionDate: string) => boolean;
 }
 
-const getPartyAbbreviation = (party: string): string => {
-  if (!party) return '';
-  const lowerParty = party.toLowerCase();
-  if (lowerParty.startsWith('dem')) return 'D';
-  if (lowerParty.startsWith('rep')) return 'R';
-  if (lowerParty.startsWith('ind')) return 'I';
-  if (lowerParty.startsWith('gre')) return 'G';
-  if (lowerParty.startsWith('oth')) return 'O';
-  return party.charAt(0).toUpperCase(); // Fallback to first letter
-};
+import { getPartyInfo } from '../../lib/parties';
 
 const CandidateCard: React.FC<CandidateCardProps> = ({ candidate, viewMode, onToggleCandidateBallotStatus, isCandidateSelected }) => {
   const cycle = getCycleById(candidate.cycleId); 
@@ -151,7 +143,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate, viewMode, onTo
           </div>
           <p className="text-sm text-midnight-navy/80 mb-1 flex items-center"><BuildingOffice2Icon className="h-4 w-4 mr-2 text-midnight-navy/60" />{formattedOfficeName}</p>
           <p className="text-sm text-midnight-navy/80 mb-1 flex items-center"><CalendarDaysIcon className="h-4 w-4 mr-2 text-midnight-navy/60" />{formattedElectionName}</p>
-          <p className="text-sm text-midnight-navy/80 mb-3 font-medium">{candidate.party}</p>
+          <div className="mb-3"><PartyBadge party={candidate.party} size="md" /></div>
           
           {quickNoteSection}
 
@@ -188,7 +180,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate, viewMode, onTo
   }
 
   // LIST View
-  const partyAbbreviation = getPartyAbbreviation(candidate.party);
+  const partyAbbreviation = getPartyInfo(candidate.party).abbreviation;
   return (
     <div className={`${cardBaseClasses} flex flex-col sm:flex-row items-start sm:items-center`}>
       {/* Image Link removed for LIST view */}

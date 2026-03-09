@@ -12,6 +12,7 @@ import {
 import { getOfficeById } from '../../services/dataService';
 import { ArrowLeftIcon, CheckCircleIcon, ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 import FocalPointPicker from '../../components/admin/FocalPointPicker';
+import { getAllParties } from '../../lib/parties';
 
 const AdminCandidateEditPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -144,7 +145,17 @@ const AdminCandidateEditPage: React.FC = () => {
           <div className="grid grid-cols-2 gap-4">
             <Field label="First Name" value={candidate.firstName} onChange={(v) => updateField('firstName', v)} />
             <Field label="Last Name" value={candidate.lastName} onChange={(v) => updateField('lastName', v)} />
-            <Field label="Party" value={candidate.party} onChange={(v) => updateField('party', v)} />
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Party</label>
+              <select
+                value={candidate.party}
+                onChange={(e) => updateField('party', e.target.value)}
+                className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm"
+              >
+                <option value="">— Select —</option>
+                {getAllParties().map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}
+              </select>
+            </div>
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">Office</label>
               <select
