@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Cycle, Candidate } from '../../types';
-import { OFFICES_DATA, PARTIES, ViewMode } from '../../constants';
+import { OFFICES_DATA, ViewMode } from '../../constants';
+import { getAllParties } from '../../lib/parties';
 import { getAllCandidates, getFormattedElectionName } from '../../services/dataService';
 import CandidatePhoto from './CandidatePhoto';
 import { MagnifyingGlassIcon, ListBulletIcon, Squares2X2Icon } from '@heroicons/react/24/outline';
@@ -159,8 +160,8 @@ const FilterControls: React.FC<FilterControlsProps> = ({
             onChange={(e) => setSelectedParty(e.target.value)}
           >
             <option value="">All Parties</option>
-            {PARTIES.map((party) => (
-              <option key={party} value={party}>{party}</option>
+            {getAllParties().map((p) => (
+              <option key={p.id} value={p.id}>{p.label}</option>
             ))}
           </select>
         </div>

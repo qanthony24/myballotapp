@@ -155,6 +155,18 @@ function channelsToSocialLinks(channels: Array<{ type: string; id: string }>): S
 // Slug generation
 // ---------------------------------------------------------------------------
 
+function normalizePartyValue(raw: string | null | undefined): string {
+  if (!raw) return 'Nonpartisan';
+  const lower = raw.trim().toLowerCase();
+  if (lower.startsWith('dem')) return 'Democratic';
+  if (lower.startsWith('rep')) return 'Republican';
+  if (lower.startsWith('lib')) return 'Libertarian';
+  if (lower.startsWith('gre')) return 'Green';
+  if (lower.startsWith('ind')) return 'Independent';
+  if (lower === 'nonpartisan' || lower === 'non-partisan' || lower === 'no party' || lower === 'none') return 'Nonpartisan';
+  return 'Other';
+}
+
 function slugify(text: string): string {
   return text
     .toLowerCase()
@@ -240,7 +252,7 @@ function contestToCandidates(
       lastName,
       slug: slugify(`${firstName}-${lastName}`),
       photoUrl: c.photoUrl ?? '',
-      party: c.party ?? 'Nonpartisan',
+      party: normalizePartyValue(c.party),
       officeId,
       district: district ?? (mappedDistrict ? undefined : extractDistrictFallback(contest)),
       cycleId,

@@ -1,18 +1,12 @@
 import React from 'react';
 import { TrophyIcon } from '@heroicons/react/24/solid';
 import type { ResultItem } from '../../types/info';
+import { getPartyInfo } from '../../lib/parties';
 
 interface ResultsBarChartProps {
   items: ResultItem[];
   totalVotes?: number;
 }
-
-const partyColor: Record<string, string> = {
-  Republican: 'bg-red-100 text-red-700',
-  Democratic: 'bg-blue-100 text-blue-700',
-  Libertarian: 'bg-yellow-100 text-yellow-700',
-  Green: 'bg-green-100 text-green-700',
-};
 
 const ResultsBarChart: React.FC<ResultsBarChartProps> = ({ items, totalVotes }) => {
   const sorted = [...items].sort((a, b) => b.votePercent - a.votePercent);
@@ -27,7 +21,7 @@ const ResultsBarChart: React.FC<ResultsBarChartProps> = ({ items, totalVotes }) 
     >
       {sorted.map((item) => {
         const barWidth = Math.max(item.votePercent * scaleFactor, 2);
-        const badge = item.party ? (partyColor[item.party] ?? 'bg-gray-100 text-gray-700') : null;
+        const badge = item.party ? getPartyInfo(item.party).badgeClasses : null;
 
         return (
           <div key={item.id} className="space-y-1">

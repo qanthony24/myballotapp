@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { Candidate, Cycle, NoteEntry } from '../types';
 import CandidatePhoto from '../components/candidates/CandidatePhoto';
+import PartyBadge from '../components/candidates/PartyBadge';
+import { getPartyInfo } from '../lib/parties';
 import { 
   getCandidateById, 
   getCycleById, 
@@ -44,16 +46,6 @@ const TikTokIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   </svg>
 );
 
-const getPartyAbbreviation = (party: string): string => {
-  if (!party) return '';
-  const lowerParty = party.toLowerCase();
-  if (lowerParty.startsWith('dem')) return 'D';
-  if (lowerParty.startsWith('rep')) return 'R';
-  if (lowerParty.startsWith('ind')) return 'I';
-  if (lowerParty.startsWith('gre')) return 'G';
-  if (lowerParty.startsWith('oth')) return 'O';
-  return party.charAt(0).toUpperCase();
-};
 
 const CandidateProfilePage: React.FC = () => {
   const { id: candidateIdParam } = useParams<{ id: string }>(); // Corrected: Use 'id' from route param
@@ -217,7 +209,7 @@ const CandidateProfilePage: React.FC = () => {
               Running Mate: {runningMateDisplay}
             </p>
           )}
-          <p className="text-xl text-midnight-navy/80 mt-1">{candidate.party}</p>
+          <div className="mt-1"><PartyBadge party={candidate.party} size="md" /></div>
           <p className="text-lg text-midnight-navy/70 mt-2 flex items-center justify-center md:justify-start">
             <BuildingOffice2Icon className="h-5 w-5 mr-2 text-midnight-navy/60" /> {formattedOfficeName}
           </p>
@@ -433,7 +425,7 @@ const CandidateProfilePage: React.FC = () => {
                     <div>
                       <p className="font-semibold text-midnight-navy leading-tight font-display">
                         {opponentDisplayName}
-                        <span className="text-sm text-midnight-navy/70 font-sans font-normal ml-1">({getPartyAbbreviation(op.party)})</span>
+                        <span className="ml-1"><PartyBadge party={op.party} size="sm" showAbbreviation /></span>
                       </p>
                       {op.isIncumbent && (
                         <span className="mt-0.5 text-xs font-semibold text-midnight-navy bg-sunlight-gold px-1.5 py-0.5 rounded-full inline-flex items-center">
