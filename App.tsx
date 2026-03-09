@@ -48,7 +48,8 @@ const AppRoutes: React.FC = () => {
       <Route path="/profile" element={currentUser ? <UserProfilePage /> : <Navigate to="/auth" />} />
       <Route path="/auth" element={!currentUser ? <AuthPage /> : <Navigate to="/" />} />
       <Route path="/election-info" element={<Navigate to="/info" />} />
-      <Route path="/info" element={<InfoHubPage />} />
+      <Route path="/info" element={<InfoNewsPage />} />
+      <Route path="/info/hub" element={<InfoHubPage />} />
       <Route path="/info/essentials" element={<InfoEssentialsPage />} />
       <Route path="/info/qa" element={<ElectionInfoPage />} />
       <Route path="/info/news" element={<InfoNewsPage />} />
