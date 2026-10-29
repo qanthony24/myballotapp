@@ -13,6 +13,7 @@ import {
   getCandidatesByOfficeAndCycle
 } from '../services/dataService';
 import { getFirestoreCandidateById } from '../services/firestoreDataService';
+import { useElectionData } from '../services/electionDataStore';
 import { ProfileSkeleton } from '../components/ui/PageSkeleton';
 import CollapsibleAnswer from '../components/CollapsibleAnswer';
 import { ArrowLeftIcon, BuildingOffice2Icon, CalendarDaysIcon, GlobeAltIcon, EnvelopeIcon, PhoneIcon, UserGroupIcon, PlusCircleIcon, MinusCircleIcon, ScaleIcon, CheckBadgeIcon, PencilSquareIcon, ChatBubbleOvalLeftEllipsisIcon, TrashIcon } from '@heroicons/react/24/outline';
@@ -71,6 +72,8 @@ const CandidateProfilePage: React.FC = () => {
     isElectionPast
   } = useBallot();
 
+  const { version: dataVersion } = useElectionData();
+
   useEffect(() => {
     if (!candidateIdParam) {
       setCandidate(null);
@@ -80,8 +83,9 @@ const CandidateProfilePage: React.FC = () => {
       return;
     }
 
-    setLoading(true);
     const id = parseInt(candidateIdParam);
+    // Only show the loading state when opening a different candidate, not on live data refreshes.
+    if (candidate?.id !== id) setLoading(true);
 
     getFirestoreCandidateById(id).then((fetchedCandidate) => {
       // Fall back to local if Firestore returns nothing
@@ -101,7 +105,7 @@ const CandidateProfilePage: React.FC = () => {
       }
       setLoading(false);
     });
-  }, [candidateIdParam]);
+  }, [candidateIdParam, dataVersion]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (location.hash === '#notes-section' && notesSectionRef.current) {

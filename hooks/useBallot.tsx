@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useContext, createContext, useRef } from 'react';
 import { BallotEntry, BallotArchive, CandidateSelection, MeasureStance, Cycle, ReminderSettings, Candidate } from '../types';
 import { getAllCycles, getCycleByElectionDate, isElectionPast } from '../services/dataService';
+import { useElectionData } from '../services/electionDataStore';
 import { useAuth } from './useAuth';
 import { db } from '../firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -111,6 +112,7 @@ export const BallotProvider: React.FC<React.PropsWithChildren<{}>> = ({ children
   const firestoreSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const skipNextFirestoreSave = useRef(false);
 
+  useElectionData(); // re-render (and refresh election list) when election data changes
   const definedElectionEvents = getAllCycles();
   const [selectedElectionDate, setSelectedElectionDateState] = useState<string | null>(() => 
     getDefaultElectionDate(definedElectionEvents, Object.keys(ballotArchive), Object.keys(remindersArchive))
@@ -360,6 +362,7 @@ export const useBallot = (): BallotContextType => {
 
 export const useElection = () => {
   const { selectedElectionDate } = useBallot();
+  useElectionData();
   if (!selectedElectionDate) return null;
   return getCycleByElectionDate(selectedElectionDate);
 };

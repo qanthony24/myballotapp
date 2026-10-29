@@ -1,7 +1,7 @@
 // Note: This file, when loaded by the browser via importmap, will be parsed as JavaScript.
 // Type imports have been removed to prevent issues if './types.ts' is fetched and parsed by a JS engine.
 
-import type { Candidate, BallotMeasure } from './types';
+import type { Candidate, BallotMeasure, OfficeElectionResults } from './types';
 import pipelineCandidatesJson from './data/app/candidates.json';
 import pipelineMeasuresJson from './data/app/ballot-measures.json';
 
@@ -105,14 +105,6 @@ const PREDEFINED_SURVEY_QUESTIONS_DATA = [
     { "key": "fiscal_approach", "question": "What is your approach to fiscal responsibility and budget management?" }
 ];
 
-const RAW_DATA = {
-  "offices": PREDEFINED_OFFICES_DATA,
-  "cycles": PREDEFINED_CYCLES_DATA_RAW,
-  "surveyQuestions": PREDEFINED_SURVEY_QUESTIONS_DATA,
-  "candidates": pipelineCandidates,
-  "ballotMeasures": pipelineMeasures
-};
-
 export const EARLY_VOTING_LOCATIONS_DATA = [
   { id: 'ev1', name: 'City Hall', address: '222 St. Louis St, Baton Rouge, LA 70802' },
   { id: 'ev2', name: 'Main Library at Goodwood', address: '7711 Goodwood Blvd, Baton Rouge, LA 70806' },
@@ -121,85 +113,52 @@ export const EARLY_VOTING_LOCATIONS_DATA = [
   { id: 'ev5', name: 'Forest Community Park', address: '13900 S Harrells Ferry Rd, Baton Rouge, LA 70816' },
 ];
 
-export const OFFICES_DATA = RAW_DATA.offices;
-export const BALLOT_MEASURES_DATA = RAW_DATA.ballotMeasures;
+// ---------------------------------------------------------------------------
+// BUNDLED SNAPSHOT
+// These are the data shipped inside the app. Screens do NOT read them
+// directly: services/electionDataStore.ts starts from them and then applies
+// Firestore (the source of truth) on top. They matter for the very first
+// launch with no connection, and as the input to Admin → Setup → "Publish".
+// ---------------------------------------------------------------------------
 
-const today = new Date();
-today.setHours(0,0,0,0); 
+/** Candidates from the data pipeline (data/app/candidates.json), unmodified. */
+export const SNAPSHOT_CANDIDATES: Candidate[] = pipelineCandidates;
+/** Ballot measures from the data pipeline (data/app/ballot-measures.json), unmodified. */
+export const SNAPSHOT_BALLOT_MEASURES: BallotMeasure[] = pipelineMeasures;
+export const PREDEFINED_OFFICES = PREDEFINED_OFFICES_DATA;
+export const PREDEFINED_SURVEY_QUESTIONS = PREDEFINED_SURVEY_QUESTIONS_DATA;
+/** Election list without the internal `type`/`nameOverride` fields. */
+export const PREDEFINED_CYCLES = PREDEFINED_CYCLES_DATA_RAW.map((typedCycle) => {
+  const { type: _type, nameOverride, ...baseCycleData } = typedCycle as typeof typedCycle & { nameOverride?: string };
+  return nameOverride ? { ...baseCycleData, name: nameOverride } : { ...baseCycleData };
+});
 
-export const CYCLES_DATA = PREDEFINED_CYCLES_DATA_RAW
-  .map(typedCycle => {
-    const { type: cycleTypeData, nameOverride, ...baseCycleData } = typedCycle; // cycleTypeData is unused after destructuring
-    const cycle = { ...baseCycleData }; 
-    if (nameOverride) {
-      cycle.name = nameOverride; 
-    }
-    return cycle;
-  })
-  .sort((a, b) => {
+/** Upcoming elections first (soonest first), then past elections (most recent first). */
+export function sortCycles<T extends { electionDate: string }>(cycles: T[]): T[] {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return [...cycles].sort((a, b) => {
     const dateA = new Date(a.electionDate + 'T00:00:00');
     const dateB = new Date(b.electionDate + 'T00:00:00');
     const aIsPast = dateA < today;
     const bIsPast = dateB < today;
-
-    if (aIsPast && !bIsPast) return 1; 
-    if (!aIsPast && bIsPast) return -1; 
-
-    if (!aIsPast && !bIsPast) { 
-      return dateA.getTime() - dateB.getTime();
-    }
-    return dateB.getTime() - dateA.getTime(); 
+    if (aIsPast && !bIsPast) return 1;
+    if (!aIsPast && bIsPast) return -1;
+    if (!aIsPast && !bIsPast) return dateA.getTime() - dateB.getTime();
+    return dateB.getTime() - dateA.getTime();
   });
+}
 
-
-export const SURVEY_QUESTIONS_DATA = RAW_DATA.surveyQuestions;
-export const CANDIDATES_DATA = RAW_DATA.candidates.map(c => ({
-    ...c,
-    photoUrl: c.photoUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(c.firstName + ' ' + c.lastName)}&size=200&background=random`,
-    isIncumbent: c.isIncumbent || false,
-    bio: c.bio || '',
-    surveyResponses: c.surveyResponses || {},
-}));
+/** Placeholder avatar used when a candidate has no photo. Applied at display time, never saved. */
+export function candidatePhotoFallback(firstName = '', lastName = ''): string {
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(`${firstName} ${lastName}`.trim() || 'N A')}&size=200&background=random`;
+}
 
 export const PARTIES = ["Democratic", "Republican", "Independent", "Green", "Other"];
 
 
-const RAW_ELECTION_RESULTS_DATA = {};
-
-export const ELECTION_RESULTS_DATA = [];
-
-for (const electionDate in RAW_ELECTION_RESULTS_DATA) {
-  const officeResultsForDate = RAW_ELECTION_RESULTS_DATA[electionDate];
-  officeResultsForDate.forEach(rawOfficeResult => {
-    const office = OFFICES_DATA.find(o => o.id === rawOfficeResult.officeId);
-    if (!office) return;
-
-    let totalVotesInOffice = 0;
-    rawOfficeResult.candidateResults.forEach(cr => totalVotesInOffice += cr.votes);
-
-    const processedCandidateResults = rawOfficeResult.candidateResults.map(cr => {
-      const candidate = CANDIDATES_DATA.find(c => c.id === cr.candidateId);
-      let candidateDisplayName = candidate ? `${candidate.firstName} ${candidate.lastName}` : 'Unknown Candidate';
-      if (candidate && candidate.officeId === 5 && candidate.runningMateName) {
-        candidateDisplayName = `${candidate.firstName} ${candidate.lastName} / ${candidate.runningMateName}`;
-      }
-      return {
-        candidateId: cr.candidateId,
-        candidateName: candidateDisplayName,
-        party: candidate ? candidate.party : 'N/A',
-        photoUrl: candidate?.photoUrl,
-        votes: cr.votes,
-        percentage: totalVotesInOffice > 0 ? parseFloat(((cr.votes / totalVotesInOffice) * 100).toFixed(1)) : 0,
-        isWinner: cr.isWinner,
-      };
-    }).sort((a,b) => b.votes - a.votes); 
-
-    ELECTION_RESULTS_DATA.push({
-      electionDate: electionDate,
-      office: office,
-      district: rawOfficeResult.district, 
-      results: processedCandidateResults,
-      totalVotesInOffice: totalVotesInOffice,
-    });
-  });
-}
+/**
+ * Legacy per-office results used by the archived-ballot view. Empty: results
+ * will come from Firestore once the results editor exists.
+ */
+export const ELECTION_RESULTS_DATA: OfficeElectionResults[] = [];

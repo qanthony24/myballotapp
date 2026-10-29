@@ -1,6 +1,7 @@
 import React from 'react';
 import { useElection } from '../hooks/useBallot';
 import { getFormattedElectionName, getUpcomingCycles } from '../services/dataService';
+import { useElectionData } from '../services/electionDataStore';
 
 function getDaysUntil(dateStr: string): number {
   const today = new Date();
@@ -11,6 +12,7 @@ function getDaysUntil(dateStr: string): number {
 
 const ElectionBanner: React.FC = () => {
   const selectedElection = useElection();
+  useElectionData(); // re-render when election data changes
   const upcoming = getUpcomingCycles();
   const nextElection = upcoming[0] ?? selectedElection;
 

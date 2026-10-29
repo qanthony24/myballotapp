@@ -8,6 +8,7 @@ import {
   isElectionPast
 } from '../services/dataService';
 import { getFirestoreBallotMeasures } from '../services/firestoreDataService';
+import { useElectionData } from '../services/electionDataStore';
 import { DocumentCheckIcon, InformationCircleIcon, CalendarDaysIcon } from '@heroicons/react/24/outline';
 import { useBallot } from '../hooks/useBallot';
 import { useSettings } from '../hooks/useSettings';
@@ -19,10 +20,17 @@ const BallotMeasuresListPage: React.FC = () => {
   const [selectedElectionFilter, setSelectedElectionFilter] = useState<string>('');
   const { uiDensity } = useSettings();
 
+  const { version: dataVersion } = useElectionData();
+
+  // Refresh data whenever it changes (live updates).
   useEffect(() => {
     getFirestoreBallotMeasures().then(setAllMeasures);
+    setUpcomingElectionEvents(getUpcomingCycles());
+  }, [dataVersion]);
+
+  // Pick the default election filter when the selected ballot changes.
+  useEffect(() => {
     const upcomingCycles = getUpcomingCycles();
-    setUpcomingElectionEvents(upcomingCycles);
 
     if (ballotSelectedElectionDate && !isElectionPast(ballotSelectedElectionDate)) {
       setSelectedElectionFilter(ballotSelectedElectionDate);

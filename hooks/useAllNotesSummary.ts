@@ -1,7 +1,8 @@
 
 import { useState, useEffect } from 'react';
 import { NoteEntry, NoteSummaryItem, Candidate, Office, Cycle } from '../types';
-import { getCandidateById, getOfficeById, getCycleById, getFormattedElectionName, getFormattedCandidateOfficeName } from '../services/dataService';
+import { getCandidateById, getOfficeById, getRelevantCycleForCandidate, getFormattedElectionName, getFormattedCandidateOfficeName } from '../services/dataService';
+import { useElectionData } from '../services/electionDataStore';
 
 /**
  * Custom hook to scan localStorage for all candidate notes and summarize them.
@@ -9,6 +10,7 @@ import { getCandidateById, getOfficeById, getCycleById, getFormattedElectionName
  */
 export function useAllNotesSummary(): NoteSummaryItem[] {
   const [notesSummary, setNotesSummary] = useState<NoteSummaryItem[]>([]);
+  const { version: dataVersion } = useElectionData();
 
   useEffect(() => {
     const fetchAllNotes = () => {
@@ -28,7 +30,7 @@ export function useAllNotesSummary(): NoteSummaryItem[] {
                   const candidate = getCandidateById(candidateIdNum);
                   if (candidate) {
                     const office = getOfficeById(candidate.officeId);
-                    const cycle = candidate.cycleIds?.length ? getCycleById(candidate.cycleIds[0]) : null;
+                    const cycle = getRelevantCycleForCandidate(candidate);
                     
                     let candidateDisplayName = `${candidate.firstName} ${candidate.lastName}`;
                     if (candidate.officeId === 5 && candidate.runningMateName) { // Office ID 5 for US President
@@ -72,7 +74,7 @@ export function useAllNotesSummary(): NoteSummaryItem[] {
     //   window.removeEventListener('storage', handleStorageChange);
     // };
 
-  }, []);
+  }, [dataVersion]);
 
   return notesSummary;
 }

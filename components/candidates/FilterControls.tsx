@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Cycle, Candidate } from '../../types';
-import { OFFICES_DATA, ViewMode } from '../../constants';
+import { ViewMode } from '../../constants';
+import { useElectionData } from '../../services/electionDataStore';
 import { getAllParties } from '../../lib/parties';
-import { getAllCandidates, getFormattedElectionName } from '../../services/dataService';
+import { getAllCandidates, getAllOffices, getFormattedElectionName } from '../../services/dataService';
 import CandidatePhoto from './CandidatePhoto';
 import { MagnifyingGlassIcon, ListBulletIcon, Squares2X2Icon } from '@heroicons/react/24/outline';
 
@@ -35,9 +36,10 @@ const FilterControls: React.FC<FilterControlsProps> = ({
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
+  const { version: dataVersion } = useElectionData();
   useEffect(() => {
     setAllCandidates(getAllCandidates());
-  }, []);
+  }, [dataVersion]);
 
   useEffect(() => {
     if (searchTerm.trim().length > 0) {
@@ -126,7 +128,7 @@ const FilterControls: React.FC<FilterControlsProps> = ({
             onChange={(e) => setSelectedOffice(e.target.value)}
           >
             <option value="">All Offices</option>
-            {OFFICES_DATA.map((office) => (
+            {getAllOffices().map((office) => (
               <option key={office.id} value={office.id.toString()}>{office.name}</option>
             ))}
           </select>

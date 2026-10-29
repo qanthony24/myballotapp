@@ -1,7 +1,12 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp, FirebaseApp } from "firebase/app";
 import { getAuth, Auth } from "firebase/auth";
-import { getFirestore, Firestore } from "firebase/firestore";
+import {
+  initializeFirestore,
+  persistentLocalCache,
+  persistentMultipleTabManager,
+  Firestore,
+} from "firebase/firestore";
 import { getStorage, FirebaseStorage } from "firebase/storage";
 import { getAnalytics, Analytics, isSupported } from "firebase/analytics";
 
@@ -24,8 +29,14 @@ const app: FirebaseApp = initializeApp(firebaseConfig);
 // Initialize Firebase Authentication and get a reference to the service
 const auth: Auth = getAuth(app);
 
-// Initialize Cloud Firestore and get a reference to the service
-const db: Firestore = getFirestore(app);
+// Initialize Cloud Firestore with an on-device (IndexedDB) cache so election
+// data and saved ballots keep working offline — e.g. in a polling-place line
+// with no signal, or inside the mobile app. Where IndexedDB isn't available
+// (some private-browsing modes) the SDK logs a warning and keeps working with
+// an in-memory cache.
+const db: Firestore = initializeFirestore(app, {
+  localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
+});
 
 // Initialize Firebase Storage
 const storage: FirebaseStorage = getStorage(app);

@@ -3,7 +3,7 @@
 ## Cursor Cloud specific instructions
 
 ### Project overview
-MyBallot is a React/TypeScript single-page application (Vite 6) for East Baton Rouge Parish voters. There is no backend server; the app uses Firebase Auth + Firestore (hardcoded config) and pipeline-generated election data imported via `constants.tsx`.
+MyBallot is a React/TypeScript single-page application (Vite 6) for East Baton Rouge Parish voters. There is no backend server; the app uses Firebase Auth + Firestore (hardcoded config). Election data is read through `services/electionDataStore.ts`: it starts from the pipeline-generated snapshot bundled via `constants.tsx`, then applies live Firestore data (the source of truth) on top, with an offline cache. Screens re-render via `useElectionData()`. See `docs/ADMIN_SETUP.md` → "How election data flows".
 
 ### Dev server
 ```
@@ -27,7 +27,8 @@ The app is served at `http://localhost:5173/`. See `package.json` for standard s
 The `data-pipeline/` directory contains a two-stage Node.js/TypeScript CLI:
 
 1. **Extract + normalize** (`runner.ts`): Reads seed files or Google Civic API → produces `data/contests/*.json` (ContestV1 format).
-2. **Adapt** (`seed-app.ts`): Converts ContestV1 → app data model → produces `data/app/candidates.json` and `data/app/ballot-measures.json`, which `constants.tsx` imports.
+2. **Adapt** (`seed-app.ts`): Converts ContestV1 → app data model → produces `data/app/candidates.json` and `data/app/ballot-measures.json` (the bundled snapshot that `constants.tsx` imports).
+3. **Publish**: Admin → Setup → "Publish bundled data" pushes the snapshot into Firestore (merge; never erases dashboard edits). `npm run data:snapshot` goes the other way (Firestore → snapshot) before release builds.
 
 ```bash
 # Full pipeline: seed → contests → app data (no API key needed for manual source)

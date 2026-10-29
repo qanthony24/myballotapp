@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useElectionData } from '../services/electionDataStore';
 import { Link } from 'react-router-dom';
 import { Cycle } from '../types';
 import { CalendarDaysIcon, MapPinIcon, LifebuoyIcon, PencilSquareIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
@@ -7,7 +8,8 @@ import { useAllNotesSummary } from '../hooks/useAllNotesSummary';
 import { useSettings } from '../hooks/useSettings';
 
 const ElectionInfoPage: React.FC = () => {
-  const allElectionEvents = useMemo(() => getAllCycles(), []);
+  const { version: dataVersion } = useElectionData();
+  const allElectionEvents = useMemo(() => getAllCycles(), [dataVersion]); // eslint-disable-line react-hooks/exhaustive-deps
   const allNotesSummary = useAllNotesSummary();
   const { uiDensity, setUiDensity } = useSettings();
 

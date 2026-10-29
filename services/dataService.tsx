@@ -2,16 +2,19 @@
 import type { Cycle } from '../types';
 // Type annotations have been removed from function signatures and variable declarations.
 
-import { 
-    CANDIDATES_DATA, 
-    OFFICES_DATA, 
-    CYCLES_DATA, 
-    SURVEY_QUESTIONS_DATA, 
+import {
     ELECTION_RESULTS_DATA,
-    BALLOT_MEASURES_DATA,
     EARLY_VOTING_LOCATIONS_DATA,
-    formatElectionName as formatNameUtil 
-} from '../constants'; // This will import from constants.ts (which is also being cleaned)
+    formatElectionName as formatNameUtil
+} from '../constants';
+// Election data comes from the live store (Firestore over the bundled snapshot).
+import {
+    getCandidatesData,
+    getCyclesData,
+    getOfficesData,
+    getBallotMeasuresData,
+    getSurveyQuestionsData,
+} from './electionDataStore';
 
 /**
  * Checks if a given election date string is in the past.
@@ -25,11 +28,11 @@ export const isElectionPast = (electionDate) => {
 };
 
 export const getAllCandidates = () => {
-  return CANDIDATES_DATA;
+  return getCandidatesData();
 };
 
 export const getCandidateById = (id) => {
-  return CANDIDATES_DATA.find(candidate => candidate.id === id) || null;
+  return getCandidatesData().find(candidate => candidate.id === id) || null;
 };
 
 /**
@@ -37,7 +40,7 @@ export const getCandidateById = (id) => {
  * cycleId here is the numeric ID of the Cycle/ElectionEvent.
  */
 export const getCandidatesByOfficeAndCycle = (officeId, cycleId, district) => {
-  return CANDIDATES_DATA.filter(c => {
+  return getCandidatesData().filter(c => {
     const officeMatch = c.officeId === officeId;
     const cycleMatch = (c.cycleIds || []).includes(cycleId);
     const districtMatch = district ? c.district === district : true; // If district is provided, match it. Otherwise, true.
@@ -55,7 +58,7 @@ export const getCandidatesByOfficeAndCycle = (officeId, cycleId, district) => {
  * Gets unique district names for a given office and cycle.
  */
 export const getDistrictsForOfficeAndCycle = (officeId, cycleId) => {
-  const candidatesInOfficeCycle = CANDIDATES_DATA.filter(
+  const candidatesInOfficeCycle = getCandidatesData().filter(
     c => c.officeId === officeId && (c.cycleIds || []).includes(cycleId) && c.district
   );
   // FIX: Ensure correct type for uniqueDistricts by explicitly typing intermediate map and using spread syntax
@@ -66,16 +69,16 @@ export const getDistrictsForOfficeAndCycle = (officeId, cycleId) => {
 
 
 export const getAllOffices = () => {
-  return OFFICES_DATA;
+  return getOfficesData();
 };
 
 export const getOfficeById = (id) => {
-  return OFFICES_DATA.find(office => office.id === id) || null;
+  return getOfficesData().find(office => office.id === id) || null;
 };
 
 export const getAllCycles = () => {
-  // CYCLES_DATA is already sorted in constants.ts (upcoming first, then past)
-  return CYCLES_DATA;
+  // getCyclesData() is already sorted in constants.ts (upcoming first, then past)
+  return getCyclesData();
 };
 
 /**
@@ -83,12 +86,12 @@ export const getAllCycles = () => {
  * @returns An array of Cycle objects for elections that are not in the past.
  */
 export const getUpcomingCycles = () => {
-  return CYCLES_DATA.filter(cycle => !isElectionPast(cycle.electionDate));
+  return getCyclesData().filter(cycle => !isElectionPast(cycle.electionDate));
 };
 
 export const getCycleById = (id) => {
   // id here is the numeric ID of the Cycle/ElectionEvent
-  return CYCLES_DATA.find(cycle => cycle.id === id) || null;
+  return getCyclesData().find(cycle => cycle.id === id) || null;
 };
 
 /**
@@ -117,28 +120,28 @@ export const getRelevantCycleForCandidate = (
 };
 
 export const getCycleByElectionDate = (electionDate) => {
-  return CYCLES_DATA.find(cycle => cycle.electionDate === electionDate) || null;
+  return getCyclesData().find(cycle => cycle.electionDate === electionDate) || null;
 };
 
 export const getSurveyQuestions = () => {
-  return SURVEY_QUESTIONS_DATA;
+  return getSurveyQuestionsData();
 };
 
 export const getSurveyQuestionByKey = (key) => {
-    return SURVEY_QUESTIONS_DATA.find(sq => sq.key === key) || null;
+    return getSurveyQuestionsData().find(sq => sq.key === key) || null;
 };
 
 // --- Ballot Measures ---
 export const getAllBallotMeasures = () => {
-  return BALLOT_MEASURES_DATA;
+  return getBallotMeasuresData();
 };
 
 export const getBallotMeasureById = (id) => {
-  return BALLOT_MEASURES_DATA.find(measure => measure.id === id) || null;
+  return getBallotMeasuresData().find(measure => measure.id === id) || null;
 };
 
 export const getBallotMeasuresByElectionDate = (electionDate) => {
-  return BALLOT_MEASURES_DATA.filter(measure => measure.electionDate === electionDate);
+  return getBallotMeasuresData().filter(measure => measure.electionDate === electionDate);
 };
 
 

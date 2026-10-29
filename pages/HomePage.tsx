@@ -1,13 +1,13 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import CandidateCard from '../components/candidates/CandidateCard';
 import FilterControls from '../components/candidates/FilterControls';
-import { Candidate, Cycle } from '../types'; // Removed CandidateSelection
+import { Candidate, Cycle } from '../types';
 import { ViewMode } from '../constants'; // Changed import
 import { 
   getCycleById, 
   getUpcomingCycles, 
 } from '../services/dataService';
-import { getFirestoreCandidates } from '../services/firestoreDataService';
+import { useElectionData } from '../services/electionDataStore';
 import { useBallot } from '../hooks/useBallot';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { CardGridSkeleton } from '../components/ui/PageSkeleton';
@@ -20,9 +20,10 @@ const HomePage: React.FC = () => {
     selectedElectionDate: ballotSelectedElectionDate 
   } = useBallot();
 
-  const [allCandidatesData, setAllCandidatesData] = useState<Candidate[]>([]);
-  const [upcomingElections, setUpcomingElections] = useState<Cycle[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // Live election data (Firestore over the bundled snapshot); never empty, so no spinner needed.
+  const { candidates: allCandidatesData, version: dataVersion } = useElectionData();
+  const upcomingElections: Cycle[] = useMemo(() => getUpcomingCycles(), [dataVersion]); // eslint-disable-line react-hooks/exhaustive-deps
+  const isLoading = false;
   
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedOffice, setSelectedOffice] = useState(''); 
@@ -30,27 +31,25 @@ const HomePage: React.FC = () => {
   const [selectedParty, setSelectedParty] = useState('');
   const [viewMode, setViewMode] = useState<string>(ViewMode.GRID); 
 
+  // Default the election filter to the ballot's selected election (if upcoming),
+  // otherwise the next upcoming election.
   useEffect(() => {
-    setIsLoading(true);
-    getFirestoreCandidates().then((data) => {
-      setAllCandidatesData(data);
-      setIsLoading(false);
-    });
-    const cycles = getUpcomingCycles();
-    setUpcomingElections(cycles);
-
-    // Initialize selectedElectionDateForFilter
-    // Check if ballotSelectedElectionDate is one of the upcoming cycles
+    const cycles = upcomingElections;
     if (ballotSelectedElectionDate && cycles.some(c => c.electionDate === ballotSelectedElectionDate)) {
       setSelectedElectionDateForFilter(ballotSelectedElectionDate);
     } else if (cycles.length > 0) {
-      // Otherwise, if there are upcoming elections, default to the first one
       setSelectedElectionDateForFilter(cycles[0].electionDate);
     } else {
-      // No upcoming elections, and ballot context is past or null
-      setSelectedElectionDateForFilter(''); // This will mean "All Upcoming Elections" (which will be empty)
+      setSelectedElectionDateForFilter(''); // "All Upcoming Elections" (empty)
     }
-  }, [ballotSelectedElectionDate]); // Re-run when ballot context's selected date changes
+  }, [ballotSelectedElectionDate]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // If live data removes the election currently in the filter, fall back to the next upcoming one.
+  useEffect(() => {
+    if (selectedElectionDateForFilter && !upcomingElections.some(c => c.electionDate === selectedElectionDateForFilter)) {
+      setSelectedElectionDateForFilter(upcomingElections[0]?.electionDate ?? '');
+    }
+  }, [upcomingElections]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleCandidateBallotAction = (candidate: Candidate, electionDate: string) => {
     if (isCandidateSelected(candidate.id, electionDate)) {

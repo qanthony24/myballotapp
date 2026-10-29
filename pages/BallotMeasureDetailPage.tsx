@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { BallotMeasure } from '../types';
 import { getBallotMeasureById, getFormattedElectionNameFromDate } from '../services/dataService';
 import { getFirestoreBallotMeasureById } from '../services/firestoreDataService';
+import { useElectionData } from '../services/electionDataStore';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import { useBallot } from '../hooks/useBallot';
 import { ArrowLeftIcon, DocumentTextIcon, ChatBubbleLeftEllipsisIcon, CheckCircleIcon, XCircleIcon, QuestionMarkCircleIcon, HandThumbUpIcon, HandThumbDownIcon, NoSymbolIcon } from '@heroicons/react/24/outline';
@@ -20,19 +21,22 @@ const BallotMeasureDetailPage: React.FC = () => {
     isElectionPast 
   } = useBallot();
 
+  const { version: dataVersion } = useElectionData();
+
   useEffect(() => {
     if (!measureIdParam) {
       setMeasure(null);
       setLoading(false);
       return;
     }
-    setLoading(true);
     const id = parseInt(measureIdParam);
+    // Only show the loading state when opening a different measure, not on live data refreshes.
+    if (measure?.id !== id) setLoading(true);
     getFirestoreBallotMeasureById(id).then((fetched) => {
       setMeasure(fetched ?? getBallotMeasureById(id) ?? null);
       setLoading(false);
     });
-  }, [measureIdParam]);
+  }, [measureIdParam, dataVersion]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (loading) return <LoadingSpinner size="lg" />;
   if (!measure) return <div className="text-center py-10 text-sunlight-gold">Ballot measure not found.</div>; // Updated text color
