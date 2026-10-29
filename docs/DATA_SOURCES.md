@@ -66,6 +66,24 @@ Civic API does not currently carry Louisiana election data (no VIP feed).
 were placeholder numbers presented as real results. Only add results copied
 from official Secretary of State returns.
 
+**Candidate photos and profiles (synced from Firestore Oct 29, 2026):**
+- The hand-curated photo links for Cassidy, Fleming, Letlow and Crockett are now
+  in the seed files, so they no longer live only in Firestore.
+- Nick Albares's and Jamie Davis's Firestore photos were Facebook CDN links,
+  which have already expired. Replace them with official photos.
+- `data/profiles/candidate-profiles.json` keeps the House candidates you
+  corrected in the admin dashboard (names, parties, photos). They aren't on any
+  ballot until their new-map races are verified. The pipeline doesn't read this
+  folder. Don't put non-election files in `data/seed/`, because the runner
+  treats every file there as an election.
+- Prefer photos from official sources (government or campaign sites), or upload
+  them to Firebase Storage. Links to Facebook or Google Images thumbnails stop
+  working.
+
+**Pipeline fix (Oct 29, 2026):** the contest change-detection hash ignored
+nested fields, so editing a candidate's name, party or photo in a seed file was
+silently skipped as "Unchanged". `computeHash` now sorts keys recursively.
+
 **Rule going forward:** every contest and candidate in a seed file should be
 traceable to an official source (SoS qualifying list, sample ballot, or
 certified results). Each seed file's `_coverageNote` records what was verified

@@ -19,7 +19,7 @@
         "name": "Julia Letlow",
         "party": "Republican",
         "candidateUrl": null,
-        "photoUrl": null,
+        "photoUrl": "https://letlow.house.gov/sites/evo-subsites/letlow.house.gov/files/styles/large/public/evo-media-image/screenshot-2025-03-04-at-5.00.18-pm-1%29.png",
         "email": null,
         "phone": null,
         "channels": [],
@@ -43,8 +43,8 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-10-26T05:54:42.556Z",
-    "contentHash": "ff84921d64328d868d2d0db61c9d20bed88472324961d717bb80a7a686ce8dc1",
+    "fetchedAt": "2026-10-29T06:22:46.529Z",
+    "contentHash": "1527e08520fde897493d2be116ec68b5473e771e3659231daacf1afd7ade1a3f",
     "deleted": false
   },
   {

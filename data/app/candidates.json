@@ -4,7 +4,7 @@
     "firstName": "Bill",
     "lastName": "Cassidy",
     "slug": "bill-cassidy",
-    "photoUrl": "",
+    "photoUrl": "https://www.cassidy.senate.gov/wp-content/uploads/2023/09/Cassidy_About_Portrait.png",
     "party": "Republican",
     "officeId": 7,
     "cycleIds": [
@@ -23,7 +23,7 @@
     "firstName": "Julia",
     "lastName": "Letlow",
     "slug": "julia-letlow",
-    "photoUrl": "",
+    "photoUrl": "https://letlow.house.gov/sites/evo-subsites/letlow.house.gov/files/styles/large/public/evo-media-image/screenshot-2025-03-04-at-5.00.18-pm-1%29.png",
     "party": "Republican",
     "officeId": 7,
     "cycleIds": [
@@ -42,7 +42,7 @@
     "firstName": "John",
     "lastName": "Fleming",
     "slug": "john-fleming",
-    "photoUrl": "",
+    "photoUrl": "https://www.houmatoday.com/gcdn/authoring/2016/10/19/NCOU/ghows-DA-150a546f-33d1-493c-b7f9-48fbe891d5de-5d8672fd.jpeg",
     "party": "Republican",
     "officeId": 7,
     "cycleIds": [
@@ -96,7 +96,7 @@
     "firstName": "Gary",
     "lastName": "Crockett",
     "slug": "gary-crockett",
-    "photoUrl": "",
+    "photoUrl": "https://pbs.twimg.com/profile_images/419673582986219520/u1qTTOSS_400x400.jpeg",
     "party": "Democratic",
     "officeId": 7,
     "cycleIds": [

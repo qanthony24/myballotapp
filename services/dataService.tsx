@@ -1,4 +1,5 @@
 // Removed type imports from '../types' to make this file more JS-friendly for direct browser parsing.
+import type { Cycle } from '../types';
 // Type annotations have been removed from function signatures and variable declarations.
 
 import { 
@@ -88,6 +89,31 @@ export const getUpcomingCycles = () => {
 export const getCycleById = (id) => {
   // id here is the numeric ID of the Cycle/ElectionEvent
   return CYCLES_DATA.find(cycle => cycle.id === id) || null;
+};
+
+/**
+ * Picks which of a candidate's elections to show/act on. A candidate can be in
+ * several elections (e.g. a party primary and the general), so "the first one
+ * in the list" is not reliable. Order of preference:
+ *   1. the election the user is currently looking at (preferredElectionDate)
+ *   2. the soonest upcoming election
+ *   3. the most recent past election
+ */
+export const getRelevantCycleForCandidate = (
+  candidate: { cycleIds?: number[] } | null | undefined,
+  preferredElectionDate?: string,
+): Cycle | null => {
+  const cycles = (candidate?.cycleIds || [])
+    .map((cid: number) => getCycleById(cid) as Cycle | null)
+    .filter((c): c is Cycle => Boolean(c));
+  if (cycles.length === 0) return null;
+  if (preferredElectionDate) {
+    const preferred = cycles.find((c: Cycle) => c.electionDate === preferredElectionDate);
+    if (preferred) return preferred;
+  }
+  const byDate = [...cycles].sort((a, b) => a.electionDate.localeCompare(b.electionDate));
+  const upcoming = byDate.find((c) => !isElectionPast(c.electionDate));
+  return upcoming ?? byDate[byDate.length - 1];
 };
 
 export const getCycleByElectionDate = (electionDate) => {

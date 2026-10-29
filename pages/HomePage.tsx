@@ -119,6 +119,7 @@ const HomePage: React.FC = () => {
               viewMode={viewMode}
               onToggleCandidateBallotStatus={handleCandidateBallotAction} 
               isCandidateSelected={isCandidateSelectedForCard}
+              contextElectionDate={selectedElectionDateForFilter || undefined}
             />
           ))}
         </div>

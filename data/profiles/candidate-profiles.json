@@ -1,0 +1,66 @@
+{
+  "_about": "Candidate profiles curated by hand in the admin dashboard (Firestore, edited Mar 8-9, 2026) for people who are NOT currently on any ballot in MyBallot's data. Their 2026 U.S. House primaries were suspended after Louisiana v. Callais and moved to Nov 3 under a redrawn map, so their old district assignments no longer apply. Kept here so the names, party corrections and photos aren't lost. When a candidate's new race is verified from the SoS qualifying list, add them to that contest in a seed file and copy their photoUrl over. Not read by the pipeline.",
+  "_exportedFromFirestore": "2026-10-29",
+  "profiles": [
+    {
+      "name": "Blake Miguez",
+      "party": "Republican",
+      "previousContest": "U.S. House, 5th District (pre-Callais map)",
+      "photoUrl": "https://senate.la.gov/SenPics/Sen22.jpg",
+      "firestoreId": 48012
+    },
+    {
+      "name": "Rick Edmonds",
+      "party": "Republican",
+      "previousContest": "U.S. House, 5th District (pre-Callais map)",
+      "photoUrl": "https://senate.la.gov/SenPics/Sen6.jpg",
+      "firestoreId": 61321,
+      "note": "Qualified for the 6th District under the new map per Louisiana Illuminator (Aug 5, 2026); verify against SoS."
+    },
+    {
+      "name": "Misti Cordell",
+      "party": "Republican",
+      "previousContest": "U.S. House, 5th District (pre-Callais map)",
+      "photoUrl": "https://www.laregents.edu/wp-content/uploads/2025/11/Regent-Misti-Cordell-2024-e1770930239670.jpg",
+      "photoFocalPoint": {
+        "x": 45,
+        "y": 40
+      },
+      "firestoreId": 33058
+    },
+    {
+      "name": "Monique Appeaning",
+      "party": "Republican",
+      "previousContest": "U.S. House, 5th District (pre-Callais map)",
+      "photoUrl": "https://img.legistorm.com/people/311/91311.jpg",
+      "firestoreId": 33781
+    },
+    {
+      "name": "Cleo Fields",
+      "party": "Democratic",
+      "isIncumbent": true,
+      "previousContest": "U.S. House, 6th District (pre-Callais map)",
+      "photoUrl": null,
+      "photoFocalPoint": {
+        "x": 43,
+        "y": 23
+      },
+      "firestoreId": 66126,
+      "note": "Firestore photo is a Google Images thumbnail link (encrypted-tbn0.gstatic.com), which can break at any time. Replace with an official photo."
+    },
+    {
+      "name": "Larry Davis",
+      "party": "Republican",
+      "previousContest": "U.S. House, 6th District (pre-Callais map)",
+      "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/thumbs/200/300/LarryDavis26.jpg",
+      "firestoreId": 18069
+    },
+    {
+      "name": "Peter Williams",
+      "party": "Republican",
+      "previousContest": "U.S. House, 6th District (pre-Callais map)",
+      "photoUrl": "https://images.squarespace-cdn.com/content/55f2e952e4b0ef7e0849a5a3/1729476105681-UERTGQUV6R3ETOC433KU/Peter+Williams.jpg",
+      "firestoreId": 48342
+    }
+  ]
+}

@@ -167,6 +167,21 @@ export function slugify(text: string): string {
  */
 export function computeHash(contest: ContestV1): string {
   const { fetchedAt: _, contentHash: __, ...stable } = contest;
-  const json = JSON.stringify(stable, Object.keys(stable).sort());
+  // Note: JSON.stringify(obj, keysArray) would treat keysArray as a whitelist at
+  // EVERY nesting level, silently dropping nested fields (candidate names,
+  // photos, etc.) from the hash. Sort keys recursively instead.
+  const json = JSON.stringify(sortKeysDeep(stable));
   return crypto.createHash('sha256').update(json).digest('hex');
+}
+
+function sortKeysDeep(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(sortKeysDeep);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.keys(value as Record<string, unknown>)
+        .sort()
+        .map((k) => [k, sortKeysDeep((value as Record<string, unknown>)[k])]),
+    );
+  }
+  return value;
 }
