@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Candidate } from '../../types';
 import { ViewMode } from '../../constants';
-import { getCycleById, getFormattedElectionName, getFormattedCandidateOfficeName } from '../../services/dataService';
+import { getRelevantCycleForCandidate, getFormattedElectionName, getFormattedCandidateOfficeName } from '../../services/dataService';
 import { BuildingOffice2Icon, CalendarDaysIcon, ArrowRightIcon, CheckBadgeIcon, ScaleIcon } from '@heroicons/react/24/outline';
 import { useNotes } from '../../hooks/useNotes';
 import { useSettings } from '../../hooks/useSettings';
@@ -14,12 +14,14 @@ interface CandidateCardProps {
   viewMode: string; 
   onToggleCandidateBallotStatus: (candidate: Candidate, electionDate: string) => void;
   isCandidateSelected: (candidateId: number, electionDate: string) => boolean;
+  /** The election currently selected in the filters, if any. */
+  contextElectionDate?: string;
 }
 
 import { getPartyInfo } from '../../lib/parties';
 
-const CandidateCard: React.FC<CandidateCardProps> = ({ candidate, viewMode, onToggleCandidateBallotStatus, isCandidateSelected }) => {
-  const cycle = (candidate.cycleIds || []).map((cid: number) => getCycleById(cid)).find(Boolean) ?? null;
+const CandidateCard: React.FC<CandidateCardProps> = ({ candidate, viewMode, onToggleCandidateBallotStatus, isCandidateSelected, contextElectionDate }) => {
+  const cycle = getRelevantCycleForCandidate(candidate, contextElectionDate);
   const electionDate = cycle?.electionDate; 
   const formattedElectionName = getFormattedElectionName(cycle);
   const formattedOfficeName = getFormattedCandidateOfficeName(candidate);

@@ -6,7 +6,7 @@ import PartyBadge from '../components/candidates/PartyBadge';
 import { getPartyInfo } from '../lib/parties';
 import { 
   getCandidateById, 
-  getCycleById, 
+  getRelevantCycleForCandidate,
   getSurveyQuestions, 
   getFormattedElectionName, 
   getFormattedCandidateOfficeName,
@@ -88,11 +88,11 @@ const CandidateProfilePage: React.FC = () => {
       const resolved = fetchedCandidate ?? getCandidateById(id);
       setCandidate(resolved ?? null);
       if (resolved) {
-        const cycle = resolved.cycleIds?.length ? getCycleById(resolved.cycleIds[0]) : null;
+        const cycle = getRelevantCycleForCandidate(resolved);
         setCandidateCycle(cycle);
         const otherCandidatesInRace = getCandidatesByOfficeAndCycle(
           resolved.officeId,
-          resolved.cycleIds?.[0] ?? 0,
+          cycle?.id ?? 0,
           resolved.district
         ).filter(op => op.id !== resolved.id);
         setOpponents(otherCandidatesInRace);

@@ -19,7 +19,7 @@
         "name": "Bill Cassidy",
         "party": "Republican",
         "candidateUrl": "https://www.billcassidy.com",
-        "photoUrl": null,
+        "photoUrl": "https://www.cassidy.senate.gov/wp-content/uploads/2023/09/Cassidy_About_Portrait.png",
         "email": null,
         "phone": null,
         "channels": [],
@@ -30,7 +30,7 @@
         "name": "Julia Letlow",
         "party": "Republican",
         "candidateUrl": null,
-        "photoUrl": null,
+        "photoUrl": "https://letlow.house.gov/sites/evo-subsites/letlow.house.gov/files/styles/large/public/evo-media-image/screenshot-2025-03-04-at-5.00.18-pm-1%29.png",
         "email": null,
         "phone": null,
         "channels": [],
@@ -41,7 +41,7 @@
         "name": "John Fleming",
         "party": "Republican",
         "candidateUrl": null,
-        "photoUrl": null,
+        "photoUrl": "https://www.houmatoday.com/gcdn/authoring/2016/10/19/NCOU/ghows-DA-150a546f-33d1-493c-b7f9-48fbe891d5de-5d8672fd.jpeg",
         "email": null,
         "phone": null,
         "channels": [],
@@ -65,8 +65,8 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.706Z",
-    "contentHash": "e9fb2202c9b98b40e600d2942d045109808733c5a68e88a1c72749facf21c201",
+    "fetchedAt": "2026-10-29T06:22:46.520Z",
+    "contentHash": "9bd72365274713bfaa7a98ca187a680cb152633aed6122c7b9bb63a2139fa3ec",
     "deleted": false
   },
   {
@@ -100,7 +100,7 @@
         "name": "Gary Crockett",
         "party": "Democratic",
         "candidateUrl": null,
-        "photoUrl": null,
+        "photoUrl": "https://pbs.twimg.com/profile_images/419673582986219520/u1qTTOSS_400x400.jpeg",
         "email": null,
         "phone": null,
         "channels": [],
@@ -124,8 +124,8 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.706Z",
-    "contentHash": "9c76e4ae919bbb0349d2ae709d5deb9cb3806e37845e2aa717da82050186d3d1",
+    "fetchedAt": "2026-10-29T06:22:46.520Z",
+    "contentHash": "d6f6ac6f1695874294effe7869d8d90b88b08160b54006df9d8ec66d290c2cb7",
     "deleted": false
   },
   {
@@ -194,9 +194,9 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.706Z",
-    "contentHash": "4c96276e0956dd7815498093bd6d2e3719eeadfedd98e1b91debed186d6023b9",
-    "deleted": false
+    "fetchedAt": "2026-10-26T05:54:42.551Z",
+    "contentHash": "38986183790d4a383f2f88a4ff87d3aad317d7773ebc1c0457f83e6e99167e82",
+    "deleted": true
   },
   {
     "id": "la-2026-may-primary:ocd-division/country:us/state:la/cd:5:u-s-representative-5th-district-democratic-primary",
@@ -242,9 +242,9 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.706Z",
-    "contentHash": "9f720656a084652e4f96cc0adac6511d132b5e9493b5ab8e03f0a6bbdf93b78e",
-    "deleted": false
+    "fetchedAt": "2026-10-26T05:54:42.551Z",
+    "contentHash": "0bdcec0111f9a11b281ebb301803a2910c8919c024409fb019ae12a86339e5fd",
+    "deleted": true
   },
   {
     "id": "la-2026-may-primary:ocd-division/country:us/state:la/cd:6:u-s-representative-6th-district-democratic-primary",
@@ -301,9 +301,9 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.706Z",
-    "contentHash": "462b525ba66fdc07c83f2394c9b21608a491fb33677d90153ab305a2bed2063b",
-    "deleted": false
+    "fetchedAt": "2026-10-26T05:54:42.551Z",
+    "contentHash": "46b0d366c092619c121ffbbaf32e4cc2e2a0e167979ae40510a11914469da3b8",
+    "deleted": true
   },
   {
     "id": "la-2026-may-primary:ocd-division/country:us/state:la/parish:east_baton_rouge:family-court-judge-special-election",
@@ -326,8 +326,8 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.706Z",
-    "contentHash": "c88471f6b9a6e53866541f6767c73cd57067f253058363293707e689eb768661",
-    "deleted": false
+    "fetchedAt": "2026-10-26T05:54:42.551Z",
+    "contentHash": "5a26705c6e1f14b7756b19b1dcb4930fb37f865cd48b226f4322973bfd99e68c",
+    "deleted": true
   }
 ]

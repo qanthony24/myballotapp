@@ -13,10 +13,27 @@
         "ocdDivisionId": "ocd-division/country:us/state:la"
       },
       "candidates": [
-        { "name": "Bill Cassidy", "party": "Republican", "isIncumbent": true, "candidateUrl": "https://www.billcassidy.com" },
-        { "name": "Julia Letlow", "party": "Republican" },
-        { "name": "John Fleming", "party": "Republican" },
-        { "name": "Mark Spencer", "party": "Republican" }
+        {
+          "name": "Bill Cassidy",
+          "party": "Republican",
+          "isIncumbent": true,
+          "candidateUrl": "https://www.billcassidy.com",
+          "photoUrl": "https://www.cassidy.senate.gov/wp-content/uploads/2023/09/Cassidy_About_Portrait.png"
+        },
+        {
+          "name": "Julia Letlow",
+          "party": "Republican",
+          "photoUrl": "https://letlow.house.gov/sites/evo-subsites/letlow.house.gov/files/styles/large/public/evo-media-image/screenshot-2025-03-04-at-5.00.18-pm-1%29.png"
+        },
+        {
+          "name": "John Fleming",
+          "party": "Republican",
+          "photoUrl": "https://www.houmatoday.com/gcdn/authoring/2016/10/19/NCOU/ghows-DA-150a546f-33d1-493c-b7f9-48fbe891d5de-5d8672fd.jpeg"
+        },
+        {
+          "name": "Mark Spencer",
+          "party": "Republican"
+        }
       ]
     },
     {
@@ -28,62 +45,21 @@
         "ocdDivisionId": "ocd-division/country:us/state:la"
       },
       "candidates": [
-        { "name": "Nick Albares", "party": "Democratic" },
-        { "name": "Gary Crockett", "party": "Democratic" },
-        { "name": "Jamie Davis", "party": "Democratic" }
+        {
+          "name": "Nick Albares",
+          "party": "Democratic"
+        },
+        {
+          "name": "Gary Crockett",
+          "party": "Democratic",
+          "photoUrl": "https://pbs.twimg.com/profile_images/419673582986219520/u1qTTOSS_400x400.jpeg"
+        },
+        {
+          "name": "Jamie Davis",
+          "party": "Democratic"
+        }
       ]
-    },
-    {
-      "office": "U.S. Representative, 5th District (Republican Primary)",
-      "type": "Primary",
-      "district": {
-        "name": "Louisiana 5th Congressional District",
-        "scope": "congressional",
-        "ocdDivisionId": "ocd-division/country:us/state:la/cd:5"
-      },
-      "candidates": [
-        { "name": "Blake Miguez", "party": "Republican", "isIncumbent": true },
-        { "name": "Jesse Cathey", "party": "Republican" },
-        { "name": "Rob Edmonds", "party": "Republican" },
-        { "name": "Scotty McMakin", "party": "Republican" }
-      ]
-    },
-    {
-      "office": "U.S. Representative, 5th District (Democratic Primary)",
-      "type": "Primary",
-      "district": {
-        "name": "Louisiana 5th Congressional District",
-        "scope": "congressional",
-        "ocdDivisionId": "ocd-division/country:us/state:la/cd:5"
-      },
-      "candidates": [
-        { "name": "Martin Cordell", "party": "Democratic" },
-        { "name": "Marguerite Foy", "party": "Democratic" }
-      ]
-    },
-    {
-      "office": "U.S. Representative, 6th District (Democratic Primary)",
-      "type": "Primary",
-      "district": {
-        "name": "Louisiana 6th Congressional District",
-        "scope": "congressional",
-        "ocdDivisionId": "ocd-division/country:us/state:la/cd:6"
-      },
-      "candidates": [
-        { "name": "Cleo Fields", "party": "Democratic", "isIncumbent": true },
-        { "name": "Larry Davis", "party": "Democratic" },
-        { "name": "Peter Williams", "party": "Democratic" }
-      ]
-    },
-    {
-      "office": "Family Court Judge (Special Election)",
-      "type": "Special",
-      "district": {
-        "name": "East Baton Rouge Parish Family Court",
-        "scope": "judicial",
-        "ocdDivisionId": "ocd-division/country:us/state:la/parish:east_baton_rouge"
-      },
-      "candidates": []
     }
-  ]
+  ],
+  "_coverageNote": "Verified 2026-10-26 against Wikipedia's 2026 U.S. Senate election in Louisiana page: Senate closed party primaries. Removed: U.S. House primaries (suspended by the governor after Louisiana v. Callais and moved to Nov 3) and the Family Court Judge special (could not be verified)."
 }

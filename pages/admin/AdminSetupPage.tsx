@@ -1,17 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import {
   seedAllToFirestore,
   setAdminEmails,
+  getAdminEmails,
 } from '../../services/firestoreDataService';
 
 const AdminSetupPage: React.FC = () => {
   const { currentUser } = useAuth();
   const [seedResult, setSeedResult] = useState<string | null>(null);
   const [seeding, setSeeding] = useState(false);
-  const [adminEmail, setAdminEmail] = useState(currentUser?.email || '');
+  const [adminEmail, setAdminEmail] = useState('');
   const [adminSaved, setAdminSaved] = useState(false);
+
+  useEffect(() => {
+    getAdminEmails()
+      .then((emails) => setAdminEmail(emails.join(', ')))
+      .catch(() => setAdminEmail(currentUser?.email || ''));
+  }, [currentUser]);
 
   async function handleSeed() {
     setSeeding(true);
@@ -29,7 +36,14 @@ const AdminSetupPage: React.FC = () => {
   async function handleSetAdmin() {
     if (!adminEmail.trim()) return;
     try {
-      const emails = adminEmail.split(',').map((e) => e.trim()).filter(Boolean);
+      const emails = adminEmail.split(',').map((e) => e.trim().toLowerCase()).filter(Boolean);
+      const me = currentUser?.email?.toLowerCase();
+      if (me && !emails.includes(me)) {
+        const ok = window.confirm(
+          `Your own email (${me}) is not in this list. Saving will remove your admin access. Continue?`,
+        );
+        if (!ok) return;
+      }
       await setAdminEmails(emails);
       setAdminSaved(true);
       setTimeout(() => setAdminSaved(false), 3000);
@@ -51,7 +65,7 @@ const AdminSetupPage: React.FC = () => {
       <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
         <h2 className="text-lg font-semibold text-midnight-navy mb-2">Admin Access</h2>
         <p className="text-sm text-gray-500 mb-4">
-          Enter the email addresses that should have admin access. Separate multiple emails with commas.
+          Everyone with admin access, separated by commas. Saving replaces the whole list. Admins must sign in with a verified email (Google sign-in counts).
         </p>
         <div className="flex gap-2">
           <input

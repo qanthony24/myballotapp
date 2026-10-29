@@ -2,14 +2,72 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // User profile: only the owner can read/write
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+    // ---- Helpers ----
 
-      // Ballot and other app data subcollections
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    // An admin is a signed-in user whose VERIFIED email is listed in
+    // config/admin.adminEmails. The verified check matters: email/password
+    // sign-up does not verify addresses, so without it anyone could register
+    // an account under an admin's email and inherit admin rights.
+    // Google sign-in accounts are verified automatically.
+    function isAdmin() {
+      return signedIn()
+        && request.auth.token.email_verified == true
+        && exists(/databases/$(database)/documents/config/admin)
+        && request.auth.token.email.lower() in
+           get(/databases/$(database)/documents/config/admin).data.adminEmails;
+    }
+
+    // ---- User data: only the owner can read/write ----
+
+    match /users/{userId} {
+      allow read, write: if signedIn() && request.auth.uid == userId;
+
       match /appData/{docId} {
-        allow read, write: if request.auth != null && request.auth.uid == userId;
+        allow read, write: if signedIn() && request.auth.uid == userId;
       }
     }
+
+    // ---- Public election content: anyone can read, only admins can write ----
+
+    match /candidates/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /elections/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /offices/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /ballotMeasures/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /surveyQuestions/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ---- Admin config ----
+    // Signed-in users may read it (the app checks it to show/hide admin pages).
+    // Only existing admins may change it. The FIRST admin must be added by hand
+    // in the Firebase console (see docs/ADMIN_SETUP.md).
+
+    match /config/admin {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    // Everything else is denied by default.
   }
 }

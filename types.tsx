@@ -15,6 +15,8 @@ export interface Cycle {
   electionDate: string; // Date string, e.g., "2026-11-06", used as key for ballot archive
   evStart: string;
   evEnd: string;
+  /** Shown to voters when MyBallot doesn't yet list every race on this ballot. */
+  coverageNote?: string;
 }
 
 export interface SurveyQuestion {

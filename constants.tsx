@@ -1,8 +1,14 @@
 // Note: This file, when loaded by the browser via importmap, will be parsed as JavaScript.
 // Type imports have been removed to prevent issues if './types.ts' is fetched and parsed by a JS engine.
 
-import pipelineCandidates from './data/app/candidates.json';
-import pipelineMeasures from './data/app/ballot-measures.json';
+import type { Candidate, BallotMeasure } from './types';
+import pipelineCandidatesJson from './data/app/candidates.json';
+import pipelineMeasuresJson from './data/app/ballot-measures.json';
+
+// Type the pipeline output explicitly. Otherwise TypeScript infers types from whatever happens to be in the
+// JSON right now, and fields like `district` disappear from the type when no current candidate has one.
+const pipelineCandidates = pipelineCandidatesJson as unknown as Candidate[];
+const pipelineMeasures = pipelineMeasuresJson as unknown as BallotMeasure[];
 
 // Moved from types.ts
 export const ViewMode = {
@@ -78,11 +84,15 @@ const CycleType = {
 };
 
 const PREDEFINED_CYCLES_DATA_RAW = [
-    { "id": 1, "name": "2026 Congressional General", "slug": "2026-general", "electionDate": "2026-11-03", "evStart": "2026-10-20", "evEnd": "2026-10-27", "type": [CycleType.MIDTERM_FEDERAL, CycleType.STATE_GENERAL, CycleType.MUNICIPAL_LOCAL] },
+    { "id": 1, "name": "2026 Congressional General", "slug": "2026-general", "electionDate": "2026-11-03", "evStart": "2026-10-20", "evEnd": "2026-10-27", "coverageNote": "Partial ballot: only the U.S. Senate race is listed. See your full sample ballot at voterportal.sos.la.gov.", "type": [CycleType.MIDTERM_FEDERAL, CycleType.STATE_GENERAL, CycleType.MUNICIPAL_LOCAL] },
     { "id": 2, "name": "2026 Party Primary", "slug": "2026-primary", "electionDate": "2026-05-16", "evStart": "2026-05-02", "evEnd": "2026-05-09", "type": [CycleType.PRIMARY, CycleType.MIDTERM_FEDERAL] },
     { "id": 3, "name": "2024 Presidential Primary", "slug": "2024-primary", "electionDate": "2024-03-23", "evStart": "2024-03-09", "evEnd": "2024-03-16", "type": [CycleType.PRIMARY, CycleType.PRESIDENTIAL] }, // Past
     { "id": 4, "name": "2028 Presidential General", "slug": "2028-presidential-general", "electionDate": "2028-11-07", "evStart": "2028-10-24", "evEnd": "2028-11-02", "type": [CycleType.PRESIDENTIAL, CycleType.MIDTERM_FEDERAL, CycleType.STATE_GENERAL, CycleType.MUNICIPAL_LOCAL] },
-    { "id": 5, "name": "2027 State & Local", "slug": "2027-state-local", "electionDate": "2027-11-13", "evStart": "2027-10-30", "evEnd": "2027-11-06", "type": [CycleType.STATE_GENERAL, CycleType.MUNICIPAL_LOCAL] },
+    // 2027 statewide/legislative/parish elections. Dates per the LA Secretary of State 2027 calendar as reported by
+    // Ballotpedia/Wikipedia (Oct 9 primary, Nov 20 general) — the legislature can still change them. Early voting
+    // windows are projected from the standard 14-to-7-days-before rule; confirm against the official SoS calendar.
+    { "id": 5, "name": "2027 Primary", "slug": "2027-state-primary", "electionDate": "2027-10-09", "evStart": "2027-09-25", "evEnd": "2027-10-02", "type": [CycleType.STATE_GENERAL, CycleType.MUNICIPAL_LOCAL] },
+    { "id": 8, "name": "2027 General", "slug": "2027-state-general", "electionDate": "2027-11-20", "evStart": "2027-11-06", "evEnd": "2027-11-13", "type": [CycleType.STATE_GENERAL, CycleType.MUNICIPAL_LOCAL] },
     { "id": 6, "name": "2022 Midterm Election", "slug": "2022-midterm-election", "electionDate": "2022-11-08", "evStart": "2022-10-25", "evEnd": "2022-11-03", "type": [CycleType.MIDTERM_FEDERAL, CycleType.STATE_GENERAL, CycleType.MUNICIPAL_LOCAL], "nameOverride": "2022 Midterm" }, // Past
     { "id": 7, "name": "2023 State General", "slug": "2023-state-general", "electionDate": "2023-10-14", "evStart": "2023-09-30", "evEnd": "2023-10-07", "type": [CycleType.STATE_GENERAL, CycleType.MUNICIPAL_LOCAL], "nameOverride": "2023 State" } // Past, LA specific
 ];

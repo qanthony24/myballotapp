@@ -1,0 +1,26 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Same admin definition as firestore.rules: verified email listed in
+    // Firestore config/admin.adminEmails.
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && firestore.exists(/databases/(default)/documents/config/admin)
+        && request.auth.token.email.lower() in
+           firestore.get(/databases/(default)/documents/config/admin).data.adminEmails;
+    }
+
+    // Candidate photos: public read; admin-only upload, images under 5 MB.
+    match /candidates/{candidateId}/{fileName} {
+      allow read: if true;
+      allow write: if isAdmin()
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+      allow delete: if isAdmin();
+    }
+
+    // Everything else is denied by default.
+  }
+}

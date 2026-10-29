@@ -376,6 +376,16 @@ export async function isUserAdmin(email: string | undefined): Promise<boolean> {
   return false;
 }
 
+export async function getAdminEmails(): Promise<string[]> {
+  const configDoc = await getDoc(doc(db, 'config', 'admin'));
+  if (!configDoc.exists()) return [];
+  return (configDoc.data() as { adminEmails?: string[] }).adminEmails ?? [];
+}
+
+/**
+ * Replaces the admin list. Only succeeds for existing admins (enforced by
+ * firestore.rules). The first admin has to be added in the Firebase console.
+ */
 export async function setAdminEmails(emails: string[]): Promise<void> {
   await setDoc(doc(db, 'config', 'admin'), stripUndefined({
     adminEmails: emails.map((e) => e.toLowerCase()),
