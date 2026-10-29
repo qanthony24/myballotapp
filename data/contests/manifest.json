@@ -1,10 +1,10 @@
 {
-  "lastUpdated": "2026-03-09T03:21:54.300Z",
+  "lastUpdated": "2026-10-26T05:54:42.560Z",
   "electionId": "la-2026-nov",
-  "electionName": "Louisiana 2026 Congressional General / Open Primary",
+  "electionName": "Louisiana November 3, 2026 Election",
   "electionDate": "2026-11-03",
   "address": "East Baton Rouge Parish, LA",
   "source": "manual",
-  "totalContests": 18,
-  "totalCandidates": 17
+  "totalContests": 1,
+  "totalCandidates": 2
 }

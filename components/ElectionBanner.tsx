@@ -43,6 +43,9 @@ const ElectionBanner: React.FC = () => {
           </>
         )}
       </div>
+      {nextElection.coverageNote && (
+        <p className="container mx-auto px-4 text-xs text-midnight-navy/80 mt-0.5">{nextElection.coverageNote}</p>
+      )}
     </div>
   );
 };

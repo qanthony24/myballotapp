@@ -8,8 +8,7 @@
     "party": "Republican",
     "officeId": 7,
     "cycleIds": [
-      2,
-      1
+      2
     ],
     "website": "https://www.billcassidy.com",
     "bio": "",
@@ -47,8 +46,7 @@
     "party": "Republican",
     "officeId": 7,
     "cycleIds": [
-      2,
-      1
+      2
     ],
     "bio": "",
     "surveyResponses": {},
@@ -66,8 +64,7 @@
     "party": "Republican",
     "officeId": 7,
     "cycleIds": [
-      2,
-      1
+      2
     ],
     "bio": "",
     "surveyResponses": {},
@@ -85,8 +82,7 @@
     "party": "Democratic",
     "officeId": 7,
     "cycleIds": [
-      2,
-      1
+      2
     ],
     "bio": "",
     "surveyResponses": {},
@@ -104,8 +100,7 @@
     "party": "Democratic",
     "officeId": 7,
     "cycleIds": [
-      2,
-      1
+      2
     ],
     "bio": "",
     "surveyResponses": {},
@@ -131,204 +126,6 @@
     "ballotOrder": 3,
     "isIncumbent": false,
     "_pipelineContestId": "la-2026-may-primary:ocd-division/country:us/state:la:u-s-senate-democratic-primary",
-    "_pipelineSource": "manual"
-  },
-  {
-    "id": 48012,
-    "firstName": "Blake",
-    "lastName": "Miguez",
-    "slug": "blake-miguez",
-    "photoUrl": "",
-    "party": "Republican",
-    "officeId": 8,
-    "district": "District 5",
-    "cycleIds": [
-      2,
-      1
-    ],
-    "bio": "",
-    "surveyResponses": {},
-    "ballotOrder": 1,
-    "isIncumbent": true,
-    "_pipelineContestId": "la-2026-may-primary:ocd-division/country:us/state:la/cd:5:u-s-representative-5th-district-republican-primary",
-    "_pipelineSource": "manual"
-  },
-  {
-    "id": 15604,
-    "firstName": "Jesse",
-    "lastName": "Cathey",
-    "slug": "jesse-cathey",
-    "photoUrl": "",
-    "party": "Republican",
-    "officeId": 8,
-    "district": "District 5",
-    "cycleIds": [
-      2,
-      1
-    ],
-    "bio": "",
-    "surveyResponses": {},
-    "ballotOrder": 2,
-    "isIncumbent": false,
-    "_pipelineContestId": "la-2026-may-primary:ocd-division/country:us/state:la/cd:5:u-s-representative-5th-district-republican-primary",
-    "_pipelineSource": "manual"
-  },
-  {
-    "id": 61321,
-    "firstName": "Rob",
-    "lastName": "Edmonds",
-    "slug": "rob-edmonds",
-    "photoUrl": "",
-    "party": "Republican",
-    "officeId": 8,
-    "district": "District 5",
-    "cycleIds": [
-      2,
-      1
-    ],
-    "bio": "",
-    "surveyResponses": {},
-    "ballotOrder": 3,
-    "isIncumbent": false,
-    "_pipelineContestId": "la-2026-may-primary:ocd-division/country:us/state:la/cd:5:u-s-representative-5th-district-republican-primary",
-    "_pipelineSource": "manual"
-  },
-  {
-    "id": 58850,
-    "firstName": "Scotty",
-    "lastName": "McMakin",
-    "slug": "scotty-mcmakin",
-    "photoUrl": "",
-    "party": "Republican",
-    "officeId": 8,
-    "district": "District 5",
-    "cycleIds": [
-      2,
-      1
-    ],
-    "bio": "",
-    "surveyResponses": {},
-    "ballotOrder": 4,
-    "isIncumbent": false,
-    "_pipelineContestId": "la-2026-may-primary:ocd-division/country:us/state:la/cd:5:u-s-representative-5th-district-republican-primary",
-    "_pipelineSource": "manual"
-  },
-  {
-    "id": 33058,
-    "firstName": "Martin",
-    "lastName": "Cordell",
-    "slug": "martin-cordell",
-    "photoUrl": "",
-    "party": "Democratic",
-    "officeId": 8,
-    "district": "District 5",
-    "cycleIds": [
-      2,
-      1
-    ],
-    "bio": "",
-    "surveyResponses": {},
-    "ballotOrder": 1,
-    "isIncumbent": false,
-    "_pipelineContestId": "la-2026-may-primary:ocd-division/country:us/state:la/cd:5:u-s-representative-5th-district-democratic-primary",
-    "_pipelineSource": "manual"
-  },
-  {
-    "id": 33781,
-    "firstName": "Marguerite",
-    "lastName": "Foy",
-    "slug": "marguerite-foy",
-    "photoUrl": "",
-    "party": "Democratic",
-    "officeId": 8,
-    "district": "District 5",
-    "cycleIds": [
-      2,
-      1
-    ],
-    "bio": "",
-    "surveyResponses": {},
-    "ballotOrder": 2,
-    "isIncumbent": false,
-    "_pipelineContestId": "la-2026-may-primary:ocd-division/country:us/state:la/cd:5:u-s-representative-5th-district-democratic-primary",
-    "_pipelineSource": "manual"
-  },
-  {
-    "id": 66126,
-    "firstName": "Cleo",
-    "lastName": "Fields",
-    "slug": "cleo-fields",
-    "photoUrl": "",
-    "party": "Democratic",
-    "officeId": 8,
-    "district": "District 6",
-    "cycleIds": [
-      2,
-      1
-    ],
-    "bio": "",
-    "surveyResponses": {},
-    "ballotOrder": 1,
-    "isIncumbent": true,
-    "_pipelineContestId": "la-2026-may-primary:ocd-division/country:us/state:la/cd:6:u-s-representative-6th-district-democratic-primary",
-    "_pipelineSource": "manual"
-  },
-  {
-    "id": 18069,
-    "firstName": "Larry",
-    "lastName": "Davis",
-    "slug": "larry-davis",
-    "photoUrl": "",
-    "party": "Democratic",
-    "officeId": 8,
-    "district": "District 6",
-    "cycleIds": [
-      2,
-      1
-    ],
-    "bio": "",
-    "surveyResponses": {},
-    "ballotOrder": 2,
-    "isIncumbent": false,
-    "_pipelineContestId": "la-2026-may-primary:ocd-division/country:us/state:la/cd:6:u-s-representative-6th-district-democratic-primary",
-    "_pipelineSource": "manual"
-  },
-  {
-    "id": 48342,
-    "firstName": "Peter",
-    "lastName": "Williams",
-    "slug": "peter-williams",
-    "photoUrl": "",
-    "party": "Democratic",
-    "officeId": 8,
-    "district": "District 6",
-    "cycleIds": [
-      2,
-      1
-    ],
-    "bio": "",
-    "surveyResponses": {},
-    "ballotOrder": 3,
-    "isIncumbent": false,
-    "_pipelineContestId": "la-2026-may-primary:ocd-division/country:us/state:la/cd:6:u-s-representative-6th-district-democratic-primary",
-    "_pipelineSource": "manual"
-  },
-  {
-    "id": 77262,
-    "firstName": "Sharon Weston",
-    "lastName": "Broome",
-    "slug": "sharon-weston-broome",
-    "photoUrl": "",
-    "party": "Democratic",
-    "officeId": 1,
-    "cycleIds": [
-      1
-    ],
-    "bio": "",
-    "surveyResponses": {},
-    "ballotOrder": 1,
-    "isIncumbent": true,
-    "_pipelineContestId": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge:mayor-president",
     "_pipelineSource": "manual"
   }
 ]

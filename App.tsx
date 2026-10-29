@@ -33,6 +33,7 @@ import AdminBallotMeasuresPage from './pages/admin/AdminBallotMeasuresPage';
 import AdminBallotMeasureEditPage from './pages/admin/AdminBallotMeasureEditPage';
 import AdminSurveyQuestionsPage from './pages/admin/AdminSurveyQuestionsPage';
 import AdminSurveyResponsesPage from './pages/admin/AdminSurveyResponsesPage';
+import AdminRoute from './components/admin/AdminRoute';
 
 const AppRoutes: React.FC = () => {
   const { currentUser } = useAuth();
@@ -57,15 +58,15 @@ const AppRoutes: React.FC = () => {
       <Route path="/info/results/:electionId" element={<InfoElectionResultsPage />} />
       <Route path="/info/results/:electionId/:contestId" element={<InfoContestResultsPage />} />
       <Route path="/onboarding" element={currentUser ? <OnboardingPage /> : <Navigate to="/auth" />} />
-      <Route path="/debug/ballot-feed" element={<DebugBallotFeedPage />} />
-      <Route path="/admin" element={currentUser ? <AdminSetupPage /> : <Navigate to="/auth" />} />
-      <Route path="/admin/candidates" element={currentUser ? <AdminCandidatesPage /> : <Navigate to="/auth" />} />
-      <Route path="/admin/candidates/:id" element={currentUser ? <AdminCandidateEditPage /> : <Navigate to="/auth" />} />
-      <Route path="/admin/csv-import" element={currentUser ? <AdminCsvImportPage /> : <Navigate to="/auth" />} />
-      <Route path="/admin/ballot-measures" element={currentUser ? <AdminBallotMeasuresPage /> : <Navigate to="/auth" />} />
-      <Route path="/admin/ballot-measures/:id" element={currentUser ? <AdminBallotMeasureEditPage /> : <Navigate to="/auth" />} />
-      <Route path="/admin/survey-questions" element={currentUser ? <AdminSurveyQuestionsPage /> : <Navigate to="/auth" />} />
-      <Route path="/admin/survey-responses" element={currentUser ? <AdminSurveyResponsesPage /> : <Navigate to="/auth" />} />
+      <Route path="/debug/ballot-feed" element={<AdminRoute><DebugBallotFeedPage /></AdminRoute>} />
+      <Route path="/admin" element={<AdminRoute><AdminSetupPage /></AdminRoute>} />
+      <Route path="/admin/candidates" element={<AdminRoute><AdminCandidatesPage /></AdminRoute>} />
+      <Route path="/admin/candidates/:id" element={<AdminRoute><AdminCandidateEditPage /></AdminRoute>} />
+      <Route path="/admin/csv-import" element={<AdminRoute><AdminCsvImportPage /></AdminRoute>} />
+      <Route path="/admin/ballot-measures" element={<AdminRoute><AdminBallotMeasuresPage /></AdminRoute>} />
+      <Route path="/admin/ballot-measures/:id" element={<AdminRoute><AdminBallotMeasureEditPage /></AdminRoute>} />
+      <Route path="/admin/survey-questions" element={<AdminRoute><AdminSurveyQuestionsPage /></AdminRoute>} />
+      <Route path="/admin/survey-responses" element={<AdminRoute><AdminSurveyResponsesPage /></AdminRoute>} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
@@ -85,7 +86,7 @@ const App: React.FC = () => {
             </a>
             <HeaderComponent />
             {uiRefresh && <ElectionBanner />}
-            <main id="main-content" className={`flex-grow container mx-auto px-4 pb-20 ${uiRefresh ? 'pt-28' : 'pt-20'}`}>
+            <main id="main-content" className={`flex-grow container mx-auto px-4 pb-20 ${uiRefresh ? 'pt-36' : 'pt-20'}`}>
               <ErrorBoundary>
                 <AppRoutes />
               </ErrorBoundary>

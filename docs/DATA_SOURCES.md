@@ -45,24 +45,31 @@ stack them without touching the UI layer.
 This is the **primary data source** for Louisiana elections because Google
 Civic API does not currently carry Louisiana election data (no VIP feed).
 
-The seed file `data/seed/la-2026-nov.json` contains **18 contests**
-(17 races + 1 referendum) for the November 3, 2026 General Election:
+**Coverage status (cleaned up and re-verified Oct 26, 2026):**
 
-- **U.S. Senate** — Cassidy (R, incumbent), Letlow, Fleming, Spencer (R), Albares, Crockett, Davis (D)
-- **U.S. House 5th District** — Miguez (R, incumbent), Cathey, Edmonds, McMakin (R), Cordell, Foy (D)
-- **U.S. House 6th District** — Cleo Fields (D, incumbent), Davis, Williams
-- **Mayor-President** — Broome (D, incumbent), challengers TBD as they qualify
-- **Metro Council Districts 1–12** — contest structure in place, candidates TBD
-- **Family Court Judge** — special election, candidates TBD
-- **Proposition L: Library System Millage Renewal** — referendum with full ballot text
+`data/seed/la-2026-may-primary.json`: May 16, 2026 closed party primary.
+- **U.S. Senate Republican and Democratic primaries** (verified against published results).
+- Removed the U.S. House primaries. The governor suspended them after
+  *Louisiana v. Callais*, and they moved to Nov 3 under a redrawn map.
+- Removed the Family Court Judge special election (could not be verified).
 
-The seed file `data/seed/la-2026-may-primary.json` contains **6 contests**
-for the May 16, 2026 Closed Party Primary:
+`data/seed/la-2026-nov.json`: November 3, 2026 election. **Partial.**
+- **U.S. Senate general**: Julia Letlow (R) vs. Jamie Davis (D).
+- **Not loaded yet:** U.S. House open primaries (new map), constitutional
+  amendments, and local races and propositions. The app shows a partial-ballot
+  notice for this election (`coverageNote` on the cycle in `constants.tsx`).
+- Removed Mayor-President and Metro Council (those seats were elected in 2024;
+  next race is 2028), plus Family Court Judge and "Proposition L" (could not be
+  verified).
 
-- **U.S. Senate** — Republican and Democratic primaries
-- **U.S. House 5th District** — Republican and Democratic primaries
-- **U.S. House 6th District** — Democratic primary
-- **Family Court Judge** — special election
+`data/results/elections.json` is intentionally empty. The previous contents
+were placeholder numbers presented as real results. Only add results copied
+from official Secretary of State returns.
+
+**Rule going forward:** every contest and candidate in a seed file should be
+traceable to an official source (SoS qualifying list, sample ballot, or
+certified results). Each seed file's `_coverageNote` records what was verified
+and what's missing.
 
 To add new races or candidates, edit the seed file and re-run:
 ```bash

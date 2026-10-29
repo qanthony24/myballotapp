@@ -7,7 +7,7 @@
     "ballotTitle": null,
     "electionId": "la-2026-nov",
     "electionDate": "2026-11-03",
-    "electionName": "Louisiana 2026 Congressional General / Open Primary",
+    "electionName": "Louisiana November 3, 2026 Election",
     "district": {
       "name": "Louisiana",
       "scope": "statewide",
@@ -16,17 +16,6 @@
     "numberElected": 1,
     "candidates": [
       {
-        "name": "Bill Cassidy",
-        "party": "Republican",
-        "candidateUrl": "https://www.billcassidy.com",
-        "photoUrl": null,
-        "email": null,
-        "phone": null,
-        "channels": [],
-        "orderOnBallot": 1,
-        "isIncumbent": true
-      },
-      {
         "name": "Julia Letlow",
         "party": "Republican",
         "candidateUrl": null,
@@ -34,51 +23,7 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 2,
-        "isIncumbent": false
-      },
-      {
-        "name": "John Fleming",
-        "party": "Republican",
-        "candidateUrl": null,
-        "photoUrl": null,
-        "email": null,
-        "phone": null,
-        "channels": [],
-        "orderOnBallot": 3,
-        "isIncumbent": false
-      },
-      {
-        "name": "Mark Spencer",
-        "party": "Republican",
-        "candidateUrl": null,
-        "photoUrl": null,
-        "email": null,
-        "phone": null,
-        "channels": [],
-        "orderOnBallot": 4,
-        "isIncumbent": false
-      },
-      {
-        "name": "Nick Albares",
-        "party": "Democratic",
-        "candidateUrl": null,
-        "photoUrl": null,
-        "email": null,
-        "phone": null,
-        "channels": [],
-        "orderOnBallot": 5,
-        "isIncumbent": false
-      },
-      {
-        "name": "Gary Crockett",
-        "party": "Democratic",
-        "candidateUrl": null,
-        "photoUrl": null,
-        "email": null,
-        "phone": null,
-        "channels": [],
-        "orderOnBallot": 6,
+        "orderOnBallot": 1,
         "isIncumbent": false
       },
       {
@@ -89,7 +34,7 @@
         "email": null,
         "phone": null,
         "channels": [],
-        "orderOnBallot": 7,
+        "orderOnBallot": 2,
         "isIncumbent": false
       }
     ],
@@ -98,8 +43,8 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.710Z",
-    "contentHash": "e8c82a00be720b11e5a2533be161a4c20d0679d43c0626f33fd109e9ed5d5004",
+    "fetchedAt": "2026-10-26T05:54:42.556Z",
+    "contentHash": "ff84921d64328d868d2d0db61c9d20bed88472324961d717bb80a7a686ce8dc1",
     "deleted": false
   },
   {
@@ -190,9 +135,9 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.710Z",
-    "contentHash": "0763d83bd7420d7c2737285340be9a2b1fa2d09dc8c24074f3747e966362216a",
-    "deleted": false
+    "fetchedAt": "2026-10-26T05:54:42.558Z",
+    "contentHash": "cac6afeda4bb2f3a4ac1213075b89c272cd355c63f0a3d9d9edc3979f78b682c",
+    "deleted": true
   },
   {
     "id": "la-2026-nov:ocd-division/country:us/state:la/cd:6:u-s-representative-6th-district",
@@ -249,9 +194,9 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.710Z",
-    "contentHash": "7dc095f2b0586d4d5e845e1f7077f8d6ed895933009f741895ac67d9f0d7b9c1",
-    "deleted": false
+    "fetchedAt": "2026-10-26T05:54:42.558Z",
+    "contentHash": "d7744d93ce4d70e7b5a164fdbab9a7ae359816aee8f40758707dcacadf857eab",
+    "deleted": true
   },
   {
     "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge:mayor-president",
@@ -286,9 +231,9 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.710Z",
-    "contentHash": "f45104bf409799306635ad70d28671cd457c2b96c3e0b0aae4d270f20541f582",
-    "deleted": false
+    "fetchedAt": "2026-10-26T05:54:42.559Z",
+    "contentHash": "b3b068e46a635de501a79b835ac293df2ff0f9e1c92fc683aeebf2fc39268720",
+    "deleted": true
   },
   {
     "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:1:metro-council-district-1",
@@ -311,9 +256,9 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.710Z",
-    "contentHash": "ed55ef794b3580ecafbbb9cd60595a3a3c0c2f39623a7dc27af3d04e50984f2f",
-    "deleted": false
+    "fetchedAt": "2026-10-26T05:54:42.559Z",
+    "contentHash": "4b82c8e44bbe1ca25c27c1ebb09353444aaa0f0db84a41336a15314e6a9fc223",
+    "deleted": true
   },
   {
     "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:2:metro-council-district-2",
@@ -336,9 +281,9 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.710Z",
-    "contentHash": "56f0c0885cff2ece30227f89cda32fc61495928d8c9d9ca410451fc9b70cb8f1",
-    "deleted": false
+    "fetchedAt": "2026-10-26T05:54:42.559Z",
+    "contentHash": "2ef5a8e0596e2a630d605ad877f3c0581fc1b924e740a2cf04c7f464d5d0fde2",
+    "deleted": true
   },
   {
     "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:3:metro-council-district-3",
@@ -361,9 +306,9 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.710Z",
-    "contentHash": "0a69e2c2463c551ba43a5b85c990d9c25b70bb781d000c8e0aaa9ebcf5923824",
-    "deleted": false
+    "fetchedAt": "2026-10-26T05:54:42.559Z",
+    "contentHash": "668e6f86379e168845c8d17ca7350fcdf09b84db39983d71fca2335a79532584",
+    "deleted": true
   },
   {
     "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:4:metro-council-district-4",
@@ -386,9 +331,9 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.710Z",
-    "contentHash": "0f86746f8ace876b848143f148afa1dc06082dfc12582c1a43ebd8bc494a5978",
-    "deleted": false
+    "fetchedAt": "2026-10-26T05:54:42.559Z",
+    "contentHash": "cadbbfd8dc83083337dbbed69a9b9e18ea19ffea8dc8bfec6ea32bb1815b6d3c",
+    "deleted": true
   },
   {
     "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:5:metro-council-district-5",
@@ -411,9 +356,9 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.710Z",
-    "contentHash": "53d72f59e4fb27f5a6d20671a6b29ff42f8578407bd73ce43f47ffbf9e2dfd96",
-    "deleted": false
+    "fetchedAt": "2026-10-26T05:54:42.559Z",
+    "contentHash": "5131489b3d9ddbdefae4d4122f9dd15f6527d9779069755b8dc2073146d96150",
+    "deleted": true
   },
   {
     "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:6:metro-council-district-6",
@@ -436,9 +381,9 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.710Z",
-    "contentHash": "921841f99ca21a4ae697fc622199103d975aa432daed324337cba704466468b3",
-    "deleted": false
+    "fetchedAt": "2026-10-26T05:54:42.559Z",
+    "contentHash": "023282216468465437bbc50f506a04aac549a97a717d2ddb54b5700a39d982da",
+    "deleted": true
   },
   {
     "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:7:metro-council-district-7",
@@ -461,9 +406,9 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.710Z",
-    "contentHash": "430cc37269a3bdf3ab9d52d262898289d7728174be3c736b8944d871290bf948",
-    "deleted": false
+    "fetchedAt": "2026-10-26T05:54:42.559Z",
+    "contentHash": "4310d8a42e503746ed379d36d6c7950d8b5789a0389ddab37d59f60033ffe7bf",
+    "deleted": true
   },
   {
     "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:8:metro-council-district-8",
@@ -486,9 +431,9 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.710Z",
-    "contentHash": "f1106c127bd0ea251b4c2992735135202a0c1938985c3409041fb9863d6f2184",
-    "deleted": false
+    "fetchedAt": "2026-10-26T05:54:42.559Z",
+    "contentHash": "cb8a4b44b2ee20a149ba20fac9e91b8efc6f105b2253a1038ed3d6418060fded",
+    "deleted": true
   },
   {
     "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:9:metro-council-district-9",
@@ -511,9 +456,9 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.710Z",
-    "contentHash": "213310384a2c9fc3cdf22db283de49db67e4bb2f165e7aee001619b8a1329e21",
-    "deleted": false
+    "fetchedAt": "2026-10-26T05:54:42.559Z",
+    "contentHash": "8d0d431aaa213044c486cd584a9300177f27c0895e98e222b24fdf91db2e73fc",
+    "deleted": true
   },
   {
     "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:10:metro-council-district-10",
@@ -536,9 +481,9 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.710Z",
-    "contentHash": "b34343bd42c332cefa032e29dcbb54149b4a39d1c98c345d514169fd9ac487b6",
-    "deleted": false
+    "fetchedAt": "2026-10-26T05:54:42.559Z",
+    "contentHash": "e30df0eb56d9a4451fcfb0724eb5d0bd2c2d5a2adcc40de501396cb985fc85df",
+    "deleted": true
   },
   {
     "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:11:metro-council-district-11",
@@ -561,9 +506,9 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.710Z",
-    "contentHash": "8b788a5fcf6389e8862e28af63a17b8e0e06173d19878c6f5748e56856845227",
-    "deleted": false
+    "fetchedAt": "2026-10-26T05:54:42.559Z",
+    "contentHash": "a3308adea39bed56fa67ee18edc629cd6df6cf18853f44367ba0e96f1f1b50dd",
+    "deleted": true
   },
   {
     "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge/council_district:12:metro-council-district-12",
@@ -586,9 +531,9 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.710Z",
-    "contentHash": "4a176a3f43bf56530c2e774dc09868df5abe33481758724a135f13ac550df4aa",
-    "deleted": false
+    "fetchedAt": "2026-10-26T05:54:42.559Z",
+    "contentHash": "7b8d6f65c9adbae5447f66b57067ecb7cf49bb2be412eab8d82619f023aaff50",
+    "deleted": true
   },
   {
     "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge:family-court-judge-special-election",
@@ -611,9 +556,9 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.710Z",
-    "contentHash": "bef7836cc9ef8e56cc3fd8a521d606def3322b6d1e0805a5b2127b74df0f3a10",
-    "deleted": false
+    "fetchedAt": "2026-10-26T05:54:42.559Z",
+    "contentHash": "dc01c45bffc1eb0a82213e21b3a0e32ccaecaabed68ddac35f03c5b7612e5651",
+    "deleted": true
   },
   {
     "id": "la-2026-nov:ocd-division/country:us/state:la/parish:east_baton_rouge:proposition-l-library-system-millage-renewal",
@@ -648,8 +593,8 @@
     "sourceMetadata": {
       "jurisdiction": "East Baton Rouge Parish, LA"
     },
-    "fetchedAt": "2026-02-28T05:35:14.710Z",
-    "contentHash": "e7f0d4790ce0b486ae27be0e95342cdc9236de5c718c9b76d3194961fa2b3965",
-    "deleted": false
+    "fetchedAt": "2026-10-26T05:54:42.559Z",
+    "contentHash": "23da80e70821381b588ae59669b10bdd63491c50103ff92aa2ca313134989f6d",
+    "deleted": true
   }
 ]
