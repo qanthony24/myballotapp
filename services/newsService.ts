@@ -1,5 +1,6 @@
 import type { NewsArticle, NewsFeedResponse } from '../types/info';
 
+// Served from public/data/news/feed.json (written by data-pipeline/src/news-fetcher.ts).
 const NEWS_FEED_URL = '/data/news/feed.json';
 
 export async function fetchNewsFeed(

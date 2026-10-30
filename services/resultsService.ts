@@ -1,5 +1,6 @@
 import type { ElectionResultSummary, ContestResult } from '../types/info';
 
+// Served from public/data/results/elections.json.
 const ELECTIONS_URL = '/data/results/elections.json';
 
 let cachedElections: ElectionResultSummary[] | null = null;

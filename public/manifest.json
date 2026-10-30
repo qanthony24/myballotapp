@@ -1,19 +1,17 @@
 {
-  "name": "MyBallot - East Baton Rouge",
+  "name": "MyBallot",
   "short_name": "MyBallot",
-  "description": "Build your personal ballot for East Baton Rouge Parish elections. Compare candidates, track ballot measures, and take your choices to the polls.",
+  "description": "Your Louisiana voter guide: see what's on your ballot, compare candidates, understand ballot measures, and take your choices to the polls.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#F5F7FA",
   "theme_color": "#2155FF",
   "orientation": "portrait-primary",
   "icons": [
-    {
-      "src": "/assets/M Logo.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "categories": ["government", "news", "politics"]
 }

@@ -4,7 +4,7 @@
  *
  * Fetches RSS feeds from approved Louisiana news outlets, normalizes
  * articles into the NewsArticle schema, deduplicates by URL, filters
- * for political/civic relevance, and writes data/news/feed.json.
+ * for political/civic relevance, and writes public/data/news/feed.json (served as /data/news/feed.json).
  *
  * Usage:
  *   npx tsx data-pipeline/src/news-fetcher.ts
@@ -17,7 +17,7 @@ import * as path from 'node:path';
 
 const OUTPUT_PATH = path.resolve(
   import.meta.dirname ?? path.dirname(new URL(import.meta.url).pathname),
-  '../../data/news/feed.json',
+  '../../public/data/news/feed.json',
 );
 
 const MAX_ARTICLES = 50;
