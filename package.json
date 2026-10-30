@@ -8,17 +8,18 @@
     "build": "vite build",
     "preview": "vite preview",
     "data:snapshot": "tsx data-pipeline/src/snapshot-from-firestore.ts",
-    "test:data": "tsx tests/data-merge.test.mts"
+    "test:data": "tsx tests/data-merge.test.mts",
+    "deploy:preview": "npm run build && npx firebase-tools@13 hosting:channel:deploy preview --expires 7d",
+    "deploy:rules": "npx firebase-tools@13 deploy --only firestore:rules,storage"
   },
   "dependencies": {
-    "@google/genai": "^0.14.0",
     "@heroicons/react": "^2.1.0",
-    "firebase": "^11.8.1",
+    "firebase": "^11.10.0",
     "framer-motion": "^12.16.0",
     "react": "^18.2.0",
     "react-confetti": "^6.4.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.24.0"
+    "react-router-dom": "^7.18.5"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
@@ -30,5 +31,8 @@
     "typescript": "~5.7.2",
     "vite": "^6.2.0",
     "vite-plugin-pwa": "^1.2.0"
+  },
+  "overrides": {
+    "@grpc/grpc-js": "^1.13.6"
   }
 }
