@@ -19,6 +19,7 @@
 import { useSyncExternalStore } from 'react';
 import { collection, onSnapshot, Unsubscribe } from 'firebase/firestore';
 import { db } from '../firebase';
+import { mergeById } from './mergeRecords';
 import type { Candidate, Cycle, Office, BallotMeasure, SurveyQuestion } from '../types';
 import {
   SNAPSHOT_CANDIDATES,
@@ -64,38 +65,9 @@ const collectionStatus: Record<string, 'pending' | 'cache' | 'live' | 'error'> =
   surveyQuestions: 'pending',
 };
 
-/** Drop empty values so a blank field in Firestore doesn't erase a real one from the snapshot. */
-function meaningful(doc: Doc): Doc {
-  const out: Doc = {};
-  for (const [k, v] of Object.entries(doc)) {
-    if (v === undefined || v === null || v === '') continue;
-    out[k] = v;
-  }
-  return out;
-}
-
-/**
- * Merge snapshot records with Firestore documents.
- * - Firestore fields win over snapshot fields.
- * - Firestore-only documents are added.
- * - `_deleted: true` hides the record (snapshot copies included).
- */
-export function mergeById<T extends Doc>(base: T[], docs: Map<string, Doc>, keyOf: (item: T) => string): T[] {
-  const result: T[] = [];
-  const seen = new Set<string>();
-  for (const item of base) {
-    const key = keyOf(item);
-    seen.add(key);
-    const override = docs.get(key);
-    if (override?._deleted) continue;
-    result.push(override ? ({ ...item, ...meaningful(override) } as T) : item);
-  }
-  for (const [key, d] of docs) {
-    if (seen.has(key) || d._deleted) continue;
-    result.push(d as T);
-  }
-  return result;
-}
+// Merge rules (Firestore authoritative, partial docs fill in from the snapshot,
+// `_deleted` tombstones) live in mergeRecords.ts, shared with the snapshot script.
+export { mergeById };
 
 function normalizeCandidate(c: Candidate): Candidate {
   return {
@@ -104,7 +76,10 @@ function normalizeCandidate(c: Candidate): Candidate {
     // a ballot automatically: an unassigned candidate stays hidden until an
     // admin ticks an election in the dashboard.
     cycleIds: Array.isArray(c.cycleIds) ? c.cycleIds.map(Number) : [],
+    // Placeholder avatar for display only. `_photoIsPlaceholder` marks it so it
+    // is never saved back as a real photo (see firestoreDataService).
     photoUrl: c.photoUrl || candidatePhotoFallback(c.firstName, c.lastName),
+    _photoIsPlaceholder: !c.photoUrl,
     isIncumbent: c.isIncumbent || false,
     bio: c.bio || '',
     surveyResponses: c.surveyResponses || {},

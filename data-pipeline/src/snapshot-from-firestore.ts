@@ -8,13 +8,18 @@
  * Run this before building a release (especially App Store builds) so that
  * fallback is current, then commit the updated JSON.
  *
+ * It exports the EFFECTIVE data the app shows: the current bundled snapshot
+ * with Firestore merged on top, using the same rules as the app
+ * (services/mergeRecords.ts). So partial Firestore docs keep their bundled
+ * fields, bundle-only records are kept, and `_deleted` records are dropped.
+ *
  * Reads through the public Firestore REST API (election data is publicly
- * readable under firestore.rules), so no credentials are needed. Records
- * marked `_deleted: true` are left out. Internal fields (_updatedAt, etc.)
- * are dropped except _pipeline* provenance fields.
+ * readable under firestore.rules), so no credentials are needed. Internal
+ * fields (_updatedAt, etc.) are dropped except _pipeline* provenance fields.
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { mergeById } from '../../services/mergeRecords';
 
 const PROJECT_ID = 'myballot-app';
 const BASE = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
@@ -44,21 +49,36 @@ export function decodeFields(fields: Record<string, FirestoreValue>): Record<str
   return Object.fromEntries(Object.entries(fields).map(([k, v]) => [k, decodeValue(v)]));
 }
 
-async function fetchCollection(name: string): Promise<Record<string, unknown>[]> {
-  const docs: Record<string, unknown>[] = [];
+async function fetchCollection(name: string): Promise<Map<string, Record<string, unknown>>> {
+  const docs = new Map<string, Record<string, unknown>>();
   let pageToken = '';
   do {
     const url = `${BASE}/${name}?pageSize=300${pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : ''}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error(`${name}: HTTP ${res.status} ${await res.text()}`);
     const json = (await res.json()) as {
-      documents?: { fields?: Record<string, FirestoreValue> }[];
+      documents?: { name: string; fields?: Record<string, FirestoreValue> }[];
       nextPageToken?: string;
     };
-    for (const d of json.documents ?? []) docs.push(decodeFields(d.fields ?? {}));
+    for (const d of json.documents ?? []) {
+      const id = d.name.split('/').pop() as string;
+      docs.set(id, decodeFields(d.fields ?? {}));
+    }
     pageToken = json.nextPageToken ?? '';
   } while (pageToken);
   return docs;
+}
+
+async function readJson(file: string): Promise<Record<string, unknown>[]> {
+  return JSON.parse(await fs.readFile(file, 'utf-8'));
+}
+
+/** Bundled snapshot + Firestore, merged exactly as the app does it. */
+export function effectiveRecords(
+  bundled: Record<string, unknown>[],
+  remote: Map<string, Record<string, unknown>>,
+): Record<string, unknown>[] {
+  return mergeById(bundled, remote, (r) => String(r.id));
 }
 
 /** Keep public data fields; drop deleted records and internal bookkeeping. */
@@ -74,14 +94,18 @@ export function clean(records: Record<string, unknown>[]): Record<string, unknow
 
 async function main(): Promise<void> {
   console.log('📸 Refreshing bundled snapshot from Firestore…');
-  const candidates = clean(await fetchCollection('candidates'))
+  const candFile = path.join(OUT_DIR, 'candidates.json');
+  const measureFile = path.join(OUT_DIR, 'ballot-measures.json');
+
+  const candidates = clean(effectiveRecords(await readJson(candFile), await fetchCollection('candidates')))
     // Only candidates assigned to at least one election belong in the app snapshot.
     .filter((c) => Array.isArray(c.cycleIds) && (c.cycleIds as unknown[]).length > 0)
     .sort((a, b) => Number(a.id) - Number(b.id));
-  const measures = clean(await fetchCollection('ballotMeasures')).sort((a, b) => Number(a.id) - Number(b.id));
+  const measures = clean(effectiveRecords(await readJson(measureFile), await fetchCollection('ballotMeasures')))
+    .sort((a, b) => Number(a.id) - Number(b.id));
 
-  await fs.writeFile(path.join(OUT_DIR, 'candidates.json'), JSON.stringify(candidates, null, 2) + '\n');
-  await fs.writeFile(path.join(OUT_DIR, 'ballot-measures.json'), JSON.stringify(measures, null, 2) + '\n');
+  await fs.writeFile(candFile, JSON.stringify(candidates, null, 2) + '\n');
+  await fs.writeFile(measureFile, JSON.stringify(measures, null, 2) + '\n');
   console.log(`   ${candidates.length} candidates → data/app/candidates.json`);
   console.log(`   ${measures.length} ballot measures → data/app/ballot-measures.json`);
   console.log('✅ Done. Review the diff, then commit.');

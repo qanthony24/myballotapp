@@ -55,7 +55,9 @@ subscribed. Your dashboard edits reach every screen within seconds, with no app
 release. The last data loaded is cached on the device, so the app keeps working
 offline.
 
-- **Editing:** use the admin dashboard. Changes are live immediately.
+- **Editing:** use the admin dashboard. Changes are live immediately. Clearing
+  a field (e.g. removing an outdated photo or bio) really clears it: an empty
+  value in the database wins over the bundled copy.
 - **Deleting:** the dashboard marks a record `_deleted: true` instead of
   removing it, so the bundled copy can't bring it back. To undo a deletion,
   remove that field in the Firebase console, or re-save the record.
@@ -64,7 +66,8 @@ offline.
   the fields the bundled data has. It never erases photos, bios, survey answers
   or deletions made in the dashboard.
 - **Before an App Store build:** run `npm run data:snapshot` to refresh the
-  bundled copy from the live database, then commit the result. This only
+  bundled copy with exactly what the app currently shows (bundled data with
+  database edits merged on top, deletions removed), then commit the result. This only
   matters for a brand-new install that has never been online.
 
 A candidate with no elections ticked is hidden from voters. That's how the

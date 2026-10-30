@@ -78,6 +78,16 @@ function stripEmpty(obj: Record<string, unknown>): Record<string, unknown> {
 
 const now = () => new Date().toISOString();
 
+/**
+ * Never persist the display-only placeholder avatar the data store adds for
+ * candidates without a photo (marked `_photoIsPlaceholder`).
+ */
+function withoutPlaceholder<T extends Record<string, unknown>>(data: T): T {
+  const { _photoIsPlaceholder, ...rest } = data as Record<string, unknown>;
+  if (_photoIsPlaceholder) rest.photoUrl = '';
+  return rest as T;
+}
+
 /** Kept for compatibility: the live store updates itself after writes. */
 export function invalidateCandidateCache(): void {}
 
@@ -100,10 +110,10 @@ export async function getFirestoreCandidateById(
 export async function saveCandidate(candidate: Candidate): Promise<void> {
   const docRef = doc(db, 'candidates', String(candidate.id));
   // Full replace (also clears any `_deleted` tombstone).
-  await setDoc(docRef, stripUndefined({
+  await setDoc(docRef, stripUndefined(withoutPlaceholder({
     ...candidate,
     _updatedAt: now(),
-  } as Record<string, unknown>));
+  } as Record<string, unknown>)));
 }
 
 export async function updateCandidateFields(
@@ -113,11 +123,11 @@ export async function updateCandidateFields(
   // merge: works whether or not the candidate already has a Firestore doc
   // (a candidate may so far exist only in the bundled snapshot).
   const docRef = doc(db, 'candidates', String(id));
-  await setDoc(docRef, stripUndefined({
+  await setDoc(docRef, stripUndefined(withoutPlaceholder({
     ...fields,
     id,
     _updatedAt: now(),
-  } as Record<string, unknown>), { merge: true });
+  } as Record<string, unknown>)), { merge: true });
 }
 
 // ---- Candidate delete (tombstone) ----
