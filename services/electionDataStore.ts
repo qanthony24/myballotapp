@@ -20,7 +20,8 @@ import { useSyncExternalStore } from 'react';
 import { collection, onSnapshot, Unsubscribe } from 'firebase/firestore';
 import { db } from '../firebase';
 import { mergeById } from './mergeRecords';
-import type { Candidate, Cycle, Office, BallotMeasure, SurveyQuestion } from '../types';
+import type { Candidate, Cycle, Office, BallotMeasure, SurveyQuestion, Race } from '../types';
+import type { ElectionResultSummary } from '../types/info';
 import {
   SNAPSHOT_CANDIDATES,
   SNAPSHOT_BALLOT_MEASURES,
@@ -43,6 +44,9 @@ interface StoreState {
   offices: Office[];
   ballotMeasures: BallotMeasure[];
   surveyQuestions: SurveyQuestion[];
+  races: Race[];
+  /** Results entered in the admin results editor (only published ones are shown to voters). */
+  results: (ElectionResultSummary & { published?: boolean; _docId: string })[];
   status: DataStatus;
   version: number;
 }
@@ -56,6 +60,8 @@ const remote: Record<string, Map<string, Doc>> = {
   offices: new Map(),
   ballotMeasures: new Map(),
   surveyQuestions: new Map(),
+  races: new Map(),
+  results: new Map(),
 };
 const collectionStatus: Record<string, 'pending' | 'cache' | 'live' | 'error'> = {
   candidates: 'pending',
@@ -63,6 +69,8 @@ const collectionStatus: Record<string, 'pending' | 'cache' | 'live' | 'error'> =
   offices: 'pending',
   ballotMeasures: 'pending',
   surveyQuestions: 'pending',
+  races: 'pending',
+  results: 'pending',
 };
 
 // Merge rules (Firestore authoritative, partial docs fill in from the snapshot,
@@ -106,13 +114,21 @@ function build(prevVersion: number): StoreState {
     (q) => String(q.key),
   ) as unknown as SurveyQuestion[];
 
+  // Races and results exist only in Firestore (no bundled snapshot).
+  const races = mergeById([] as Doc[], remote.races, (r) => String(r.id)).map(
+    (r) => ({ ...r, electionId: Number(r.electionId), officeId: Number(r.officeId) }) as unknown as Race,
+  );
+  const results = [...remote.results.entries()]
+    .filter(([, d]) => !d._deleted)
+    .map(([docId, d]) => ({ ...(d as unknown as ElectionResultSummary), _docId: docId }));
+
   const statuses = Object.values(collectionStatus);
   let status: DataStatus = 'snapshot';
   if (statuses.every((s) => s === 'live')) status = 'live';
   else if (statuses.some((s) => s === 'error')) status = 'error';
   else if (statuses.some((s) => s === 'live' || s === 'cache')) status = 'cache';
 
-  return { candidates, cycles, offices, ballotMeasures, surveyQuestions, status, version: prevVersion + 1 };
+  return { candidates, cycles, offices, ballotMeasures, surveyQuestions, races, results, status, version: prevVersion + 1 };
 }
 
 let state: StoreState = build(0);
@@ -162,6 +178,8 @@ export const getCyclesData = (): Cycle[] => state.cycles;
 export const getOfficesData = (): Office[] => state.offices;
 export const getBallotMeasuresData = (): BallotMeasure[] => state.ballotMeasures;
 export const getSurveyQuestionsData = (): SurveyQuestion[] => state.surveyQuestions;
+export const getRacesData = (): Race[] => state.races;
+export const getResultsData = (): StoreState['results'] => state.results;
 export const getDataStatus = (): DataStatus => state.status;
 
 /** Raw Firestore doc (no snapshot merge). Used by admin screens to see what's actually stored. */

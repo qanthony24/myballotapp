@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useElectionData } from '../../services/electionDataStore';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeftIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import { fetchContestById } from '../../services/resultsService';
@@ -11,6 +12,8 @@ const InfoContestResultsPage: React.FC = () => {
   const [election, setElection] = useState<ElectionResultSummary | null>(null);
   const [contest, setContest] = useState<ContestResult | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const { version: dataVersion } = useElectionData();
 
   useEffect(() => {
     let cancelled = false;
@@ -25,7 +28,7 @@ const InfoContestResultsPage: React.FC = () => {
       }
     });
     return () => { cancelled = true; };
-  }, [electionId, contestId]);
+  }, [electionId, contestId, dataVersion]); // live: re-read when results are saved
 
   if (loading) {
     return (

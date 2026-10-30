@@ -39,7 +39,7 @@ Do the bootstrap step **before** deploying, or you'll lock yourself out of the a
 | Data | Read | Write |
 |---|---|---|
 | `users/{uid}` and `users/{uid}/appData/*` | owner | owner |
-| `candidates`, `elections`, `offices`, `ballotMeasures`, `surveyQuestions` | anyone | admins |
+| `candidates`, `elections`, `offices`, `ballotMeasures`, `surveyQuestions`, `races`, `results` | anyone | admins |
 | `config/admin` | signed-in users | admins |
 | Storage `candidates/{id}/*` (photos) | anyone | admins (images < 5 MB) |
 | Anything else | denied | denied |
@@ -73,6 +73,36 @@ offline.
 A candidate with no elections ticked is hidden from voters. That's how the
 House candidates from the suspended pre-Callais primaries are kept: still in
 the database, but not on any ballot.
+
+## Entering elections, races and results by hand
+
+Start at **Admin → Elections, Races & Results** (`/#/admin/elections`).
+
+1. **Offices** (`/#/admin/offices`): make sure every office on the ballot
+   exists, and set each one's **district type** (statewide, State House
+   district, and so on). Address → ballot will use that.
+2. **Elections:** create the election. Early voting is pre-filled with the
+   usual 14-to-7-days window; check it against the Secretary of State's
+   calendar. The optional "coverage note" appears in the voter banner (e.g.
+   "Partial ballot: …").
+3. **Races** (Elections → *Races* button): add races one by one, or import a
+   spreadsheet with one row per race:
+   `office, district, district_key, seats, ballot_order, candidates`, where
+   candidates look like `Jane Doe (R); John Roe (D)`. Re-importing is safe:
+   races update, and a candidate with the same name, office and district is
+   reused, not duplicated (that's also how runoff candidates carry over).
+   Party codes: R, D, L, G, I, NP (No Party), NPT (Nonpartisan).
+   - **District key** is a machine label like `la-house-61` that address →
+     ballot will match against. You can leave it blank for now.
+   - A race marked **Not saved yet** exists only because candidates are
+     assigned to that office/district. Click *Save race* to make it real.
+4. **Results** (Elections → *Enter results*): type vote counts per race, tick
+   **Called** when a race is decided (the top vote-getters become winners), and
+   tick **Published** when voters should see them. Published results update
+   live on the voter Results pages within seconds of each save.
+
+New candidates created here get IDs from 100000 up, so they never collide with
+the data pipeline's IDs.
 
 ## Testing the rules
 

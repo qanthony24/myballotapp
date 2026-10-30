@@ -21,7 +21,10 @@ const REGISTRY: PartyInfo[] = [
   { id: 'Libertarian',   label: 'Libertarian',   abbreviation: 'L',  badgeClasses: 'bg-yellow-100 text-yellow-700', barColor: 'bg-yellow-500', sortOrder: 3 },
   { id: 'Green',         label: 'Green',         abbreviation: 'G',  badgeClasses: 'bg-green-100 text-green-700', barColor: 'bg-green-500',  sortOrder: 4 },
   { id: 'Independent',   label: 'Independent',   abbreviation: 'I',  badgeClasses: 'bg-purple-100 text-purple-700', barColor: 'bg-purple-400', sortOrder: 5 },
-  { id: 'Nonpartisan',   label: 'Nonpartisan',   abbreviation: 'NP', badgeClasses: 'bg-gray-100 text-gray-600',   barColor: 'bg-gray-400',   sortOrder: 6 },
+  // Louisiana voters/candidates registered with no party appear on the ballot as "No Party".
+  { id: 'No Party',      label: 'No Party',      abbreviation: 'NP', badgeClasses: 'bg-gray-100 text-gray-600',   barColor: 'bg-gray-400',   sortOrder: 6 },
+  // For races with no party labels at all (e.g. judicial).
+  { id: 'Nonpartisan',   label: 'Nonpartisan',   abbreviation: 'NPT', badgeClasses: 'bg-gray-100 text-gray-600',   barColor: 'bg-gray-400',   sortOrder: 7 },
   { id: 'Other',         label: 'Other',         abbreviation: 'O',  badgeClasses: 'bg-gray-100 text-gray-600',   barColor: 'bg-gray-400',   sortOrder: 99 },
 ];
 
@@ -64,7 +67,8 @@ export function normalizeParty(raw: string | null | undefined): string {
   if (lower.startsWith('lib')) return 'Libertarian';
   if (lower.startsWith('gre')) return 'Green';
   if (lower.startsWith('ind')) return 'Independent';
-  if (lower === 'nonpartisan' || lower === 'non-partisan' || lower === 'no party' || lower === 'none') return 'Nonpartisan';
+  if (lower === 'no party' || lower === 'noparty' || lower === 'np') return 'No Party';
+  if (lower === 'nonpartisan' || lower === 'non-partisan' || lower === 'none') return 'Nonpartisan';
   const exact = BY_ID.get(raw.trim());
   if (exact) return exact.id;
   return 'Other';
