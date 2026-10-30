@@ -1,74 +1,81 @@
-# MyBallot App
+# MyBallot
 
-A web application for East Baton Rouge Parish voters to find candidate information, compare candidates, build a personal ballot, and get election details. Powered by Gemini for Q&A.
+A Louisiana voter guide. Voters see what's on their ballot, compare candidates,
+read plain-language explanations of ballot measures, and build a personal ballot
+to take to the polls. Launch target: the 2027 Louisiana elections (Oct 9 primary,
+Nov 20 general), starting with statewide races and East Baton Rouge Parish.
 
-## Features
+Platforms: the web (desktop and mobile), plus iOS and Android apps planned
+(the same code, packaged with Capacitor).
 
-- Candidate listings and profiles (filterable by election, office, party)
-- Side-by-side candidate comparison for specific races (office & district)
-- Personalized ballot building, saved locally per election
-- View past election results alongside your archived ballot choices
-- Ballot measure information (details, explanations, pro/con) and stance tracking
-- Election information (key dates, polling place links)
-- Q&A with Gemini AI for election-related questions
-- Vote reminders (for early voting or election day) with location selection and calendar integration details.
+## What's in the app
 
-## Setup and Running
+**For voters**
+- Browse and search candidates; candidate profiles with bios, links and survey answers
+- Side-by-side comparison of candidates in a race
+- Build your ballot (no account needed; sign in to sync it across devices)
+- Private notes on candidates, election reminders
+- Ballot measures with plain-language explanations
+- Election essentials, past results, Louisiana political news
+- Works offline once loaded
 
-1.  **Clone the repository.**
-    ```bash
-    git clone <repository-url>
-    cd <repository-directory>
-    ```
+**For admins** (`/#/admin`, restricted to admin accounts)
+- Add and edit candidates: photos (with focal-point cropping), bios, links, survey answers
+- CSV import for candidates and survey responses
+- Ballot measures and survey questions
+- Publish bundled pipeline data to the database
 
-2.  **Environment Variables:**
-    *   This project uses the Google Gemini API for its Q&A feature. You will need an API key.
-    *   Create a `.env` file in the root of the project by copying the `.env.example` file:
-        ```bash
-        cp .env.example .env
-        ```
-    *   Open the `.env` file and replace `YOUR_GEMINI_API_KEY_HERE` with your actual Google Gemini API key.
-        ```env
-        API_KEY="your_actual_gemini_api_key"
-        ```
-    *   **Note for Browser-Based Development:** The `index.html` file includes a script to mock `process.env.API_KEY` if it's not set (e.g., during simple local server hosting without a build process that injects environment variables). For development convenience, you can temporarily replace `'YOUR_GEMINI_API_KEY'` directly in that script in `index.html`.
-        **However, this is not secure for production. In a real deployment, the API key must be managed securely and not hardcoded in client-side files.** This application context assumes `process.env.API_KEY` will be made available in the execution environment where the Gemini client is initialized.
+## Tech
 
-3.  **Serve the `index.html` file.**
-    *   You can use any simple HTTP server. If you have Node.js, you can use `serve` (install globally via `npm install -g serve` or use `npx serve .`):
-        ```bash
-        npx serve .
-        ```
-    *   Open your browser to the address provided by the server (e.g., `http://localhost:3000` or `http://localhost:5000`).
+- React 18 + TypeScript, built with Vite; Tailwind CSS; installable PWA
+- Firebase: Auth, Firestore (election data + user data, offline cache), Storage (photos)
+- No custom backend server. Security is enforced by `firestore.rules` and `storage.rules`.
 
-## Project Structure
+## Getting started
 
--   `index.html`: Main HTML entry point. Sets up Tailwind CSS, the importmap for ES modules, and includes the main script.
--   `index.tsx`: Root React script that renders the main `App` component.
--   `App.tsx`: Main application component, handles routing and global layout structure (Header, Navbar).
--   `types.ts`: Contains all TypeScript type definitions and interfaces used across the application.
--   `constants.ts`: Holds static data like candidate lists, office details, survey questions, mock election results, and ballot measures. Also includes utility functions related to this data.
--   `metadata.json`: Contains metadata for the application, including its name, description, and permissions requests if any.
--   `components/`: Directory for reusable UI components, further organized into subdirectories like:
-    -   `candidates/`: Components related to displaying candidates (e.g., `CandidateCard`, `FilterControls`).
-    -   `election/`: Components for displaying election-specific information (e.g., `ElectionResultsDisplay`).
-    -   `layout/`: Components for the overall page structure (e.g., `Header`, `Navbar`, `Footer`).
-    -   `reminders/`: Components for the vote reminder system (e.g., `ReminderSetupModal`).
-    -   `ui/`: General-purpose UI elements (e.g., `Modal`, `LoadingSpinner`).
--   `hooks/`: Custom React hooks, such as `useBallot.ts` for managing ballot state and interactions.
--   `pages/`: Top-level components that represent different views/pages of the application (e.g., `HomePage.tsx`, `CandidateProfilePage.tsx`).
--   `services/`: Modules for data access and business logic, primarily `dataService.ts` for retrieving and processing data from `constants.ts`. `geminiService.ts` is a placeholder for more complex Gemini API interactions.
--   `.env.example`: Example file for environment variables.
+```bash
+npm install
+npm run dev          # http://localhost:5173
+```
 
-## Absolute Imports
+Other scripts:
 
-This project is configured to use absolute-style imports for local modules, resolved from the project root. This is managed via an `importmap` in `index.html`.
-This means that instead of relative paths like `../../hooks/useBallot`, you can use paths like `hooks/useBallot`.
+| Command | What it does |
+|---|---|
+| `npm run build` | Production build into `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm run deploy:preview` | Build and deploy to a private Firebase Hosting preview link (expires in 7 days) |
+| `npm run test:data` | Tests for how database data merges with the bundled data |
+| `npm run data:snapshot` | Refresh the bundled data from the live database (run before release builds) |
 
-Examples:
-- `import HomePage from 'pages/HomePage';`
-- `import CandidateCard from 'components/candidates/CandidateCard';`
-- `import { useBallot } from 'hooks/useBallot';`
-- `import { getCandidateById } from 'services/dataService';`
-- `import { Candidate } from 'types';`
-- `import { OFFICES_DATA } from 'constants';`
+No `.env` is required. The Firebase web config in `firebase.ts` is public by
+design; access is controlled by the security rules.
+
+## How data works
+
+The **Firestore database is the source of truth**. The app ships with a bundled
+copy of the election data (`data/app/*.json`, produced by the data pipeline),
+loads the database on top of it, and stays subscribed. Admin edits reach every
+screen within seconds without a new release, and the last data is cached on the
+device for offline use.
+
+- Election data flow, admin setup, deploying rules: [`docs/ADMIN_SETUP.md`](docs/ADMIN_SETUP.md)
+- Data sources and the pipeline: [`docs/DATA_SOURCES.md`](docs/DATA_SOURCES.md)
+- Notes for coding agents: [`AGENTS.md`](AGENTS.md)
+
+## Project layout
+
+```
+App.tsx, index.tsx        App shell and routes (HashRouter)
+pages/                    Screens (pages/admin/ = admin dashboard, pages/info/ = info hub)
+components/               Reusable UI
+hooks/                    Auth, ballot, notes, settings
+services/                 Data access (electionDataStore = live data store), Firestore writes
+data/seed/                Hand-entered election data (pipeline input)
+data/contests/, data/app/ Pipeline output; data/app is bundled into the app
+data/profiles/            Candidate profiles not currently on any ballot
+data-pipeline/            Pipeline + news fetcher + snapshot scripts (Node/tsx)
+public/                   Static files served as-is (icons, manifest, news/results JSON)
+firestore.rules, storage.rules   Security rules
+tests/                    Data-merge tests, security-rules tests
+```
