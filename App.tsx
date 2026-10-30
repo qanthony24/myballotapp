@@ -34,6 +34,10 @@ import AdminBallotMeasureEditPage from './pages/admin/AdminBallotMeasureEditPage
 import AdminSurveyQuestionsPage from './pages/admin/AdminSurveyQuestionsPage';
 import AdminSurveyResponsesPage from './pages/admin/AdminSurveyResponsesPage';
 import AdminRoute from './components/admin/AdminRoute';
+import AdminElectionsPage from './pages/admin/AdminElectionsPage';
+import AdminOfficesPage from './pages/admin/AdminOfficesPage';
+import AdminRacesPage from './pages/admin/AdminRacesPage';
+import AdminResultsPage from './pages/admin/AdminResultsPage';
 
 const AppRoutes: React.FC = () => {
   const { currentUser } = useAuth();
@@ -66,6 +70,11 @@ const AppRoutes: React.FC = () => {
       <Route path="/admin/ballot-measures" element={<AdminRoute><AdminBallotMeasuresPage /></AdminRoute>} />
       <Route path="/admin/ballot-measures/:id" element={<AdminRoute><AdminBallotMeasureEditPage /></AdminRoute>} />
       <Route path="/admin/survey-questions" element={<AdminRoute><AdminSurveyQuestionsPage /></AdminRoute>} />
+      <Route path="/admin/elections" element={<AdminRoute><AdminElectionsPage /></AdminRoute>} />
+      <Route path="/admin/elections/:electionId/races" element={<AdminRoute><AdminRacesPage /></AdminRoute>} />
+      <Route path="/admin/offices" element={<AdminRoute><AdminOfficesPage /></AdminRoute>} />
+      <Route path="/admin/results" element={<Navigate to="/admin/elections" />} />
+      <Route path="/admin/results/:electionId" element={<AdminRoute><AdminResultsPage /></AdminRoute>} />
       <Route path="/admin/survey-responses" element={<AdminRoute><AdminSurveyResponsesPage /></AdminRoute>} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

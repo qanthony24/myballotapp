@@ -57,6 +57,14 @@ service cloud.firestore {
       allow read: if true;
       allow write: if isAdmin();
     }
+    match /races/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /results/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
 
     // ---- Admin config ----
     // Signed-in users may read it (the app checks it to show/hide admin pages).

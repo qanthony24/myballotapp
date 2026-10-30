@@ -115,6 +115,8 @@ const AdminSetupPage: React.FC = () => {
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <h2 className="text-lg font-semibold text-midnight-navy mb-3">Quick Links</h2>
         <ul className="space-y-2 text-sm">
+          <li><Link to="/admin/elections" className="text-civic-blue underline font-semibold">Elections, Races &amp; Results</Link> <span className="text-gray-500">— set up each election's races, add candidates, enter results</span></li>
+          <li><Link to="/admin/offices" className="text-civic-blue underline">Manage Offices</Link></li>
           <li><Link to="/admin/candidates" className="text-civic-blue underline">Manage Candidates</Link></li>
           <li><Link to="/admin/ballot-measures" className="text-civic-blue underline">Manage Ballot Measures</Link></li>
           <li><Link to="/admin/survey-questions" className="text-civic-blue underline">Manage Survey Questions</Link></li>

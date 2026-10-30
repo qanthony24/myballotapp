@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { useElectionData } from '../../services/electionDataStore';
 import { Link } from 'react-router-dom';
 import { ChartBarIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { fetchAllElections } from '../../services/resultsService';
@@ -30,6 +31,8 @@ const InfoResultsHomePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
 
+  const { version: dataVersion } = useElectionData();
+
   useEffect(() => {
     let cancelled = false;
     fetchAllElections().then((data) => {
@@ -39,7 +42,7 @@ const InfoResultsHomePage: React.FC = () => {
       }
     });
     return () => { cancelled = true; };
-  }, []);
+  }, [dataVersion]); // live: re-read when results are saved
 
   const filtered = useMemo(() => {
     if (filter === 'all') return elections;

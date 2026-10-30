@@ -1,7 +1,57 @@
+/** Government level of an office. */
+export type OfficeLevel = 'federal' | 'state' | 'parish' | 'municipal' | 'judicial' | 'other';
+
+/**
+ * What kind of district an office's races are drawn from. Used to work out
+ * which races are on a voter's ballot from their address.
+ */
+export type DistrictType =
+  | 'statewide'
+  | 'congressional'
+  | 'state-senate'
+  | 'state-house'
+  | 'bese'
+  | 'psc'
+  | 'supreme-court'
+  | 'judicial'
+  | 'parishwide'
+  | 'parish-council'
+  | 'school-board'
+  | 'municipal'
+  | 'justice-of-the-peace'
+  | 'constable'
+  | 'other';
+
 export interface Office {
   id: number;
   name: string;
   slug: string;
+  level?: OfficeLevel;
+  districtType?: DistrictType;
+  _deleted?: boolean;
+}
+
+/**
+ * A race (contest) on an election's ballot, e.g. "State Representative,
+ * District 61" in the 2027 Primary. Stored in Firestore `races/{id}`.
+ * Candidates belong to a race when they share its office + district and are
+ * assigned to its election (candidate.cycleIds includes electionId).
+ */
+export interface Race {
+  id: string;
+  electionId: number;
+  officeId: number;
+  /** Display label, e.g. "District 61". Empty for statewide/parishwide races. */
+  district?: string;
+  /** Machine key for address lookup, e.g. "la-house-61" or "ebr-council-7". */
+  districtKey?: string;
+  /** Number of seats (e.g. 2 for some at-large or JP races). Defaults to 1. */
+  seats?: number;
+  ballotOrder?: number;
+  note?: string;
+  /** True when shown in admin because candidates imply it, but not yet saved. */
+  _inferred?: boolean;
+  _deleted?: boolean;
 }
 
 /**

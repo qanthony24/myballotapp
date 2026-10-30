@@ -41,6 +41,10 @@ await t('user reads config', assertSucceeds(user.doc('config/admin').get()));
 await t('user own profile rw', assertSucceeds(user.doc('users/u1').set({a:1})));
 await t('user own appData rw', assertSucceeds(user.doc('users/u1/appData/ballot').set({a:1})));
 await t('user cannot read other profile', assertFails(user.doc('users/u3').get()));
+await t('anon reads races/results', assertSucceeds(Promise.all([anon.doc('races/x').get(), anon.doc('results/1').get()])));
+await t('user cannot write races', assertFails(user.doc('races/x').set({a:1})));
+await t('user cannot write results', assertFails(user.doc('results/1').set({a:1})));
+await t('admin writes races and results', assertSucceeds(Promise.all([admin.doc('races/x').set({a:1}), admin.doc('results/1').set({a:1})])));
 await t('unknown collection denied', assertFails(admin.doc('random/x').set({a:1})));
 // storage
 const sUser = env.authenticatedContext('u1', { email: 'joe@example.com', email_verified: true }).storage();
