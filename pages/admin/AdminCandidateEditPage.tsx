@@ -40,7 +40,9 @@ const AdminCandidateEditPage: React.FC = () => {
     setLoading(true);
     const c = await getFirestoreCandidateById(candidateId);
     if (c) {
-      setCandidate(c);
+      // Show an empty photo field (not the display-only placeholder avatar) when there's no real photo.
+      const { _photoIsPlaceholder, ...rest } = c;
+      setCandidate(_photoIsPlaceholder ? { ...rest, photoUrl: '' } : rest);
     } else {
       setError('Candidate not found');
     }

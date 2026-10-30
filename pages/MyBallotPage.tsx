@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useElectionData } from '../services/electionDataStore';
 import { Link } from 'react-router-dom';
 import { useBallot } from '../hooks/useBallot';
 import { useAuth } from '../hooks/useAuth';
@@ -57,6 +58,8 @@ const MyBallotPage: React.FC = () => {
   const [existingReminder, setExistingReminder] = useState<ReminderSettings | null>(null);
 
 
+  const { version: dataVersion } = useElectionData();
+
   const allKnownElectionDates = useMemo(() => {
     const datesFromDefinedEvents = definedElectionEventDates.map(c => c.electionDate);
     const uniqueDates = Array.from(new Set([...datesFromDefinedEvents, ...archivedElectionDates]));
@@ -98,7 +101,7 @@ const MyBallotPage: React.FC = () => {
       setExistingReminder(null);
       setElectionResults([]);
     }
-  }, [selectedElectionDate, currentElectionIsPastState, getElectionReminder]);
+  }, [selectedElectionDate, currentElectionIsPastState, getElectionReminder, dataVersion]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
   const populatedCandidateSelections = useMemo(() => {
@@ -111,7 +114,7 @@ const MyBallotPage: React.FC = () => {
         return (candidate && office) ? { candidate, office, district: item.district } as PopulatedCandidateEntry : null;
       })
       .filter(entry => entry !== null) as PopulatedCandidateEntry[];
-  }, [currentElectionEntries, selectedElectionDate]);
+  }, [currentElectionEntries, selectedElectionDate, dataVersion]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const populatedMeasureStances = useMemo(() => {
     if (!selectedElectionDate) return [];
@@ -120,7 +123,7 @@ const MyBallotPage: React.FC = () => {
         const userStance = getSelectedMeasureStance(measure.id, selectedElectionDate);
         return { measure, userStance } as PopulatedMeasureEntry;
     });
-  }, [currentElectionEntries, selectedElectionDate, getSelectedMeasureStance, getBallotMeasuresByElectionDate]);
+  }, [currentElectionEntries, selectedElectionDate, getSelectedMeasureStance, getBallotMeasuresByElectionDate, dataVersion]);
 
 
   const groupedBallotByOffice = useMemo(() => {
@@ -153,7 +156,7 @@ const MyBallotPage: React.FC = () => {
     const candidatesForCycle = getAllCandidates().filter(c => (c.cycleIds || []).includes(cycle.id));
     const uniqueRaces = new Set(candidatesForCycle.map(c => `${c.officeId}-${c.district || 'no-district'}`));
     return uniqueRaces.size;
-  }, [selectedElectionDate]);
+  }, [selectedElectionDate, dataVersion]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const ballotIsComplete = populatedCandidateSelections.length >= totalRacesForElection && totalRacesForElection > 0;
 

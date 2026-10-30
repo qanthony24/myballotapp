@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { useElectionData } from '../../services/electionDataStore';
 import { Link } from 'react-router-dom';
 import { Candidate, SurveyQuestion, Office, Cycle } from '../../types';
 import {
@@ -29,6 +30,7 @@ const AdminSurveyResponsesPage: React.FC = () => {
   const offices = getLocalOffices();
   const cycles = getLocalCycles();
 
+  const { version: dataVersion } = useElectionData();
   useEffect(() => {
     Promise.all([
       getFirestoreCandidates(),
@@ -38,7 +40,7 @@ const AdminSurveyResponsesPage: React.FC = () => {
       setQuestions(qs);
       setLoading(false);
     });
-  }, []);
+  }, [dataVersion]);
 
   const raceCandidates = useMemo(() => {
     if (!selectedElection || !selectedOffice) return [];

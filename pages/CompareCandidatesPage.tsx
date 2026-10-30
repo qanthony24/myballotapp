@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useElectionData } from '../services/electionDataStore';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { Candidate, Office, Cycle } from '../types';
 import CandidatePhoto from '../components/candidates/CandidatePhoto';
@@ -89,16 +90,17 @@ const CompareCandidatesPage: React.FC = () => {
     isElectionPast 
   } = useBallot();
 
+  const { version: dataVersion } = useElectionData();
   const surveyQuestions = getSurveyQuestions();
   
-  const currentOffice: Office | null = useMemo(() => selectedOfficeIdParam ? getOfficeById(parseInt(selectedOfficeIdParam)) : null, [selectedOfficeIdParam]);
-  const currentCycle: Cycle | null = useMemo(() => selectedElectionDateParam ? getCycleByElectionDate(selectedElectionDateParam) : null, [selectedElectionDateParam]);
+  const currentOffice: Office | null = useMemo(() => selectedOfficeIdParam ? getOfficeById(parseInt(selectedOfficeIdParam)) : null, [selectedOfficeIdParam, dataVersion]);
+  const currentCycle: Cycle | null = useMemo(() => selectedElectionDateParam ? getCycleByElectionDate(selectedElectionDateParam) : null, [selectedElectionDateParam, dataVersion]);
   const currentElectionIsPast: boolean = useMemo(() => selectedElectionDateParam ? isElectionPast(selectedElectionDateParam) : false, [selectedElectionDateParam, isElectionPast]);
 
   useEffect(() => {
     setAllOfficesData(getAllOffices());
     setAllCyclesData(getAllCycles()); 
-  }, []);
+  }, [dataVersion]);
 
   useEffect(() => {
     const params: Record<string, string> = {};
@@ -114,13 +116,13 @@ const CompareCandidatesPage: React.FC = () => {
     setLoading(true);
     setCandidate1(candidate1Id ? getCandidateById(parseInt(candidate1Id)) : null);
     setLoading(false);
-  }, [candidate1Id]);
+  }, [candidate1Id, dataVersion]);
 
   useEffect(() => {
     setLoading(true);
     setCandidate2(candidate2Id ? getCandidateById(parseInt(candidate2Id)) : null);
     setLoading(false);
-  }, [candidate2Id]);
+  }, [candidate2Id, dataVersion]);
   
   useEffect(() => {
     if (selectedOfficeIdParam && currentCycle) {
@@ -146,7 +148,7 @@ const CompareCandidatesPage: React.FC = () => {
       return getCandidatesByOfficeAndCycle(currentOffice.id, currentCycle.id, selectedDistrictParam || undefined);
     }
     return [];
-  }, [currentOffice, currentCycle, selectedDistrictParam, availableDistricts]);
+  }, [currentOffice, currentCycle, selectedDistrictParam, availableDistricts, dataVersion]);
 
   useEffect(() => {
     if (candidate1Id && !candidate2Id && availableCandidatesForSelection.length === 2) {

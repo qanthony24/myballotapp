@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useElectionData } from '../../services/electionDataStore';
 import { Link } from 'react-router-dom';
 import { Candidate, Office, Cycle } from '../../types';
 import { getFirestoreCandidates, deleteCandidatesBulk, getLocalOffices, getLocalCycles } from '../../services/firestoreDataService';
@@ -19,9 +20,10 @@ const AdminCandidatesPage: React.FC = () => {
   const officeMap = useMemo(() => new Map(offices.map((o) => [o.id, o])), [offices]);
   const cycleMap = useMemo(() => new Map(cycles.map((c) => [c.id, c])), [cycles]);
 
+  const { version: dataVersion } = useElectionData();
   useEffect(() => {
     loadCandidates();
-  }, []);
+  }, [dataVersion]);
 
   async function loadCandidates() {
     setLoading(true);

@@ -1,31 +1,46 @@
 /**
- * Firestore-backed data service.
+ * Firestore data service: admin writes, imports, and publishing.
  *
- * Reads candidates, elections, offices, and ballot measures from Firestore.
- * Falls back to constants.tsx for any data not yet in Firestore.
+ * READS go through services/electionDataStore.ts, which keeps a live,
+ * offline-capable copy of Firestore merged over the bundled snapshot. The
+ * async read functions below are kept for the admin pages' existing API and
+ * simply return the store's current data.
  *
  * Firestore collections:
- *   candidates/{id}   — candidate records (editable via admin UI)
- *   elections/{id}     — election/cycle records
- *   offices/{id}       — office records
- *   ballotMeasures/{id} — ballot measure records
- *   surveyQuestions/{key} — survey question definitions
- *   config/admin       — { adminEmails: string[] }
+ *   candidates/{id}        — candidate records
+ *   elections/{id}         — election/cycle records
+ *   offices/{id}           — office records
+ *   ballotMeasures/{id}    — ballot measure records
+ *   surveyQuestions/{key}  — survey question definitions
+ *   config/admin           — { adminEmails: string[] }
+ *
+ * Deleting sets `_deleted: true` (a "tombstone") instead of removing the
+ * document, so the bundled snapshot can't bring a deleted record back.
  */
 import { db, storage } from '../firebase';
 import {
-  collection,
   doc,
   getDoc,
-  getDocs,
   setDoc,
-  updateDoc,
-  query,
-  orderBy,
   writeBatch,
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { Candidate, Office, Cycle, BallotMeasure, SurveyQuestion } from '../types';
+import {
+  SNAPSHOT_CANDIDATES,
+  SNAPSHOT_BALLOT_MEASURES,
+  PREDEFINED_CYCLES,
+  PREDEFINED_OFFICES,
+  PREDEFINED_SURVEY_QUESTIONS,
+} from '../constants';
+import {
+  getCandidatesData,
+  getCyclesData,
+  getOfficesData,
+  getBallotMeasuresData,
+  getSurveyQuestionsData,
+  whenElectionDataReady,
+} from './electionDataStore';
 
 /** Recursively strip undefined values — Firestore rejects them. */
 function stripUndefined<T extends Record<string, unknown>>(obj: T): T {
@@ -41,110 +56,88 @@ function stripUndefined<T extends Record<string, unknown>>(obj: T): T {
   return clean as T;
 }
 
-import {
-  CANDIDATES_DATA,
-  OFFICES_DATA,
-  CYCLES_DATA,
-  BALLOT_MEASURES_DATA,
-  SURVEY_QUESTIONS_DATA,
-} from '../constants';
-
-// ---- Cache layer (avoid repeated Firestore reads) ----
-
-let candidateCache: Candidate[] | null = null;
-let candidateCacheTime = 0;
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
-
-export function invalidateCandidateCache(): void {
-  candidateCache = null;
-  candidateCacheTime = 0;
+/**
+ * For publishing bundled data with merge: drop empty strings and empty
+ * objects so they never overwrite real values an admin entered (photos,
+ * bios, survey answers).
+ */
+function stripEmpty(obj: Record<string, unknown>): Record<string, unknown> {
+  const clean: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(obj)) {
+    if (value === undefined || value === null || value === '') continue;
+    if (typeof value === 'object' && !Array.isArray(value)) {
+      const inner = stripEmpty(value as Record<string, unknown>);
+      if (Object.keys(inner).length === 0) continue;
+      clean[key] = inner;
+    } else {
+      clean[key] = value;
+    }
+  }
+  return clean;
 }
 
-// ---- Candidate reads ----
+const now = () => new Date().toISOString();
+
+/**
+ * Never persist the display-only placeholder avatar the data store adds for
+ * candidates without a photo (marked `_photoIsPlaceholder`).
+ */
+function withoutPlaceholder<T extends Record<string, unknown>>(data: T): T {
+  const { _photoIsPlaceholder, ...rest } = data as Record<string, unknown>;
+  if (_photoIsPlaceholder) rest.photoUrl = '';
+  return rest as T;
+}
+
+/** Kept for compatibility: the live store updates itself after writes. */
+export function invalidateCandidateCache(): void {}
+
+// ---- Candidate reads (from the live store) ----
 
 export async function getFirestoreCandidates(): Promise<Candidate[]> {
-  if (candidateCache && Date.now() - candidateCacheTime < CACHE_TTL) {
-    return candidateCache;
-  }
-
-  try {
-    const snap = await getDocs(collection(db, 'candidates'));
-    if (snap.empty) return CANDIDATES_DATA;
-
-    const firestoreCandidates = new Map<number, Candidate>();
-    snap.forEach((d) => {
-      const data = d.data() as Candidate;
-      firestoreCandidates.set(data.id, data);
-    });
-
-    // Merge: Firestore overrides constants.tsx per candidate ID
-    const merged = CANDIDATES_DATA.map((c) => {
-      const override = firestoreCandidates.get(c.id);
-      return override ? { ...c, ...override } : c;
-    });
-
-    // Add any Firestore-only candidates not in constants
-    for (const [id, fc] of firestoreCandidates) {
-      if (!CANDIDATES_DATA.find((c) => c.id === id)) {
-        merged.push(fc);
-      }
-    }
-
-    candidateCache = merged;
-    candidateCacheTime = Date.now();
-    return merged;
-  } catch (err) {
-    console.warn('Firestore read failed, using local data:', err);
-    return CANDIDATES_DATA;
-  }
+  await whenElectionDataReady();
+  return getCandidatesData();
 }
 
 export async function getFirestoreCandidateById(
   id: number,
 ): Promise<Candidate | undefined> {
-  try {
-    const docSnap = await getDoc(doc(db, 'candidates', String(id)));
-    if (docSnap.exists()) {
-      const local = CANDIDATES_DATA.find((c) => c.id === id);
-      return local
-        ? { ...local, ...(docSnap.data() as Candidate) }
-        : (docSnap.data() as Candidate);
-    }
-  } catch {
-    // fall through to local
-  }
-  return CANDIDATES_DATA.find((c) => c.id === id);
+  await whenElectionDataReady();
+  return getCandidatesData().find((c) => c.id === id);
 }
 
 // ---- Candidate writes (admin) ----
 
 export async function saveCandidate(candidate: Candidate): Promise<void> {
   const docRef = doc(db, 'candidates', String(candidate.id));
-  await setDoc(docRef, stripUndefined({
+  // Full replace (also clears any `_deleted` tombstone).
+  await setDoc(docRef, stripUndefined(withoutPlaceholder({
     ...candidate,
-    _updatedAt: new Date().toISOString(),
-  } as Record<string, unknown>));
-  invalidateCandidateCache();
+    _updatedAt: now(),
+  } as Record<string, unknown>)));
 }
 
 export async function updateCandidateFields(
   id: number,
   fields: Partial<Candidate>,
 ): Promise<void> {
+  // merge: works whether or not the candidate already has a Firestore doc
+  // (a candidate may so far exist only in the bundled snapshot).
   const docRef = doc(db, 'candidates', String(id));
-  await updateDoc(docRef, stripUndefined({
+  await setDoc(docRef, stripUndefined(withoutPlaceholder({
     ...fields,
-    _updatedAt: new Date().toISOString(),
-  } as Record<string, unknown>));
-  invalidateCandidateCache();
+    id,
+    _updatedAt: now(),
+  } as Record<string, unknown>)), { merge: true });
 }
 
-// ---- Candidate delete ----
+// ---- Candidate delete (tombstone) ----
 
 export async function deleteCandidate(candidateId: number): Promise<void> {
-  const { deleteDoc: delDoc } = await import('firebase/firestore');
-  await delDoc(doc(db, 'candidates', String(candidateId)));
-  invalidateCandidateCache();
+  await setDoc(doc(db, 'candidates', String(candidateId)), {
+    id: candidateId,
+    _deleted: true,
+    _updatedAt: now(),
+  }, { merge: true });
 }
 
 export async function deleteCandidatesBulk(candidateIds: number[]): Promise<number> {
@@ -154,12 +147,11 @@ export async function deleteCandidatesBulk(candidateIds: number[]): Promise<numb
     const batch = writeBatch(db);
     const chunk = candidateIds.slice(i, i + batchSize);
     for (const id of chunk) {
-      batch.delete(doc(db, 'candidates', String(id)));
+      batch.set(doc(db, 'candidates', String(id)), { id, _deleted: true, _updatedAt: now() }, { merge: true });
       count++;
     }
     await batch.commit();
   }
-  invalidateCandidateCache();
   return count;
 }
 
@@ -178,67 +170,52 @@ export async function uploadCandidatePhoto(
   return url;
 }
 
-// ---- Seed: bulk-import constants into Firestore ----
+// ---- Publish: push the bundled snapshot into Firestore (non-destructive) ----
+//
+// Uses merge writes with empty values stripped, so anything an admin entered
+// in Firestore (photos, focal points, bios, survey answers, deletions) is kept.
+// Fields that ARE present in the bundled data (names, offices, elections,
+// dates) overwrite Firestore — that's how pipeline corrections reach the app.
 
-export async function seedCandidatesToFirestore(
-  candidates?: Candidate[],
+async function publishDocs(
+  collectionName: string,
+  items: Record<string, unknown>[],
+  idOf: (item: Record<string, unknown>) => string,
 ): Promise<number> {
-  const data = candidates ?? CANDIDATES_DATA;
-  const batchSize = 400; // Firestore limit is 500 per batch
+  const batchSize = 400;
   let count = 0;
-
-  for (let i = 0; i < data.length; i += batchSize) {
+  for (let i = 0; i < items.length; i += batchSize) {
     const batch = writeBatch(db);
-    const chunk = data.slice(i, i + batchSize);
-    for (const c of chunk) {
-      batch.set(doc(db, 'candidates', String(c.id)), stripUndefined({
-        ...c,
-        _updatedAt: new Date().toISOString(),
-        _seededFromConstants: true,
-      } as Record<string, unknown>));
+    for (const item of items.slice(i, i + batchSize)) {
+      batch.set(
+        doc(db, collectionName, idOf(item)),
+        { ...stripEmpty(item), _updatedAt: now(), _publishedFromSnapshot: true },
+        { merge: true },
+      );
       count++;
     }
     await batch.commit();
   }
-
-  invalidateCandidateCache();
   return count;
 }
 
+export async function seedCandidatesToFirestore(
+  candidates?: Candidate[],
+): Promise<number> {
+  const data = (candidates ?? SNAPSHOT_CANDIDATES) as unknown as Record<string, unknown>[];
+  return publishDocs('candidates', data, (c) => String(c.id));
+}
+
 export async function seedElectionsToFirestore(): Promise<number> {
-  const batch = writeBatch(db);
-  for (const cycle of CYCLES_DATA) {
-    batch.set(doc(db, 'elections', String(cycle.id)), stripUndefined({
-      ...cycle,
-      _updatedAt: new Date().toISOString(),
-    } as Record<string, unknown>));
-  }
-  await batch.commit();
-  return CYCLES_DATA.length;
+  return publishDocs('elections', PREDEFINED_CYCLES as unknown as Record<string, unknown>[], (c) => String(c.id));
 }
 
 export async function seedOfficesToFirestore(): Promise<number> {
-  const batch = writeBatch(db);
-  for (const office of OFFICES_DATA) {
-    batch.set(doc(db, 'offices', String(office.id)), stripUndefined({
-      ...office,
-      _updatedAt: new Date().toISOString(),
-    } as Record<string, unknown>));
-  }
-  await batch.commit();
-  return OFFICES_DATA.length;
+  return publishDocs('offices', PREDEFINED_OFFICES as unknown as Record<string, unknown>[], (o) => String(o.id));
 }
 
 export async function seedSurveyQuestionsToFirestore(): Promise<number> {
-  const batch = writeBatch(db);
-  for (const q of SURVEY_QUESTIONS_DATA) {
-    batch.set(doc(db, 'surveyQuestions', q.key), stripUndefined({
-      ...q,
-      _updatedAt: new Date().toISOString(),
-    } as Record<string, unknown>));
-  }
-  await batch.commit();
-  return SURVEY_QUESTIONS_DATA.length;
+  return publishDocs('surveyQuestions', PREDEFINED_SURVEY_QUESTIONS as unknown as Record<string, unknown>[], (q) => String(q.key));
 }
 
 export async function seedAllToFirestore(): Promise<string> {
@@ -247,10 +224,8 @@ export async function seedAllToFirestore(): Promise<string> {
   const offices = await seedOfficesToFirestore();
   const questions = await seedSurveyQuestionsToFirestore();
   const measures = await seedBallotMeasuresToFirestore();
-  return `Seeded: ${candidates} candidates, ${elections} elections, ${offices} offices, ${questions} survey questions, ${measures} ballot measures`;
+  return `Published: ${candidates} candidates, ${elections} elections, ${offices} offices, ${questions} survey questions, ${measures} ballot measures`;
 }
-
-// ---- CSV import ----
 
 export interface CsvImportResult {
   imported: number;
@@ -393,32 +368,25 @@ export async function setAdminEmails(emails: string[]): Promise<void> {
   } as Record<string, unknown>));
 }
 
-// ---- Passthrough reads (these stay local for now, can migrate later) ----
+// ---- Synchronous reads (from the live store) ----
 
 export function getLocalOffices(): Office[] {
-  return OFFICES_DATA;
+  return getOfficesData();
 }
 
 export function getLocalCycles(): Cycle[] {
-  return CYCLES_DATA;
+  return getCyclesData();
 }
 
 export function getLocalSurveyQuestions(): SurveyQuestion[] {
-  return SURVEY_QUESTIONS_DATA;
+  return getSurveyQuestionsData();
 }
 
 // ---- Survey Question CRUD ----
 
 export async function getFirestoreSurveyQuestions(): Promise<SurveyQuestion[]> {
-  try {
-    const snap = await getDocs(collection(db, 'surveyQuestions'));
-    if (snap.empty) return SURVEY_QUESTIONS_DATA;
-    const questions: SurveyQuestion[] = [];
-    snap.forEach((d) => questions.push(d.data() as SurveyQuestion));
-    return questions.length > 0 ? questions : SURVEY_QUESTIONS_DATA;
-  } catch {
-    return SURVEY_QUESTIONS_DATA;
-  }
+  await whenElectionDataReady();
+  return getSurveyQuestionsData();
 }
 
 export async function saveSurveyQuestion(question: SurveyQuestion): Promise<void> {
@@ -429,8 +397,7 @@ export async function saveSurveyQuestion(question: SurveyQuestion): Promise<void
 }
 
 export async function deleteSurveyQuestion(key: string): Promise<void> {
-  const { deleteDoc: delDoc } = await import('firebase/firestore');
-  await delDoc(doc(db, 'surveyQuestions', key));
+  await setDoc(doc(db, 'surveyQuestions', key), { key, _deleted: true, _updatedAt: now() }, { merge: true });
 }
 
 export async function importSurveyResponsesCsv(
@@ -480,21 +447,13 @@ export async function importSurveyResponsesCsv(
         continue;
       }
 
-      const docRef = doc(db, 'candidates', String(candidateId));
-      const existing = await getDoc(docRef);
-      if (existing.exists()) {
-        const prev = (existing.data() as Record<string, unknown>).surveyResponses as Record<string, string> || {};
-        await updateDoc(docRef, stripUndefined({
-          surveyResponses: { ...prev, ...responses },
-          _updatedAt: new Date().toISOString(),
-        } as Record<string, unknown>));
-      } else {
-        await setDoc(docRef, stripUndefined({
-          id: candidateId,
-          surveyResponses: responses,
-          _updatedAt: new Date().toISOString(),
-        } as Record<string, unknown>));
-      }
+      const existing = getCandidatesData().find((c) => c.id === candidateId);
+      const prev = (existing?.surveyResponses as Record<string, string>) || {};
+      await setDoc(doc(db, 'candidates', String(candidateId)), stripUndefined({
+        id: candidateId,
+        surveyResponses: { ...prev, ...responses },
+        _updatedAt: now(),
+      } as Record<string, unknown>), { merge: true });
       result.imported++;
     } catch (err) {
       result.errors.push(`Row ${i + 1}: ${err instanceof Error ? err.message : String(err)}`);
@@ -507,95 +466,34 @@ export async function importSurveyResponsesCsv(
 }
 
 export function getLocalBallotMeasures(): BallotMeasure[] {
-  return BALLOT_MEASURES_DATA;
+  return getBallotMeasuresData();
 }
 
 // ---- Ballot Measure CRUD ----
 
-let measureCache: BallotMeasure[] | null = null;
-let measureCacheTime = 0;
-
-export function invalidateMeasureCache(): void {
-  measureCache = null;
-  measureCacheTime = 0;
-}
+/** Kept for compatibility: the live store updates itself after writes. */
+export function invalidateMeasureCache(): void {}
 
 export async function getFirestoreBallotMeasures(): Promise<BallotMeasure[]> {
-  if (measureCache && Date.now() - measureCacheTime < CACHE_TTL) {
-    return measureCache;
-  }
-
-  try {
-    const snap = await getDocs(collection(db, 'ballotMeasures'));
-    if (snap.empty) return BALLOT_MEASURES_DATA;
-
-    const firestoreMeasures = new Map<number, BallotMeasure>();
-    snap.forEach((d) => {
-      const data = d.data() as BallotMeasure;
-      firestoreMeasures.set(data.id, data);
-    });
-
-    const merged = BALLOT_MEASURES_DATA.map((m) => {
-      const override = firestoreMeasures.get(m.id);
-      return override ? { ...m, ...override } : m;
-    });
-
-    for (const [id, fm] of firestoreMeasures) {
-      if (!BALLOT_MEASURES_DATA.find((m) => m.id === id)) {
-        merged.push(fm);
-      }
-    }
-
-    measureCache = merged;
-    measureCacheTime = Date.now();
-    return merged;
-  } catch (err) {
-    console.warn('Firestore ballot measures read failed, using local data:', err);
-    return BALLOT_MEASURES_DATA;
-  }
+  await whenElectionDataReady();
+  return getBallotMeasuresData();
 }
 
 export async function getFirestoreBallotMeasureById(
   id: number,
 ): Promise<BallotMeasure | undefined> {
-  try {
-    const docSnap = await getDoc(doc(db, 'ballotMeasures', String(id)));
-    if (docSnap.exists()) {
-      const local = BALLOT_MEASURES_DATA.find((m) => m.id === id);
-      return local
-        ? { ...local, ...(docSnap.data() as BallotMeasure) }
-        : (docSnap.data() as BallotMeasure);
-    }
-  } catch {
-    // fall through
-  }
-  return BALLOT_MEASURES_DATA.find((m) => m.id === id);
+  await whenElectionDataReady();
+  return getBallotMeasuresData().find((m) => m.id === id);
 }
 
 export async function saveBallotMeasure(measure: BallotMeasure): Promise<void> {
   const docRef = doc(db, 'ballotMeasures', String(measure.id));
   await setDoc(docRef, stripUndefined({
     ...measure,
-    _updatedAt: new Date().toISOString(),
+    _updatedAt: now(),
   } as Record<string, unknown>));
-  invalidateMeasureCache();
 }
 
 export async function seedBallotMeasuresToFirestore(): Promise<number> {
-  const batchSize = 400;
-  let count = 0;
-  for (let i = 0; i < BALLOT_MEASURES_DATA.length; i += batchSize) {
-    const batch = writeBatch(db);
-    const chunk = BALLOT_MEASURES_DATA.slice(i, i + batchSize);
-    for (const m of chunk) {
-      batch.set(doc(db, 'ballotMeasures', String(m.id)), stripUndefined({
-        ...m,
-        _updatedAt: new Date().toISOString(),
-      } as Record<string, unknown>));
-      count++;
-    }
-    await batch.commit();
-  }
-  invalidateMeasureCache();
-  return count;
+  return publishDocs('ballotMeasures', SNAPSHOT_BALLOT_MEASURES as unknown as Record<string, unknown>[], (m) => String(m.id));
 }

@@ -44,6 +44,8 @@ export interface Candidate {
   slug: string;
   photoUrl: string;
   photoFocalPoint?: PhotoFocalPoint;
+  /** Set by the data store when photoUrl is a display-only placeholder avatar. Never saved. */
+  _photoIsPlaceholder?: boolean;
   party: string;
   officeId: number;
   runningMateName?: string;

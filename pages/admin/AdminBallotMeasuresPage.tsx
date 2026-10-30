@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useElectionData } from '../../services/electionDataStore';
 import { Link } from 'react-router-dom';
 import { BallotMeasure } from '../../types';
 import { getFirestoreBallotMeasures, getLocalCycles } from '../../services/firestoreDataService';
@@ -12,12 +13,13 @@ const AdminBallotMeasuresPage: React.FC = () => {
   const [electionFilter, setElectionFilter] = useState('');
   const cycles = getLocalCycles();
 
+  const { version: dataVersion } = useElectionData();
   useEffect(() => {
     getFirestoreBallotMeasures().then((data) => {
       setMeasures(data);
       setLoading(false);
     });
-  }, []);
+  }, [dataVersion]);
 
   const filtered = useMemo(() => {
     return measures.filter((m) => {

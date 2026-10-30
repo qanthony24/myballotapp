@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useElectionData } from '../../services/electionDataStore';
 import { Link } from 'react-router-dom';
 import { Cycle } from '../../types';
 import { getAllCycles, getFormattedElectionName } from '../../services/dataService';
@@ -36,7 +37,8 @@ const InfoCard: React.FC<InfoCardProps> = ({ title, icon, children }) => {
 };
 
 const InfoEssentialsPage: React.FC = () => {
-  const allElectionEvents = useMemo(() => getAllCycles(), []);
+  const { version: dataVersion } = useElectionData();
+  const allElectionEvents = useMemo(() => getAllCycles(), [dataVersion]); // eslint-disable-line react-hooks/exhaustive-deps
   const allNotesSummary = useAllNotesSummary();
   const { uiDensity, setUiDensity } = useSettings();
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useElectionData } from '../../services/electionDataStore';
 import { Link } from 'react-router-dom';
 import { SurveyQuestion } from '../../types';
 import {
@@ -17,9 +18,10 @@ const AdminSurveyQuestionsPage: React.FC = () => {
   const [newQuestion, setNewQuestion] = useState('');
   const [saved, setSaved] = useState(false);
 
+  const { version: dataVersion } = useElectionData();
   useEffect(() => {
     loadQuestions();
-  }, []);
+  }, [dataVersion]);
 
   async function loadQuestions() {
     setLoading(true);

@@ -90,17 +90,19 @@ const AdminSetupPage: React.FC = () => {
 
       {/* Seed data */}
       <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-        <h2 className="text-lg font-semibold text-midnight-navy mb-2">Seed Firestore</h2>
+        <h2 className="text-lg font-semibold text-midnight-navy mb-2">Publish bundled data to the database</h2>
         <p className="text-sm text-gray-500 mb-4">
-          Import the current mock data from constants.tsx into Firestore. This creates documents for
-          all candidates, elections, offices, and survey questions. Existing documents will be overwritten.
+          The database is what the app shows. This pushes the election data bundled in the code
+          (from the data pipeline: candidates, elections, offices, survey questions, measures) into
+          the database. It's safe to re-run: it only fills in or updates the fields the bundled data
+          has, and never erases photos, bios, survey answers or deletions you made here.
         </p>
         <button
           onClick={handleSeed}
           disabled={seeding}
           className="bg-midnight-navy text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-opacity-90 disabled:opacity-50"
         >
-          {seeding ? 'Seeding...' : 'Seed All Data to Firestore'}
+          {seeding ? 'Publishing...' : 'Publish bundled data'}
         </button>
         {seedResult && (
           <p className={`text-sm mt-3 ${seedResult.startsWith('Error') ? 'text-red-500' : 'text-green-600'}`}>

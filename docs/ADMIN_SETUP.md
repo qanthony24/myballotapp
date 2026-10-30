@@ -47,15 +47,32 @@ Do the bootstrap step **before** deploying, or you'll lock yourself out of the a
 `/admin/*` and `/debug/ballot-feed` are also hidden behind an in-app admin check,
 but that's only for convenience: the rules are what actually block writes.
 
-## Cleaning stale data out of Firestore
+## How election data flows (since Oct 29, 2026)
 
-The app merges Firestore over the bundled JSON. Firestore wins for any candidate
-ID it has, and candidates that exist only in Firestore are still shown. So if
-Firestore was seeded before the October 2026 cleanup, stale records (e.g. Bill
-Cassidy on the November ballot, Sharon Weston Broome, Metro Council) will keep
-showing up until they're removed. Use **Admin → Candidates** to delete them in
-bulk, then use **Seed All Data to Firestore** on the Setup page to rewrite the
-current records.
+**The database (Firestore) is the source of truth.** The app starts from a copy
+of the data bundled in the code, then loads the database on top of it and stays
+subscribed. Your dashboard edits reach every screen within seconds, with no app
+release. The last data loaded is cached on the device, so the app keeps working
+offline.
+
+- **Editing:** use the admin dashboard. Changes are live immediately. Clearing
+  a field (e.g. removing an outdated photo or bio) really clears it: an empty
+  value in the database wins over the bundled copy.
+- **Deleting:** the dashboard marks a record `_deleted: true` instead of
+  removing it, so the bundled copy can't bring it back. To undo a deletion,
+  remove that field in the Firebase console, or re-save the record.
+- **Bulk changes from the data pipeline** (seed files): run the pipeline, then
+  **Admin → Setup → Publish bundled data**. Publishing only fills in or updates
+  the fields the bundled data has. It never erases photos, bios, survey answers
+  or deletions made in the dashboard.
+- **Before an App Store build:** run `npm run data:snapshot` to refresh the
+  bundled copy with exactly what the app currently shows (bundled data with
+  database edits merged on top, deletions removed), then commit the result. This only
+  matters for a brand-new install that has never been online.
+
+A candidate with no elections ticked is hidden from voters. That's how the
+House candidates from the suspended pre-Callais primaries are kept: still in
+the database, but not on any ballot.
 
 ## Testing the rules
 
