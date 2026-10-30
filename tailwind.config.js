@@ -2,7 +2,9 @@
 export default {
   content: [
     './index.html',
-    './**/*.{tsx,ts,jsx,js}',
+    // Scan only app source (a ./**/* glob would also crawl node_modules and slow every build).
+    './*.{tsx,ts}',
+    './{components,pages,hooks,services,lib}/**/*.{tsx,ts}',
     '!./node_modules/**',
     '!./data-pipeline/**',
     '!./dist/**',

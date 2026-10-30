@@ -62,7 +62,7 @@ Civic API does not currently carry Louisiana election data (no VIP feed).
   next race is 2028), plus Family Court Judge and "Proposition L" (could not be
   verified).
 
-`data/results/elections.json` is intentionally empty. The previous contents
+`public/data/results/elections.json` is intentionally empty. The previous contents
 were placeholder numbers presented as real results. Only add results copied
 from official Secretary of State returns.
 
