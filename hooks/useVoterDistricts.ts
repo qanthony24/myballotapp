@@ -10,6 +10,8 @@ export interface SavedVoterDistricts {
   matchedAddress?: string;
   source: 'address' | 'location';
   districts: VoterDistrict[];
+  /** Key prefixes the local map lookup answered for (see services/localDistricts.ts). */
+  checked?: string[];
   savedAt: string;
 }
 
@@ -68,8 +70,19 @@ function subscribe(l: () => void) {
   return () => listeners.delete(l);
 }
 
+/** Every key on the voter's ballot, plus "checked:<prefix>" markers (see ballotScope.statusForKey). */
+export function voterKeySet(saved: Pick<SavedVoterDistricts, 'districts' | 'checked'>): Set<string> {
+  const keys = new Set<string>();
+  for (const d of saved.districts) {
+    keys.add(d.key);
+    d.extraKeys?.forEach((k) => keys.add(k));
+  }
+  saved.checked?.forEach((p) => keys.add(`checked:${p}`));
+  return keys;
+}
+
 export function useVoterDistricts(): { saved: SavedVoterDistricts | null; keys: Set<string> | null } {
   const saved = useSyncExternalStore(subscribe, () => current, () => current);
-  const keys = useMemo(() => (saved ? new Set(saved.districts.map((d) => d.key)) : null), [saved]);
+  const keys = useMemo(() => (saved ? voterKeySet(saved) : null), [saved]);
   return { saved, keys };
 }

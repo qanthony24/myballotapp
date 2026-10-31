@@ -111,11 +111,16 @@ the data pipeline's IDs.
 
 Voters enter their address (or tap "Use my location") on the Candidates or My
 Ballot page. The app asks the U.S. Census Bureau's free geocoder which
-districts that address is in, saves the result **on the voter's device only**,
-and hides candidates whose race is definitely not on their ballot. Races it
-can't match stay visible. Nothing about the address is stored by MyBallot.
+districts that address is in. In East Baton Rouge Parish it also asks the
+City-Parish's official district maps (maps.brla.gov) for the local ones,
+sending only the map point, never the address. The result is saved **on the
+voter's device only**. Candidates whose race is definitely not on their ballot
+are hidden; races the app can't match stay visible as "might be on your ballot".
+If a map service is down, its races fall back to "might be", never to hidden.
 
-District keys the Census lookup provides:
+### District keys
+
+From the Census (every Louisiana address):
 
 | District | Key format | Example |
 |---|---|---|
@@ -124,13 +129,48 @@ District keys the Census lookup provides:
 | State Senate | `la-sen-N` | `la-sen-14` |
 | State House | `la-house-N` | `la-house-67` |
 | Parish | `parish-<name>` | `parish-east-baton-rouge` |
-| City/town | `city-<name>` | `city-baton-rouge` |
+| City/town | `city-<name>` | `city-baton-rouge`, `city-st-george` |
 
-So a parishwide race (e.g. sheriff) uses `parish-east-baton-rouge`, and a
-Baton Rouge city race uses `city-baton-rouge`. **Not yet matchable:** BESE,
-PSC, judicial, school board, council, JP and constable districts. The Census
-doesn't provide these, so they'll need map files later. Until then, those
-races show to everyone in the election with no filtering.
+From East Baton Rouge City-Parish maps (EBR addresses only, for now):
+
+| District | Key format | Example |
+|---|---|---|
+| BESE | `la-bese-N` | `la-bese-8` |
+| Public Service Commission | `la-psc-N` | `la-psc-3` |
+| Supreme Court | `la-supreme-N` | `la-supreme-2` |
+| Metro Council | `ebr-council-N` | `ebr-council-10` |
+| Baker / Central / Zachary city council | `city-baker-council-N` etc. | `city-central-council-4` |
+| School board (EBR, Central, Baker, Zachary) | `ebr-school-N`, `central-school-N`, `baker-school-N`, `zachary-school-N` | `ebr-school-5` |
+| 19th JDC judge, by division | `jdc-19-div-<letter>` | `jdc-19-div-d` |
+| Baton Rouge City Court judge, by division | `br-city-court-div-<letter>` | `br-city-court-div-b` |
+| Voting precinct | `ebr-precinct-<ward>-<precinct>` | `ebr-precinct-1-086` |
+
+Inside EBR the city comes from the City-Parish's city limits, which already
+include St. George (the Census may not yet).
+
+### Keys you don't have to type
+
+A race's key is filled in automatically from its office:
+
+- District type **statewide, U.S. House, State Senate, State House, BESE, PSC
+  or Supreme Court**, plus the district number: "BESE Member, District 8" →
+  `la-bese-8`.
+- Or the office's **key prefix** (Admin → Offices) plus the district number or
+  letter: Metro Council has prefix `ebr-council`, so "District 10" →
+  `ebr-council-10`. A 19th JDC office with prefix `jdc-19-div` turns
+  "Division D" into `jdc-19-div-d`. An office with a prefix and no district
+  (e.g. Central Mayor, prefix `city-central`) uses the prefix as is.
+
+Built-in prefixes: Metro Council `ebr-council`, School Board Member
+`ebr-school`, City Court Judge `br-city-court-div`. If you add offices for
+another parish, give them their own prefix or type the key on each race.
+
+Parishwide races (sheriff, assessor, clerk) use `parish-<name>`; at-large city
+races use `city-<name>`.
+
+**Not yet matchable:** local districts outside East Baton Rouge, BESE/PSC/
+Supreme Court outside EBR, and JP and constable districts anywhere. Those races
+show to everyone in the election as "might be on your ballot".
 
 ## Testing the rules
 

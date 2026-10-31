@@ -28,6 +28,8 @@ export interface Office {
   slug: string;
   level?: OfficeLevel;
   districtType?: DistrictType;
+  /** Builds the address → ballot key from the race's district, e.g. "ebr-council" + "District 10" → "ebr-council-10". */
+  districtKeyPrefix?: string;
   _deleted?: boolean;
 }
 

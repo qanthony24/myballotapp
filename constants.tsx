@@ -60,8 +60,8 @@ export const formatElectionName = (electionDate, baseName) => {
 const PREDEFINED_OFFICES_DATA: Office[] = [
     { id: 1, name: "Mayor-President", slug: "mayor-president", level: "parish", districtType: "parishwide" },
     { id: 2, name: "State Representative", slug: "state-representative", level: "state", districtType: "state-house" },
-    { id: 3, name: "City Court Judge", slug: "city-court-judge", level: "judicial", districtType: "judicial" },
-    { id: 4, name: "Metro Council", slug: "metro-council", level: "parish", districtType: "parish-council" },
+    { id: 3, name: "City Court Judge", slug: "city-court-judge", level: "judicial", districtType: "judicial", districtKeyPrefix: "br-city-court-div" },
+    { id: 4, name: "Metro Council", slug: "metro-council", level: "parish", districtType: "parish-council", districtKeyPrefix: "ebr-council" },
     { id: 5, name: "US President", slug: "us-president", level: "federal", districtType: "statewide" },
     // ID 6 (US Vice President) is removed.
     { id: 7, name: "US Senator", slug: "us-senator", level: "federal", districtType: "statewide" },
@@ -71,7 +71,7 @@ const PREDEFINED_OFFICES_DATA: Office[] = [
     { id: 11, name: "Attorney General", slug: "attorney-general", level: "state", districtType: "statewide" },
     { id: 12, name: "Secretary of State", slug: "secretary-of-state", level: "state", districtType: "statewide" },
     { id: 13, name: "State Treasurer", slug: "state-treasurer", level: "state", districtType: "statewide" },
-    { id: 14, name: "School Board Member", slug: "school-board-member", level: "parish", districtType: "school-board" },
+    { id: 14, name: "School Board Member", slug: "school-board-member", level: "parish", districtType: "school-board", districtKeyPrefix: "ebr-school" },
     { id: 15, name: "Parish Sheriff", slug: "parish-sheriff", level: "parish", districtType: "parishwide" },
 ];
 

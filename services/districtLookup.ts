@@ -11,7 +11,8 @@
  *   statewide (Louisiana), congressional district (current/new map),
  *   State Senate and State House districts, parish, incorporated city/town.
  * Not available from the Census: BESE, PSC, judicial, school board, council,
- * JP/constable districts — those need map files (future work).
+ * precinct — see services/localDistricts.ts (East Baton Rouge so far).
+ * JP/constable districts aren't covered anywhere yet.
  */
 
 export type VoterDistrictType =
@@ -20,7 +21,15 @@ export type VoterDistrictType =
   | 'state-senate'
   | 'state-house'
   | 'parishwide'
-  | 'municipal';
+  | 'municipal'
+  | 'bese'
+  | 'psc'
+  | 'supreme-court'
+  | 'parish-council'
+  | 'city-council'
+  | 'school-board'
+  | 'judicial'
+  | 'precinct';
 
 export interface VoterDistrict {
   type: VoterDistrictType;
@@ -30,6 +39,8 @@ export interface VoterDistrict {
   label: string;
   /** District number where relevant (e.g. 61). */
   number?: number;
+  /** More keys this district puts on the ballot (e.g. the court divisions a 19th JDC section votes on). */
+  extraKeys?: string[];
 }
 
 export interface DistrictLookupResult {

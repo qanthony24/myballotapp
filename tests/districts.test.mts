@@ -62,7 +62,8 @@ assert.equal(derivedDistrictKey(offices[1], 'U.S. House, 6th District'), 'la-cd-
 
 // Candidate uses their saved race's key when there is one.
 const races: any[] = [{ id: 'x', officeId: 4, district: 'District 10', districtKey: 'ebr-council-10' }];
-assert.equal(candidateBallotStatus({ officeId: 4, district: 'district 10' } as any, races, offices, voter), 'no');
+assert.equal(candidateBallotStatus({ officeId: 4, district: 'district 10' } as any, races, offices, voter), 'unknown', 'council map not looked up yet');
+assert.equal(candidateBallotStatus({ officeId: 4, district: 'district 10' } as any, races, offices, new Set([...voter, 'checked:ebr-council'])), 'no');
 assert.equal(candidateBallotStatus({ officeId: 4, district: 'district 10' } as any, races, offices, new Set(['ebr-council-10'])), 'yes');
 assert.equal(candidateBallotStatus({ officeId: 7 } as any, [], offices, voter), 'yes');
 console.log('ballot matching OK');

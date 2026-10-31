@@ -74,7 +74,10 @@ const OfficeRow: React.FC<{ office: Office; inUse: number; isNew?: boolean; onDo
       <tr className="border-t">
         <td className="px-3 py-2 font-medium text-midnight-navy">{office.name}</td>
         <td className="px-3 py-2 text-sm text-gray-600">{levelLabel}</td>
-        <td className={`px-3 py-2 text-sm ${office.districtType ? 'text-gray-600' : 'text-amber-700'}`}>{typeLabel}</td>
+        <td className={`px-3 py-2 text-sm ${office.districtType ? 'text-gray-600' : 'text-amber-700'}`}>
+          {typeLabel}
+          {office.districtKeyPrefix && <div className="text-xs text-gray-500">Key: <code>{office.districtKeyPrefix}-…</code></div>}
+        </td>
         <td className="px-3 py-2 text-sm text-gray-500">{inUse}</td>
         <td className="px-3 py-2 text-sm text-right space-x-3 whitespace-nowrap">
           <button onClick={() => setEditing(true)} className="text-civic-blue underline">Edit</button>
@@ -97,6 +100,13 @@ const OfficeRow: React.FC<{ office: Office; inUse: number; isNew?: boolean; onDo
           <option value="">Not set</option>
           {DISTRICT_TYPES.map((d) => <option key={d.value} value={d.value}>{d.label}</option>)}
         </select>
+        <input
+          className={`${field} mt-1`}
+          value={o.districtKeyPrefix ?? ''}
+          placeholder="Key prefix (optional), e.g. ebr-council"
+          title="Races for this office get the key prefix + district number or letter, e.g. ebr-council + District 10 → ebr-council-10. See docs/ADMIN_SETUP.md for the list."
+          onChange={(e) => setO({ ...o, districtKeyPrefix: e.target.value.trim().toLowerCase() })}
+        />
       </td>
       <td className="px-3 py-2 text-sm text-gray-500">{inUse}</td>
       <td className="px-3 py-2 text-sm text-right whitespace-nowrap space-x-2">
