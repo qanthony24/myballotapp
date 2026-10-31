@@ -3,7 +3,9 @@ import { useElectionData } from '../services/electionDataStore';
 import FindMyBallot from '../components/ballot/FindMyBallot';
 import { useVoterDistricts } from '../hooks/useVoterDistricts';
 import { candidateBallotStatus } from '../services/ballotScope';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { shareUrlFor, shareBallot } from './PrintableBallotPage';
+import { trackEvent } from '../services/analytics';
 import { useBallot } from '../hooks/useBallot';
 import { useAuth } from '../hooks/useAuth';
 import { 
@@ -18,7 +20,7 @@ import {
     isElectionPast // Import directly from dataService
 } from '../services/dataService';
 import { Candidate, Office, /* BallotEntry, */ OfficeElectionResults, BallotMeasure, CandidateSelection, /* MeasureStance, */ Cycle, ReminderSettings } from '../types'; // Removed unused imports
-import { TrashIcon, UserCircleIcon, ArrowPathIcon, CheckBadgeIcon, ArrowDownTrayIcon, CalendarDaysIcon, LockClosedIcon, ChartBarIcon, InformationCircleIcon, DocumentCheckIcon, HandThumbUpIcon, HandThumbDownIcon, NoSymbolIcon, BellAlertIcon, PencilSquareIcon, CheckCircleIcon as SolidCheckCircleIcon } from '@heroicons/react/24/outline';
+import { TrashIcon, UserCircleIcon, ArrowPathIcon, CheckBadgeIcon, CalendarDaysIcon, LockClosedIcon, ChartBarIcon, InformationCircleIcon, DocumentCheckIcon, HandThumbUpIcon, HandThumbDownIcon, NoSymbolIcon, BellAlertIcon, PencilSquareIcon, PrinterIcon, ShareIcon, CheckCircleIcon as SolidCheckCircleIcon } from '@heroicons/react/24/outline';
 import SwipeableBallotItem from '../components/SwipeableBallotItem';
 import Confetti from 'react-confetti';
 import ElectionResultsDisplay from '../components/election/ElectionResultsDisplay'; 
@@ -53,7 +55,6 @@ const MyBallotPage: React.FC = () => {
     setElectionReminder  
   } = useBallot();
   
-  const [showSaveConfirmation, setShowSaveConfirmation] = useState(false);
   const [confettiShown, setConfettiShown] = useState(false);
   const [electionResults, setElectionResults] = useState<OfficeElectionResults[]>([]);
   const [isReminderModalOpen, setIsReminderModalOpen] = useState(false);
@@ -177,9 +178,16 @@ const MyBallotPage: React.FC = () => {
     }
   }, [ballotIsComplete, confettiShown]);
   
-  const handleSaveBallot = () => {
-    setShowSaveConfirmation(true);
-    setTimeout(() => setShowSaveConfirmation(false), 3000);
+  const navigate = useNavigate();
+  const [shareNotice, setShareNotice] = useState<string | null>(null);
+  const handleShareBallot = async () => {
+    if (!selectedElectionDate) return;
+    const result = await shareBallot(shareUrlFor(selectedElectionDate, currentElectionEntries), `My ballot: ${electionDisplayName}`, `My picks for the ${electionDisplayName}`);
+    trackEvent('ballot_share', { result, source: 'my_ballot' });
+    if (result === 'copied' || result === 'failed') {
+      setShareNotice(result === 'copied' ? 'Link copied. Paste it into a text or email.' : "Couldn't share or copy the link on this device.");
+      setTimeout(() => setShareNotice(null), 4000);
+    }
   };
   
   const handleMeasureStanceChange = (measureId: number, vote: 'support' | 'oppose' | null) => {
@@ -423,12 +431,20 @@ const MyBallotPage: React.FC = () => {
       {selectedElectionDate && (
           <div className="mt-8 flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
             {!currentElectionIsPastState && (
+                <>
                 <button
-                onClick={handleSaveBallot}
+                onClick={() => navigate('/my-ballot/print')}
                 className="w-full sm:w-auto flex items-center justify-center bg-civic-blue hover:bg-opacity-80 hover:bg-civic-blue text-white font-semibold py-3 px-6 rounded-md transition duration-150 ease-in-out text-lg"
                 >
-                <ArrowDownTrayIcon className="h-6 w-6 mr-2" /> Save My Ballot
+                <PrinterIcon className="h-6 w-6 mr-2" /> Print / Save PDF
                 </button>
+                <button
+                onClick={handleShareBallot}
+                className="w-full sm:w-auto flex items-center justify-center bg-civic-blue hover:bg-opacity-80 hover:bg-civic-blue text-white font-semibold py-3 px-6 rounded-md transition duration-150 ease-in-out text-lg"
+                >
+                <ShareIcon className="h-6 w-6 mr-2" /> Share
+                </button>
+                </>
             )}
             {!currentElectionIsPastState && currentElectionCycleDetails && (
                 <button
@@ -458,12 +474,9 @@ const MyBallotPage: React.FC = () => {
             </button>
         </div>
       )}
-      {showSaveConfirmation && (
-        <div
-            className="fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 transition-opacity duration-300 ease-in-out"
-            role="alert"
-        >
-            Ballot for {electionDisplayName} saved successfully!
+      {shareNotice && (
+        <div className="fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-midnight-navy text-white px-6 py-3 rounded-lg shadow-lg z-50" role="status">
+            {shareNotice}
         </div>
       )}
       {showConfetti && <Confetti recycle={false} />} 

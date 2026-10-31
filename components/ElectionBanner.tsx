@@ -33,7 +33,7 @@ const ElectionBanner: React.FC = () => {
   const isEarlyVotingActive = evStart && evEnd && now >= evStart && now <= evEnd;
 
   return (
-    <div className="bg-sunlight-gold text-midnight-navy text-center py-1.5 shadow-sm border-b border-midnight-navy/10 fixed top-16 left-0 w-full z-30">
+    <div className="bg-sunlight-gold text-midnight-navy text-center py-1.5 shadow-sm border-b border-midnight-navy/10 fixed top-16 left-0 w-full z-30 print:hidden">
       <div className="container mx-auto px-4 flex items-center justify-center gap-3 text-sm">
         <span className="font-semibold">{displayName}</span>
         {daysUntil >= 0 && (

@@ -38,6 +38,7 @@ import AdminElectionsPage from './pages/admin/AdminElectionsPage';
 import AdminOfficesPage from './pages/admin/AdminOfficesPage';
 import AdminRacesPage from './pages/admin/AdminRacesPage';
 import AdminResultsPage from './pages/admin/AdminResultsPage';
+import PrintableBallotPage from './pages/PrintableBallotPage';
 
 const AppRoutes: React.FC = () => {
   const { currentUser } = useAuth();
@@ -48,6 +49,8 @@ const AppRoutes: React.FC = () => {
       <Route path="/ballot-measures" element={<BallotMeasuresListPage />} />
       <Route path="/ballot-measure/:id" element={<BallotMeasureDetailPage />} />
       <Route path="/my-ballot" element={<MyBallotPage />} />
+      <Route path="/my-ballot/print" element={<PrintableBallotPage mode="mine" />} />
+      <Route path="/ballot/shared/:payload" element={<PrintableBallotPage mode="shared" />} />
       <Route path="/compare" element={<CompareCandidatesPage />} />
       <Route path="/candidate/:id" element={<CandidateProfilePage />} />
       <Route path="/profile" element={currentUser ? <UserProfilePage /> : <Navigate to="/auth" />} />
@@ -95,7 +98,7 @@ const App: React.FC = () => {
             </a>
             <HeaderComponent />
             {uiRefresh && <ElectionBanner />}
-            <main id="main-content" className={`flex-grow container mx-auto px-4 pb-20 ${uiRefresh ? 'pt-36' : 'pt-20'}`}>
+            <main id="main-content" className={`flex-grow container mx-auto px-4 pb-20 print:p-0 ${uiRefresh ? 'pt-36' : 'pt-20'}`}>
               <ErrorBoundary>
                 <AppRoutes />
               </ErrorBoundary>

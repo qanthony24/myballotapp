@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MapPinIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { lookupAddress, lookupCoordinates, DistrictLookupError } from '../../services/districtLookup';
+import { trackEvent } from '../../services/analytics';
 import { saveVoterDistricts, clearVoterDistricts, useVoterDistricts } from '../../hooks/useVoterDistricts';
 
 const OFFICIAL_SAMPLE_BALLOT = 'https://voterportal.sos.la.gov/';
@@ -24,9 +25,11 @@ const FindMyBallot: React.FC<{ compact?: boolean }> = ({ compact }) => {
     try {
       const r = await lookupAddress(address.trim());
       saveVoterDistricts({ source: 'address', matchedAddress: r.matchedAddress, districts: r.districts });
+      trackEvent('address_lookup', { method: 'address', outcome: 'success' });
       setEditing(false);
       setAddress('');
     } catch (err) {
+      trackEvent('address_lookup', { method: 'address', outcome: err instanceof DistrictLookupError ? err.code : 'error' });
       setError(err instanceof DistrictLookupError ? err.message : 'Something went wrong looking up that address.');
     } finally {
       setBusy(null);
@@ -45,8 +48,10 @@ const FindMyBallot: React.FC<{ compact?: boolean }> = ({ compact }) => {
         try {
           const r = await lookupCoordinates(pos.coords.latitude, pos.coords.longitude);
           saveVoterDistricts({ source: 'location', districts: r.districts });
+          trackEvent('address_lookup', { method: 'location', outcome: 'success' });
           setEditing(false);
         } catch (err) {
+          trackEvent('address_lookup', { method: 'location', outcome: err instanceof DistrictLookupError ? err.code : 'error' });
           setError(err instanceof DistrictLookupError ? err.message : 'Something went wrong looking up your location.');
         } finally {
           setBusy(null);
@@ -54,6 +59,7 @@ const FindMyBallot: React.FC<{ compact?: boolean }> = ({ compact }) => {
       },
       () => {
         setBusy(null);
+        trackEvent('address_lookup', { method: 'location', outcome: 'permission-denied' });
         setError("We couldn't get your location. Enter your address instead.");
       },
       { enableHighAccuracy: false, timeout: 15000, maximumAge: 600000 },
