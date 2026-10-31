@@ -1,7 +1,7 @@
 // Note: This file, when loaded by the browser via importmap, will be parsed as JavaScript.
 // Type imports have been removed to prevent issues if './types.ts' is fetched and parsed by a JS engine.
 
-import type { Candidate, BallotMeasure, OfficeElectionResults } from './types';
+import type { Candidate, BallotMeasure, OfficeElectionResults, Office } from './types';
 import pipelineCandidatesJson from './data/app/candidates.json';
 import pipelineMeasuresJson from './data/app/ballot-measures.json';
 
@@ -55,22 +55,24 @@ export const formatElectionName = (electionDate, baseName) => {
 };
 
 // Pre-define parts of RAW_DATA to avoid initialization errors
-const PREDEFINED_OFFICES_DATA = [
-    { "id": 1, "name": "Mayor-President", "slug": "mayor-president" },
-    { "id": 2, "name": "State Representative", "slug": "state-representative" }, // Districted
-    { "id": 3, "name": "City Court Judge", "slug": "city-court-judge" },
-    { "id": 4, "name": "Metro Council", "slug": "metro-council" }, // Districted
-    { "id": 5, "name": "US President", "slug": "us-president" },
+// Built-in offices. `level` and `districtType` tell address → ballot which district
+// map decides who votes in each race; admins can change them under Admin → Offices.
+const PREDEFINED_OFFICES_DATA: Office[] = [
+    { id: 1, name: "Mayor-President", slug: "mayor-president", level: "parish", districtType: "parishwide" },
+    { id: 2, name: "State Representative", slug: "state-representative", level: "state", districtType: "state-house" },
+    { id: 3, name: "City Court Judge", slug: "city-court-judge", level: "judicial", districtType: "judicial" },
+    { id: 4, name: "Metro Council", slug: "metro-council", level: "parish", districtType: "parish-council" },
+    { id: 5, name: "US President", slug: "us-president", level: "federal", districtType: "statewide" },
     // ID 6 (US Vice President) is removed.
-    { "id": 7, "name": "US Senator", "slug": "us-senator" },
-    { "id": 8, "name": "US Representative", "slug": "us-representative" }, // Districted
-    { "id": 9, "name": "Governor", "slug": "governor" },
-    { "id": 10, "name": "Lieutenant Governor", "slug": "lieutenant-governor" },
-    { "id": 11, "name": "Attorney General", "slug": "attorney-general" },
-    { "id": 12, "name": "Secretary of State", "slug": "secretary-of-state" },
-    { "id": 13, "name": "State Treasurer", "slug": "state-treasurer" },
-    { "id": 14, "name": "School Board Member", "slug": "school-board-member" }, // Districted
-    { "id": 15, "name": "Parish Sheriff", "slug": "parish-sheriff" }
+    { id: 7, name: "US Senator", slug: "us-senator", level: "federal", districtType: "statewide" },
+    { id: 8, name: "US Representative", slug: "us-representative", level: "federal", districtType: "congressional" },
+    { id: 9, name: "Governor", slug: "governor", level: "state", districtType: "statewide" },
+    { id: 10, name: "Lieutenant Governor", slug: "lieutenant-governor", level: "state", districtType: "statewide" },
+    { id: 11, name: "Attorney General", slug: "attorney-general", level: "state", districtType: "statewide" },
+    { id: 12, name: "Secretary of State", slug: "secretary-of-state", level: "state", districtType: "statewide" },
+    { id: 13, name: "State Treasurer", slug: "state-treasurer", level: "state", districtType: "statewide" },
+    { id: 14, name: "School Board Member", slug: "school-board-member", level: "parish", districtType: "school-board" },
+    { id: 15, name: "Parish Sheriff", slug: "parish-sheriff", level: "parish", districtType: "parishwide" },
 ];
 
 // Define Cycle Types for more realistic candidate assignment

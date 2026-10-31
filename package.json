@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "data:snapshot": "tsx data-pipeline/src/snapshot-from-firestore.ts",
-    "test:data": "tsx tests/data-merge.test.mts && tsx tests/races.test.mts",
+    "test:data": "tsx tests/data-merge.test.mts && tsx tests/races.test.mts && tsx tests/districts.test.mts",
     "deploy:preview": "npm run build && npx firebase-tools@13 hosting:channel:deploy preview --expires 7d",
     "deploy:rules": "npx firebase-tools@13 deploy --only firestore:rules,storage"
   },

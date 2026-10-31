@@ -20,6 +20,7 @@ import {
   ParsedRaceRow,
 } from '../../services/races';
 import { getAllParties } from '../../lib/parties';
+import { raceDistrictKey } from '../../services/ballotScope';
 
 const field = 'w-full border border-gray-200 rounded-md px-2 py-1.5 text-sm';
 const label = 'block text-xs font-medium text-gray-600 mb-1';
@@ -152,7 +153,13 @@ const RaceCard: React.FC<{ race: Race; offices: Office[]; candidates: Candidate[
             {(race.seats ?? 1) > 1 && <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">{race.seats} seats</span>}
           </div>
           <div className="text-xs text-gray-500 mt-0.5">
-            {race.districtKey ? <>District key: <code>{race.districtKey}</code></> : <span className="text-amber-700">No district key yet (needed later for address lookup)</span>}
+            {race.districtKey ? (
+              <>District key: <code>{race.districtKey}</code></>
+            ) : raceDistrictKey(race, offices) ? (
+              <>District key: <code>{raceDistrictKey(race, offices)}</code> (automatic)</>
+            ) : (
+              <span className="text-amber-700">Needs a district key for address matching (voters will see this race as “might be on your ballot”)</span>
+            )}
           </div>
         </div>
         <div className="flex gap-3 text-sm">
@@ -291,7 +298,7 @@ const AdminRacesPage: React.FC = () => {
 
   const list = useMemo(() => racesForElection(electionId, races, candidates, offices), [electionId, races, candidates, offices]);
   const unsaved = list.filter((r) => r._inferred).length;
-  const missingKeys = list.filter((r) => !r.districtKey).length;
+  const missingKeys = list.filter((r) => !raceDistrictKey(r, offices)).length;
 
   if (!election) {
     return (
@@ -309,7 +316,7 @@ const AdminRacesPage: React.FC = () => {
           <p className="text-sm text-midnight-navy/60 mt-1">
             {election.electionDate} · {list.length} race(s)
             {unsaved > 0 && <> · <span className="text-amber-700">{unsaved} not saved yet</span></>}
-            {missingKeys > 0 && <> · {missingKeys} without a district key</>}
+            {missingKeys > 0 && <> · <span className="text-amber-700">{missingKeys} need a district key</span></>}
           </p>
         </div>
         <div className="flex items-center gap-3">

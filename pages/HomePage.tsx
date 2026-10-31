@@ -8,6 +8,9 @@ import {
   getUpcomingCycles, 
 } from '../services/dataService';
 import { useElectionData } from '../services/electionDataStore';
+import FindMyBallot from '../components/ballot/FindMyBallot';
+import { useVoterDistricts } from '../hooks/useVoterDistricts';
+import { candidateBallotStatus } from '../services/ballotScope';
 import { useBallot } from '../hooks/useBallot';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { CardGridSkeleton } from '../components/ui/PageSkeleton';
@@ -21,7 +24,9 @@ const HomePage: React.FC = () => {
   } = useBallot();
 
   // Live election data (Firestore over the bundled snapshot); never empty, so no spinner needed.
-  const { candidates: allCandidatesData, version: dataVersion } = useElectionData();
+  const { candidates: allCandidatesData, races, offices, version: dataVersion } = useElectionData();
+  const { keys: voterKeys } = useVoterDistricts();
+  const [onlyMyBallot, setOnlyMyBallot] = useState(true);
   const upcomingElections: Cycle[] = useMemo(() => getUpcomingCycles(), [dataVersion]); // eslint-disable-line react-hooks/exhaustive-deps
   const isLoading = false;
   
@@ -63,7 +68,8 @@ const HomePage: React.FC = () => {
     return isCandidateSelected(candidateId, electionDate);
   };
 
-  const filteredCandidates = useMemo(() => {
+  // Candidates matching every filter except "only my ballot" (so we can say how many were hidden).
+  const candidatesBeforeBallotFilter = useMemo(() => {
     return allCandidatesData.filter(candidate => {
       const candidateCycleIds = candidate.cycleIds || [];
       if (candidateCycleIds.length === 0) return false;
@@ -91,8 +97,26 @@ const HomePage: React.FC = () => {
     });
   }, [allCandidatesData, searchTerm, selectedOffice, selectedElectionDateForFilter, selectedParty, upcomingElections]);
 
+  // When the voter has set their address, hide candidates whose race is definitely not on their ballot.
+  // Races we can't match yet ('unknown') stay visible.
+  const filteredCandidates = useMemo(() => {
+    if (!voterKeys || !onlyMyBallot) return candidatesBeforeBallotFilter;
+    return candidatesBeforeBallotFilter.filter((c) => candidateBallotStatus(c, races, offices, voterKeys) !== 'no');
+  }, [candidatesBeforeBallotFilter, voterKeys, onlyMyBallot, races, offices]);
+  const hiddenByBallot = candidatesBeforeBallotFilter.length - filteredCandidates.length;
+
   return (
     <div>
+      <FindMyBallot />
+      {voterKeys && (
+        <label className="flex items-center gap-2 text-sm text-midnight-navy mb-3" data-testid="only-my-ballot">
+          <input type="checkbox" className="h-4 w-4 accent-civic-blue" checked={onlyMyBallot} onChange={(e) => setOnlyMyBallot(e.target.checked)} />
+          Only races on my ballot
+          {onlyMyBallot && hiddenByBallot > 0 && (
+            <span className="text-gray-500">(hiding {hiddenByBallot} candidate{hiddenByBallot === 1 ? '' : 's'} from other districts)</span>
+          )}
+        </label>
+      )}
       <FilterControls
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}

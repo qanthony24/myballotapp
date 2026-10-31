@@ -1,5 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useElectionData } from '../services/electionDataStore';
+import FindMyBallot from '../components/ballot/FindMyBallot';
+import { useVoterDistricts } from '../hooks/useVoterDistricts';
+import { candidateBallotStatus } from '../services/ballotScope';
 import { Link } from 'react-router-dom';
 import { useBallot } from '../hooks/useBallot';
 import { useAuth } from '../hooks/useAuth';
@@ -58,7 +61,8 @@ const MyBallotPage: React.FC = () => {
   const [existingReminder, setExistingReminder] = useState<ReminderSettings | null>(null);
 
 
-  const { version: dataVersion } = useElectionData();
+  const { version: dataVersion, races, offices } = useElectionData();
+  const { keys: voterKeys } = useVoterDistricts();
 
   const allKnownElectionDates = useMemo(() => {
     const datesFromDefinedEvents = definedElectionEventDates.map(c => c.electionDate);
@@ -153,10 +157,13 @@ const MyBallotPage: React.FC = () => {
     if (!selectedElectionDate) return 0;
     const cycle = getCycleByElectionDate(selectedElectionDate);
     if (!cycle) return 0;
-    const candidatesForCycle = getAllCandidates().filter(c => (c.cycleIds || []).includes(cycle.id));
+    const candidatesForCycle = getAllCandidates()
+      .filter(c => (c.cycleIds || []).includes(cycle.id))
+      // With the voter's address set, count only races on their ballot (unknown races still count).
+      .filter(c => !voterKeys || candidateBallotStatus(c, races, offices, voterKeys) !== 'no');
     const uniqueRaces = new Set(candidatesForCycle.map(c => `${c.officeId}-${c.district || 'no-district'}`));
     return uniqueRaces.size;
-  }, [selectedElectionDate, dataVersion]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [selectedElectionDate, dataVersion, voterKeys]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const ballotIsComplete = populatedCandidateSelections.length >= totalRacesForElection && totalRacesForElection > 0;
 
@@ -215,6 +222,7 @@ const MyBallotPage: React.FC = () => {
     <div className="max-w-3xl mx-auto">
       <div className="bg-white shadow-xl rounded-lg p-6 md:p-10 border border-slate-100/30">
         <h1 className="text-3xl font-bold text-midnight-navy mb-4 text-center">My Ballot</h1>
+        <FindMyBallot compact />
 
         {!currentUser && currentElectionEntries.length > 0 && (
           <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-center">

@@ -92,8 +92,11 @@ Start at **Admin → Elections, Races & Results** (`/#/admin/elections`).
    races update, and a candidate with the same name, office and district is
    reused, not duplicated (that's also how runoff candidates carry over).
    Party codes: R, D, L, G, I, NP (No Party), NPT (Nonpartisan).
-   - **District key** is a machine label like `la-house-61` that address →
-     ballot will match against. You can leave it blank for now.
+   - **District key** decides which voters see the race (address → ballot,
+     below). It's automatic for offices whose district type is statewide,
+     U.S. House, State Senate or State House: "State Representative,
+     District 61" becomes `la-house-61`. Other races need one typed in (see
+     the key formats below), or voters see them as "might be on your ballot".
    - A race marked **Not saved yet** exists only because candidates are
      assigned to that office/district. Click *Save race* to make it real.
 4. **Results** (Elections → *Enter results*): type vote counts per race, tick
@@ -103,6 +106,31 @@ Start at **Admin → Elections, Races & Results** (`/#/admin/elections`).
 
 New candidates created here get IDs from 100000 up, so they never collide with
 the data pipeline's IDs.
+
+## Address → ballot (how voters see only their races)
+
+Voters enter their address (or tap "Use my location") on the Candidates or My
+Ballot page. The app asks the U.S. Census Bureau's free geocoder which
+districts that address is in, saves the result **on the voter's device only**,
+and hides candidates whose race is definitely not on their ballot. Races it
+can't match stay visible. Nothing about the address is stored by MyBallot.
+
+District keys the Census lookup provides:
+
+| District | Key format | Example |
+|---|---|---|
+| Statewide | `la` | `la` |
+| U.S. House (current map) | `la-cd-N` | `la-cd-6` |
+| State Senate | `la-sen-N` | `la-sen-14` |
+| State House | `la-house-N` | `la-house-67` |
+| Parish | `parish-<name>` | `parish-east-baton-rouge` |
+| City/town | `city-<name>` | `city-baton-rouge` |
+
+So a parishwide race (e.g. sheriff) uses `parish-east-baton-rouge`, and a
+Baton Rouge city race uses `city-baton-rouge`. **Not yet matchable:** BESE,
+PSC, judicial, school board, council, JP and constable districts. The Census
+doesn't provide these, so they'll need map files later. Until then, those
+races show to everyone in the election with no filtering.
 
 ## Testing the rules
 

@@ -1,0 +1,134 @@
+import React, { useState } from 'react';
+import { MapPinIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { lookupAddress, lookupCoordinates, DistrictLookupError } from '../../services/districtLookup';
+import { saveVoterDistricts, clearVoterDistricts, useVoterDistricts } from '../../hooks/useVoterDistricts';
+
+const OFFICIAL_SAMPLE_BALLOT = 'https://voterportal.sos.la.gov/';
+
+/**
+ * "Find my ballot": the voter enters an address (or uses their location) and
+ * the app works out their districts so it can show only their races.
+ */
+const FindMyBallot: React.FC<{ compact?: boolean }> = ({ compact }) => {
+  const { saved } = useVoterDistricts();
+  const [address, setAddress] = useState('');
+  const [busy, setBusy] = useState<'address' | 'location' | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [editing, setEditing] = useState(false);
+
+  async function findByAddress(e?: React.FormEvent) {
+    e?.preventDefault();
+    if (!address.trim()) return;
+    setBusy('address');
+    setError(null);
+    try {
+      const r = await lookupAddress(address.trim());
+      saveVoterDistricts({ source: 'address', matchedAddress: r.matchedAddress, districts: r.districts });
+      setEditing(false);
+      setAddress('');
+    } catch (err) {
+      setError(err instanceof DistrictLookupError ? err.message : 'Something went wrong looking up that address.');
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  function findByLocation() {
+    if (!navigator.geolocation) {
+      setError("Your browser can't share your location. Enter your address instead.");
+      return;
+    }
+    setBusy('location');
+    setError(null);
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        try {
+          const r = await lookupCoordinates(pos.coords.latitude, pos.coords.longitude);
+          saveVoterDistricts({ source: 'location', districts: r.districts });
+          setEditing(false);
+        } catch (err) {
+          setError(err instanceof DistrictLookupError ? err.message : 'Something went wrong looking up your location.');
+        } finally {
+          setBusy(null);
+        }
+      },
+      () => {
+        setBusy(null);
+        setError("We couldn't get your location. Enter your address instead.");
+      },
+      { enableHighAccuracy: false, timeout: 15000, maximumAge: 600000 },
+    );
+  }
+
+  // ---- Saved: show a summary ----
+  if (saved && !editing) {
+    const city = saved.districts.find((d) => d.type === 'municipal')?.label;
+    const parish = saved.districts.find((d) => d.type === 'parishwide')?.label;
+    const chips = saved.districts.filter((d) => d.type !== 'statewide' && d.type !== 'municipal' && d.type !== 'parishwide');
+    return (
+      <div className="bg-white border border-civic-blue/30 rounded-lg p-4 mb-4" data-testid="my-ballot-districts">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2">
+          <div>
+            <div className="flex items-center gap-2 text-midnight-navy font-semibold">
+              <MapPinIcon className="h-5 w-5 text-civic-blue" />
+              Showing your ballot
+            </div>
+            <p className="text-sm text-gray-600 mt-0.5">
+              {saved.source === 'location' ? 'Based on your current location' : saved.matchedAddress}
+              {(city || parish) && <> · {[city, parish].filter(Boolean).join(', ')}</>}
+            </p>
+            <div className="flex flex-wrap gap-1.5 mt-2">
+              {chips.map((d) => (
+                <span key={d.key} className="text-xs bg-blue-50 text-civic-blue border border-blue-100 px-2 py-0.5 rounded-full">{d.label}</span>
+              ))}
+            </div>
+          </div>
+          <div className="flex gap-3 text-sm whitespace-nowrap">
+            <button onClick={() => setEditing(true)} className="text-civic-blue underline">Change</button>
+            <button onClick={clearVoterDistricts} className="text-gray-500 underline">Forget</button>
+          </div>
+        </div>
+        {!compact && (
+          <p className="text-xs text-gray-500 mt-3">
+            Matched using U.S. Census district maps. Parish, council, school board and judicial races aren't matched by address yet. Always check your{' '}
+            <a href={OFFICIAL_SAMPLE_BALLOT} target="_blank" rel="noopener noreferrer" className="underline">official sample ballot</a>{' '}
+            from the Louisiana Secretary of State.
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  // ---- Not saved (or changing): show the form ----
+  return (
+    <div className="bg-white border border-gray-200 rounded-lg p-4 mb-4" data-testid="find-my-ballot">
+      <h2 className="text-midnight-navy font-semibold flex items-center gap-2">
+        <MapPinIcon className="h-5 w-5 text-civic-blue" /> See only what's on your ballot
+      </h2>
+      <p className="text-sm text-gray-600 mt-0.5">Enter the address where you're registered to vote.</p>
+      <form onSubmit={findByAddress} className="mt-3 flex flex-col md:flex-row gap-2">
+        <input
+          className="flex-1 border border-gray-200 rounded-md px-3 py-2 text-sm"
+          placeholder="e.g. 222 St Louis St, Baton Rouge, LA 70802"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          autoComplete="street-address"
+          aria-label="Your address"
+        />
+        <button type="submit" disabled={!!busy || !address.trim()} className="bg-civic-blue text-white px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50 flex items-center justify-center gap-1">
+          <MagnifyingGlassIcon className="h-4 w-4" /> {busy === 'address' ? 'Looking up…' : 'Find my ballot'}
+        </button>
+        <button type="button" onClick={findByLocation} disabled={!!busy} className="border border-gray-200 px-4 py-2 rounded-md text-sm disabled:opacity-50">
+          {busy === 'location' ? 'Locating…' : 'Use my location'}
+        </button>
+      </form>
+      {error && <p className="text-sm text-red-600 mt-2" role="alert">{error}</p>}
+      <p className="text-xs text-gray-500 mt-2">
+        Your address is sent only to the U.S. Census Bureau's address lookup and isn't stored by MyBallot. Your districts are saved on this device.
+        {saved && <> <button onClick={() => setEditing(false)} className="underline">Cancel</button></>}
+      </p>
+    </div>
+  );
+};
+
+export default FindMyBallot;
