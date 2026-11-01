@@ -47,6 +47,8 @@ export interface VoterDistrict {
 export interface DistrictLookupResult {
   matchedAddress?: string;
   coordinates?: { lat: number; lng: number };
+  /** 2020 Census block GEOID (15 digits), used for BESE/PSC/Supreme Court (services/blockDistricts.ts). */
+  block?: string;
   districts: VoterDistrict[];
 }
 
@@ -138,6 +140,11 @@ export function parseCensusGeographies(geos: CensusGeographies): VoterDistrict[]
   return out;
 }
 
+export function censusBlock(geos: CensusGeographies): string | undefined {
+  const g = layer(geos, /Census Blocks/i)?.GEOID;
+  return g && /^\d{15}$/.test(g) ? g : undefined;
+}
+
 /** Load a Census URL as JSONP. */
 function jsonp<T>(url: string, timeoutMs = 15000): Promise<T> {
   return new Promise((resolve, reject) => {
@@ -189,6 +196,7 @@ export async function lookupAddress(address: string): Promise<DistrictLookupResu
   return {
     matchedAddress: match.matchedAddress,
     coordinates: { lat: match.coordinates.y, lng: match.coordinates.x },
+    block: censusBlock(match.geographies),
     districts: parseCensusGeographies(match.geographies),
   };
 }
@@ -198,5 +206,5 @@ export async function lookupCoordinates(lat: number, lng: number): Promise<Distr
   const data = await jsonp<CensusCoordinatesResponse>(url);
   const geos = data.result?.geographies;
   if (!geos) throw new DistrictLookupError("We couldn't look up districts for your location.", 'not-found');
-  return { coordinates: { lat, lng }, districts: parseCensusGeographies(geos) };
+  return { coordinates: { lat, lng }, block: censusBlock(geos), districts: parseCensusGeographies(geos) };
 }

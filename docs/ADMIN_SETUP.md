@@ -131,6 +131,9 @@ From the Census (every Louisiana address):
 | Parish | `parish-<name>` | `parish-east-baton-rouge` |
 | City/town | `city-<name>` | `city-baton-rouge`, `city-st-george` |
 | Parish council / police jury (**approximate**) | `pj-<parish>-N` | `pj-pointe-coupee-8` |
+| BESE (Legislature block files) | `la-bese-N` | `la-bese-8` |
+| Public Service Commission | `la-psc-N` | `la-psc-3` |
+| Supreme Court | `la-supreme-N` | `la-supreme-2` |
 
 The State Senate district uses the 2026 plan (Act 955) even where the Census
 hasn't caught up yet (a few hundred blocks in Concordia, Morehouse and
@@ -148,9 +151,6 @@ From East Baton Rouge City-Parish maps (EBR addresses only, for now):
 
 | District | Key format | Example |
 |---|---|---|
-| BESE | `la-bese-N` | `la-bese-8` |
-| Public Service Commission | `la-psc-N` | `la-psc-3` |
-| Supreme Court | `la-supreme-N` | `la-supreme-2` |
 | Metro Council | `ebr-council-N` | `ebr-council-10` |
 | Baker / Central / Zachary city council | `city-baker-council-N` etc. | `city-central-council-4` |
 | School board (EBR, Central, Baker, Zachary) | `ebr-school-N`, `central-school-N`, `baker-school-N`, `zachary-school-N` | `ebr-school-5` |
@@ -190,8 +190,23 @@ another parish, give them their own prefix or type the key on each race.
 Parishwide races (sheriff, assessor, clerk) use `parish-<name>`; at-large city
 races use `city-<name>`.
 
-**Not yet matchable:** BESE/PSC/Supreme Court outside EBR (planned: the
-Legislature's block lists), school board and judicial districts in parishes
+### BESE, PSC and Supreme Court (every parish)
+
+These come from the Legislature's official block equivalency files (each
+census block → district for the enacted plan). The Census lookup already
+tells us the voter's block, so the match is exact. The tables live in
+`public/data/districts/` (one small file per parish) and are rebuilt with:
+
+```bash
+npm run data:districts
+```
+
+Run it again, and commit the output, whenever the Legislature enacts a new
+BESE, PSC or Supreme Court plan (update the file paths at the top of
+`scripts/build-district-blocks.mts`). Until the tables exist, those races show
+as "might be on your ballot".
+
+**Not yet matchable:** school board and judicial districts in parishes
 without official maps, and JP and constable districts (except Ascension wards). Those races
 show to everyone in the election as "might be on your ballot".
 

@@ -3,6 +3,7 @@ import { MapPinIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { lookupAddress, lookupCoordinates, DistrictLookupError } from '../../services/districtLookup';
 import { trackEvent } from '../../services/analytics';
 import { addLocalDistricts, PARISH_SOURCES } from '../../services/localDistricts';
+import { addBlockDistricts } from '../../services/blockDistricts';
 import { saveVoterDistricts, clearVoterDistricts, useVoterDistricts } from '../../hooks/useVoterDistricts';
 
 const OFFICIAL_SAMPLE_BALLOT = 'https://voterportal.sos.la.gov/';
@@ -26,8 +27,9 @@ const FindMyBallot: React.FC<{ compact?: boolean }> = ({ compact }) => {
     try {
       const r = await lookupAddress(address.trim());
       const local = await addLocalDistricts(r.districts, r.coordinates);
-      saveVoterDistricts({ source: 'address', matchedAddress: r.matchedAddress, districts: local.districts, checked: local.checked });
-      trackEvent('address_lookup', { method: 'address', outcome: 'success', local: local.outcome });
+      const blocks = await addBlockDistricts(local.districts, r.block);
+      saveVoterDistricts({ source: 'address', matchedAddress: r.matchedAddress, districts: blocks.districts, checked: [...local.checked, ...blocks.checked] });
+      trackEvent('address_lookup', { method: 'address', outcome: 'success', local: local.outcome, statewide: blocks.checked.length ? 'ok' : 'none' });
       setEditing(false);
       setAddress('');
     } catch (err) {
@@ -50,8 +52,9 @@ const FindMyBallot: React.FC<{ compact?: boolean }> = ({ compact }) => {
         try {
           const r = await lookupCoordinates(pos.coords.latitude, pos.coords.longitude);
           const local = await addLocalDistricts(r.districts, r.coordinates);
-          saveVoterDistricts({ source: 'location', districts: local.districts, checked: local.checked });
-          trackEvent('address_lookup', { method: 'location', outcome: 'success', local: local.outcome });
+          const blocks = await addBlockDistricts(local.districts, r.block);
+          saveVoterDistricts({ source: 'location', districts: blocks.districts, checked: [...local.checked, ...blocks.checked] });
+          trackEvent('address_lookup', { method: 'location', outcome: 'success', local: local.outcome, statewide: blocks.checked.length ? 'ok' : 'none' });
           setEditing(false);
         } catch (err) {
           trackEvent('address_lookup', { method: 'location', outcome: err instanceof DistrictLookupError ? err.code : 'error' });

@@ -13,7 +13,14 @@ export default defineConfig({
       manifest: false,
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
+        // ~64 per-parish district tables: fetched on demand (one per voter), cached below.
+        globIgnores: ['**/data/districts/**'],
         runtimeCaching: [
+          {
+            urlPattern: /\/data\/districts\/.*\.json$/,
+            handler: 'StaleWhileRevalidate',
+            options: { cacheName: 'district-tables', expiration: { maxEntries: 20, maxAgeSeconds: 365 * 24 * 60 * 60 } },
+          },
           {
             urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/i,
             handler: 'CacheFirst',
