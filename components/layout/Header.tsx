@@ -19,7 +19,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-slate-100 shadow-md fixed top-0 left-0 w-full z-50 print:hidden h-16 flex items-center border-b border-midnight-navy/10">
+    <header data-fixed-top className="bg-slate-100 shadow-md fixed top-0 left-0 w-full z-50 print:hidden h-16 flex items-center border-b border-midnight-navy/10">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-full">
         {/* Logo */}
         <Link to="/" className="flex items-center">

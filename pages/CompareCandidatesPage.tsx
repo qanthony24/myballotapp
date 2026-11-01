@@ -18,6 +18,7 @@ import LoadingSpinner from '../components/ui/LoadingSpinner';
 import { useBallot } from '../hooks/useBallot';
 import { ArrowLeftIcon, UsersIcon, CheckBadgeIcon, PlusCircleIcon, MinusCircleIcon, InformationCircleIcon, ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/24/outline';
 import { useNotes } from '../hooks/useNotes';
+import MobileComparison from '../components/compare/MobileComparison';
 
 const NoteCell: React.FC<{ candidate: Candidate | null; showBorder: boolean }> = ({ candidate, showBorder }) => {
   const { notes: candidateNotes, getLatestNote } = useNotes(candidate?.id ?? -1);
@@ -251,9 +252,9 @@ const CompareCandidatesPage: React.FC = () => {
       </button>
 
       <div className="bg-white shadow-xl rounded-lg p-6 md:p-10 border border-midnight-navy/20">
-        <h1 className="text-3xl font-bold text-midnight-navy mb-8 text-center">Compare Candidates</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-midnight-navy mb-6 md:mb-8 text-center">Compare Candidates</h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
           <div>
             <label htmlFor="election-select" className="block text-sm font-medium text-midnight-navy mb-1">
               Select Election
@@ -314,7 +315,7 @@ const CompareCandidatesPage: React.FC = () => {
         </div>
 
         {showCandidateSelectors && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-10">
             <div>
               <label htmlFor="candidate1-select" className="block text-sm font-medium text-midnight-navy mb-1">
                 Select Candidate 1
@@ -387,11 +388,23 @@ const CompareCandidatesPage: React.FC = () => {
 
 
         {showComparisonTable && (
-          <div className="overflow-x-auto">
-            <h2 className="text-2xl font-semibold text-midnight-navy mb-2">
+          <div>
+            <h2 className="text-xl md:text-2xl font-semibold text-midnight-navy mb-2">
               Comparison: {formattedComparisonOfficeName} - {formattedElectionDisplayName}
             </h2>
             {currentElectionIsPast && <p className="mb-4 text-sm text-midnight-navy/70 italic">Note: This is an archived comparison for a past election. Ballot actions are disabled.</p>}
+            <div className="md:hidden">
+              <MobileComparison
+                candidates={[candidate1!, candidate2!]}
+                questions={surveyQuestions}
+                ballotState={(c) => ({
+                  selected: isCandidateSelected(c.id, selectedElectionDateParam),
+                  disabled: currentElectionIsPast,
+                  toggle: () => handleCandidateBallotAction(c),
+                })}
+              />
+            </div>
+            <div className="hidden md:block overflow-x-auto">
             <table className="min-w-full divide-y divide-midnight-navy/20 border border-midnight-navy/20">
               <thead className="bg-slate-100">
                 <tr>
@@ -431,6 +444,7 @@ const CompareCandidatesPage: React.FC = () => {
                 <NoteRow candidates={[candidate1, candidate2]} />
               </tbody>
             </table>
+            </div>
           </div>
         )}
       </div>

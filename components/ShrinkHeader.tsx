@@ -30,6 +30,7 @@ const ShrinkHeader: React.FC = () => {
   return (
     <motion.header
       animate={{ height: shrink ? '3rem' : '4rem' }}
+      data-fixed-top
       className="backdrop-blur bg-slate-100/80 shadow-md fixed top-0 left-0 w-full z-50 print:hidden flex items-center border-b border-midnight-navy/10"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-full">
