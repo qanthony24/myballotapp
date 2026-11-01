@@ -70,3 +70,15 @@ assert.equal(ip.imageUrl, 'https://lailluminator.com/wp-content/uploads/2026/10/
 assert.equal(ip.summary, 'Short text only.', 'summary still from description');
 assert.equal(parseFeed('<rss><item><title>t</title><link>https://a.b/c</link><description>no image</description></item></rss>')[0].imageUrl, undefined);
 console.log('feed images OK');
+
+// Headline (og:image) extraction.
+import { extractOgImage } from '../functions/lib/news.js';
+const page = `<html><head><meta charset="utf-8"><meta property="og:title" content="x">
+<meta content="https://cms.bayouprogressive.com/uploads/banks-hero.jpg?w=1200&amp;h=630" property="og:image">
+<meta name="twitter:image" content="https://cms.bayouprogressive.com/other.jpg"></head><body><img src="/inline.jpg"></body></html>`;
+assert.equal(extractOgImage(page, 'https://bayouprogressive.com/a'), 'https://cms.bayouprogressive.com/uploads/banks-hero.jpg?w=1200&h=630', 'og:image wins, attribute order and entities handled');
+assert.equal(extractOgImage('<meta name="twitter:image" content="/img/lead.png">', 'https://lailluminator.com/2026/x/'), 'https://lailluminator.com/img/lead.png', 'twitter:image fallback, relative URL resolved');
+assert.equal(extractOgImage('<meta property="og:image" content="http://site.com/a.jpg">', 'https://site.com'), 'https://site.com/a.jpg', 'upgraded to https');
+assert.equal(extractOgImage('<meta property="og:image" content="https://site.com/logo.png">', 'https://site.com'), undefined, 'site logo is not a headline image');
+assert.equal(extractOgImage('<html>no meta</html>', 'https://site.com'), undefined);
+console.log('headline images OK');

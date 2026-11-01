@@ -13,7 +13,7 @@ import { onDocumentWritten, onDocumentCreated } from 'firebase-functions/v2/fire
 import { logger } from 'firebase-functions/v2';
 import { initializeApp } from 'firebase-admin/app';
 import { getFirestore, FieldValue } from 'firebase-admin/firestore';
-import { SOURCES, parseFeed, normalize, isRecent, dedupe, REACTIONS, holdReason, rateLimit, REPORTS_TO_HIDE } from './lib/news.js';
+import { SOURCES, parseFeed, normalize, isRecent, dedupe, REACTIONS, holdReason, rateLimit, REPORTS_TO_HIDE, FEED_HAS_LEAD_IMAGE, extractOgImage } from './lib/news.js';
 
 initializeApp();
 const db = getFirestore();
@@ -46,6 +46,55 @@ async function fetchSource(source, attempt = 1) {
   }
 }
 
+const OG_LOOKUPS_PER_RUN = 25;
+
+/** Read the article page's headline (og:image) image. Never throws. */
+async function fetchHeadlineImage(url) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 10000);
+  try {
+    const res = await fetch(url, { signal: ctrl.signal, headers: { 'User-Agent': 'MyBallot news reader (+https://myballot-app.web.app)', Accept: 'text/html' } });
+    if (!res.ok) return undefined;
+    return extractOgImage(await res.text(), url);
+  } catch {
+    return undefined;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/**
+ * Use each article's headline image (og:image), looked up once per article
+ * and remembered (ogChecked). Skipped for feeds that already carry the lead
+ * photo. Backfills at most OG_LOOKUPS_PER_RUN articles per refresh.
+ */
+async function addHeadlineImages(articles) {
+  const candidates = articles.filter((a) => !FEED_HAS_LEAD_IMAGE.has(a.sourceSlug));
+  if (!candidates.length) return { looked: 0, found: 0 };
+  const snaps = await db.getAll(...candidates.map((a) => db.collection('news').doc(a.id)));
+  const existing = new Map(snaps.map((d) => [d.id, d.exists ? d.data() : null]));
+  let looked = 0;
+  let found = 0;
+  for (const a of candidates) {
+    const prev = existing.get(a.id);
+    if (prev?.ogChecked) {
+      // Already looked up: keep what we stored (don't overwrite with a guess from the feed).
+      delete a.imageUrl;
+      continue;
+    }
+    if (looked >= OG_LOOKUPS_PER_RUN) continue; // next refresh
+    if (looked > 0) await sleep(500);
+    looked++;
+    const og = await fetchHeadlineImage(a.url);
+    if (og) {
+      a.imageUrl = og;
+      found++;
+    }
+    a.ogChecked = true;
+  }
+  return { looked, found };
+}
+
 export const refreshNews = onSchedule(
   { schedule: 'every 30 minutes', timeZone: 'America/Chicago', region: REGION, memory: '256MiB', timeoutSeconds: 300, retryCount: 0 },
   async () => {
@@ -66,6 +115,10 @@ export const refreshNews = onSchedule(
       }
     }
     const articles = dedupe(all);
+    const og = await addHeadlineImages(articles).catch((e) => {
+      logger.warn('headline images', e);
+      return { looked: 0, found: 0, error: String(e) };
+    });
     // Merge so reaction/comment counts on existing articles are kept.
     for (let i = 0; i < articles.length; i += 400) {
       const batch = db.batch();
@@ -76,7 +129,7 @@ export const refreshNews = onSchedule(
       }
       await batch.commit();
     }
-    await db.doc('config/newsStatus').set({ lastRefreshedAt: now.toISOString(), articles: articles.length, sources: status });
+    await db.doc('config/newsStatus').set({ lastRefreshedAt: now.toISOString(), articles: articles.length, sources: status, headlineImages: og });
     logger.info(`news refreshed: ${articles.length} articles`, status);
   },
 );

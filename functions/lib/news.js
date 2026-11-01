@@ -200,3 +200,35 @@ export function rateLimit(recent, nowMs, rate = COMMENT_RATE) {
   const kept = (recent ?? []).filter((t) => nowMs - t < rate.windowMs);
   return { over: kept.length >= rate.max, next: [...kept, nowMs].slice(-rate.max * 2) };
 }
+
+// ---- Headline image (og:image) from the article page ----
+
+/** Sources whose feed already carries the lead photo; never fetch their pages (they rate-limit). */
+export const FEED_HAS_LEAD_IMAGE = new Set(['the-advocate', 'nola-com', 'acadiana-advocate', 'shreveport-bossier-advocate']);
+
+/**
+ * The article's headline/share image: og:image, then twitter:image, then
+ * <link rel="image_src">. Returns an absolute https URL or undefined.
+ */
+export function extractOgImage(html, pageUrl) {
+  const head = html.slice(0, 300000);
+  const metas = [...head.matchAll(/<meta\b[^>]*>/gi)].map((m) => m[0]);
+  const attr = (tagHtml, name) => tagHtml.match(new RegExp(`\\s${name}\\s*=\\s*["']([^"']*)["']`, 'i'))?.[1];
+  const pick = (keys) => {
+    for (const k of keys) {
+      const t = metas.find((m) => (attr(m, 'property') ?? attr(m, 'name') ?? '').toLowerCase() === k);
+      const c = t && attr(t, 'content');
+      if (c) return c;
+    }
+    return undefined;
+  };
+  const raw = pick(['og:image:secure_url', 'og:image', 'og:image:url', 'twitter:image', 'twitter:image:src']) ?? head.match(/<link[^>]+rel=["']image_src["'][^>]+href=["']([^"']+)["']/i)?.[1];
+  if (!raw) return undefined;
+  try {
+    const u = new URL(decodeEntities(raw.trim()), pageUrl);
+    if (u.protocol === 'http:') u.protocol = 'https:';
+    return u.protocol === 'https:' && !NOT_A_PHOTO.test(u.pathname) ? u.toString() : undefined;
+  } catch {
+    return undefined;
+  }
+}

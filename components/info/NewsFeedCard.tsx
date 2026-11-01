@@ -20,7 +20,10 @@ const NewsFeedCard: React.FC<NewsFeedCardProps> = ({ article, social }) => {
         <img
           src={article.imageUrl}
           alt=""
-          className="w-full h-48 object-cover"
+          loading="lazy"
+          decoding="async"
+          referrerPolicy="no-referrer"
+          className="w-full h-48 object-cover bg-slate-100"
           onError={() => setImgError(true)}
         />
       )}
