@@ -19,7 +19,13 @@ initializeApp();
 const db = getFirestore();
 const REGION = 'us-central1';
 
-async function fetchSource(source) {
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * Fetch one feed. On 429/503 ("slow down"), wait (Retry-After, capped at
+ * 30 s) and try once more. We identify ourselves honestly in User-Agent.
+ */
+async function fetchSource(source, attempt = 1) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 20000);
   try {
@@ -27,7 +33,13 @@ async function fetchSource(source) {
       signal: ctrl.signal,
       headers: { 'User-Agent': 'MyBallot news reader (+https://myballot-app.web.app)', Accept: 'application/rss+xml, application/xml, text/xml' },
     });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    if ((res.status === 429 || res.status === 503) && attempt === 1) {
+      const wait = Math.min(30, parseInt(res.headers.get('retry-after') ?? '10', 10) || 10);
+      clearTimeout(timer);
+      await sleep(wait * 1000);
+      return fetchSource(source, 2);
+    }
+    if (!res.ok) throw new Error(`HTTP ${res.status}${attempt > 1 ? ' (after retry)' : ''}`);
     return parseFeed(await res.text());
   } finally {
     clearTimeout(timer);
@@ -35,23 +47,24 @@ async function fetchSource(source) {
 }
 
 export const refreshNews = onSchedule(
-  { schedule: 'every 30 minutes', timeZone: 'America/Chicago', region: REGION, memory: '256MiB', timeoutSeconds: 120, retryCount: 0 },
+  { schedule: 'every 30 minutes', timeZone: 'America/Chicago', region: REGION, memory: '256MiB', timeoutSeconds: 300, retryCount: 0 },
   async () => {
     const now = new Date();
     const status = {};
     const all = [];
-    await Promise.all(
-      SOURCES.map(async (s) => {
-        try {
-          const items = (await fetchSource(s)).map((r) => normalize(r, s, now)).filter(Boolean).filter((a) => isRecent(a, now));
-          all.push(...items);
-          status[s.slug] = { ok: true, count: items.length };
-        } catch (e) {
-          status[s.slug] = { ok: false, error: String(e?.message ?? e).slice(0, 200) };
-          logger.warn(`news source failed: ${s.slug}`, e);
-        }
-      }),
-    );
+    // One source at a time, a few seconds apart: four of them share one
+    // publishing platform (BLOX/TownNews), which rate-limits bursts.
+    for (const [i, s] of SOURCES.entries()) {
+      if (i > 0) await sleep(4000);
+      try {
+        const items = (await fetchSource(s)).map((r) => normalize(r, s, now)).filter(Boolean).filter((a) => isRecent(a, now));
+        all.push(...items);
+        status[s.slug] = { ok: true, count: items.length, withImages: items.filter((a) => a.imageUrl).length };
+      } catch (e) {
+        status[s.slug] = { ok: false, error: String(e?.message ?? e).slice(0, 200) };
+        logger.warn(`news source failed: ${s.slug}`, e);
+      }
+    }
     const articles = dedupe(all);
     // Merge so reaction/comment counts on existing articles are kept.
     for (let i = 0; i < articles.length; i += 400) {

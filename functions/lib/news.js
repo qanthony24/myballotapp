@@ -58,12 +58,26 @@ export function cleanAuthor(a) {
   return s || undefined;
 }
 
-function image(item, description) {
+// Tracking pixels, avatars and share buttons that show up as <img> in feed HTML.
+const NOT_A_PHOTO = /(gravatar|pixel|feedburner|stats\.wp|\/emoji\/|1x1|spacer|logo|icon|share)/i;
+
+/** First real photo in feed HTML (skips pixels/avatars, prefers https). */
+function firstPhoto(html) {
+  for (const m of (html ?? '').matchAll(/<img\b[^>]*>/gi)) {
+    const src = m[0].match(/\ssrc=["']([^"']+)["']/i)?.[1];
+    const w = parseInt(m[0].match(/\swidth=["']?(\d+)/i)?.[1] ?? '0', 10);
+    if (!src || NOT_A_PHOTO.test(src) || (w > 0 && w < 100)) continue;
+    return [m[0], src];
+  }
+  return null;
+}
+
+function image(item, html) {
   const m =
     item.match(/<media:content[^>]+url=["']([^"']+)["']/i) ??
     item.match(/<media:thumbnail[^>]+url=["']([^"']+)["']/i) ??
     enclosureImage(item) ??
-    (description ?? '').match(/<img[^>]+src=["']([^"']+)["']/i);
+    firstPhoto(html);
   const url = m?.[1] ? decodeEntities(m[1]) : undefined;
   return url && /^https:\/\//.test(url) ? url : undefined;
 }
@@ -76,7 +90,8 @@ export function parseFeed(xml) {
     const title = tag(item, 'title');
     const link = tag(item, 'link');
     if (!title || !link) continue;
-    const description = tag(item, 'description') ?? tag(item, 'content:encoded');
+    const content = tag(item, 'content:encoded');
+    const description = tag(item, 'description') ?? content;
     out.push({
       title: stripHtml(title),
       link: decodeEntities(link.trim()),
@@ -86,7 +101,7 @@ export function parseFeed(xml) {
         const a = tag(item, 'dc:creator') ?? tag(item, 'author');
         return a ? cleanAuthor(a) : undefined;
       })(),
-      imageUrl: image(item, description),
+      imageUrl: image(item, `${description ?? ''} ${content ?? ''}`),
     });
   }
   return out;

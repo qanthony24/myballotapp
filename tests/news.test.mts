@@ -58,3 +58,15 @@ assert.equal(r.over, false, '5th comment in the window is fine');
 assert.equal(rateLimit(r.next, 6000).over, true, '6th within 10 minutes is held');
 assert.equal(rateLimit(r.next, 11 * 60 * 1000).over, false, 'window expires');
 console.log('comment moderation OK');
+
+// Illuminator shape: short <description> without a photo; the photo is in <content:encoded>,
+// after a tracking pixel / avatar that must be skipped.
+const ill = `<rss><channel><item><title>Photo story</title><link>https://lailluminator.com/2026/10/31/x/</link>
+<description><![CDATA[Short text only.]]></description>
+<content:encoded><![CDATA[<img src="https://secure.gravatar.com/avatar/abc" width="96"><img src="https://lailluminator.com/pixel.gif" width="1" height="1"><figure><img width="1024" src="https://lailluminator.com/wp-content/uploads/2026/10/capitol.jpg"></figure><p>Body</p>]]></content:encoded>
+<pubDate>Sat, 31 Oct 2026 12:00:00 +0000</pubDate></item></channel></rss>`;
+const ip = parseFeed(ill)[0];
+assert.equal(ip.imageUrl, 'https://lailluminator.com/wp-content/uploads/2026/10/capitol.jpg', 'photo found in content:encoded, pixels/avatars skipped');
+assert.equal(ip.summary, 'Short text only.', 'summary still from description');
+assert.equal(parseFeed('<rss><item><title>t</title><link>https://a.b/c</link><description>no image</description></item></rss>')[0].imageUrl, undefined);
+console.log('feed images OK');
