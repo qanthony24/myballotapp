@@ -21,6 +21,14 @@ service cloud.firestore {
            get(/databases/$(database)/documents/config/admin).data.adminEmails;
     }
 
+    // Can post reactions/comments: signed in, verified email (Google is
+    // verified automatically), and not banned by an admin.
+    function canPost() {
+      return signedIn()
+        && request.auth.token.email_verified == true
+        && !exists(/databases/$(database)/documents/bannedUsers/$(request.auth.uid));
+    }
+
     // ---- User data: only the owner can read/write ----
 
     match /users/{userId} {
@@ -76,6 +84,67 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
-    // Everything else is denied by default.
+    // ---- News feed (articles written by the refreshNews function) ----
+
+    match /config/newsStatus {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /news/{articleId} {
+      allow read: if true;
+      allow write: if false; // Cloud Functions only (counts too)
+
+      // One reaction per user; others only see the totals on the article.
+      match /reactions/{uid} {
+        allow read, delete: if signedIn() && request.auth.uid == uid;
+        allow create, update: if canPost() && request.auth.uid == uid
+          && request.resource.data.keys().hasOnly(['type', 'at'])
+          && request.resource.data.type in ['up', 'wow', 'think', 'sad', 'angry']
+          && request.resource.data.at == request.time;
+      }
+
+      match /comments/{commentId} {
+        // Public sees visible comments; authors see their own held ones.
+        allow read: if resource.data.status == 'visible'
+          || (signedIn() && resource.data.uid == request.auth.uid)
+          || isAdmin();
+        allow create: if canPost()
+          && request.resource.data.keys().hasOnly(['uid', 'authorName', 'text', 'createdAt', 'status'])
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.status == 'visible'
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.text is string
+          && request.resource.data.text.size() >= 1
+          && request.resource.data.text.size() <= 1000
+          && request.resource.data.authorName is string
+          && request.resource.data.authorName.size() >= 1
+          && request.resource.data.authorName.size() <= 40;
+        // Admins approve/hide; counts and auto-holds come from Cloud Functions.
+        allow update: if isAdmin()
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'heldReason', 'reviewedAt', 'reviewedBy']);
+        allow delete: if (signedIn() && resource.data.uid == request.auth.uid) || isAdmin();
+
+        match /reports/{uid} {
+          allow create: if canPost() && request.auth.uid == uid
+            && request.resource.data.keys().hasOnly(['reason', 'at'])
+            && request.resource.data.reason in ['spam', 'harassment', 'hate', 'misinformation', 'other']
+            && request.resource.data.at == request.time;
+          allow read: if isAdmin();
+        }
+      }
+    }
+
+    // Admin moderation queue: comments across all articles.
+    match /{path=**}/comments/{commentId} {
+      allow read: if isAdmin();
+    }
+
+    match /bannedUsers/{uid} {
+      allow read: if isAdmin() || (signedIn() && request.auth.uid == uid);
+      allow write: if isAdmin();
+    }
+
+    // Everything else is denied by default (incl. commentThrottle, functions only).
   }
 }

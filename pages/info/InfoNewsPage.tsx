@@ -10,6 +10,7 @@ import {
 import { NewsArticle } from '../../types/info';
 import { fetchNewsFeed, formatRelativeTime } from '../../services/newsService';
 import NewsFeedCard from '../../components/info/NewsFeedCard';
+import { subscribeNews, subscribeNewsStatus, type LiveArticle } from '../../services/newsSocial';
 
 const SkeletonCard: React.FC = () => (
   <div className="bg-white rounded-lg border border-midnight-navy/10 overflow-hidden animate-pulse">
@@ -33,18 +34,21 @@ const INFO_SECTIONS = [
 ];
 
 const InfoNewsPage: React.FC = () => {
-  const [articles, setArticles] = useState<NewsArticle[]>([]);
+  const [articles, setArticles] = useState<(NewsArticle | LiveArticle)[]>([]);
   const [lastRefreshedAt, setLastRefreshedAt] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // Live = articles from Firestore (refreshed every 30 min by the refreshNews function), with reactions and comments.
+  // Until that function has run (or if Firestore is unreachable), fall back to the bundled static feed.
+  const [live, setLive] = useState(false);
+  const [attempt, setAttempt] = useState(0);
 
-  const loadFeed = async () => {
-    setLoading(true);
-    setError(null);
+  const loadStatic = async () => {
     try {
       const data = await fetchNewsFeed();
       setArticles(data.items);
       setLastRefreshedAt(data.lastRefreshedAt);
+      setLive(false);
     } catch {
       setError('Unable to load the news feed. Please try again.');
     } finally {
@@ -53,8 +57,25 @@ const InfoNewsPage: React.FC = () => {
   };
 
   useEffect(() => {
-    loadFeed();
-  }, []);
+    setLoading(true);
+    setError(null);
+    const stopStatus = subscribeNewsStatus((s) => s?.lastRefreshedAt && setLastRefreshedAt(s.lastRefreshedAt));
+    const stopNews = subscribeNews(
+      (items) => {
+        if (items.length === 0) return void loadStatic();
+        setArticles(items);
+        setLive(true);
+        setLoading(false);
+      },
+      () => void loadStatic(),
+    );
+    return () => {
+      stopStatus();
+      stopNews();
+    };
+  }, [attempt]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const loadFeed = () => setAttempt((n) => n + 1);
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -79,6 +100,11 @@ const InfoNewsPage: React.FC = () => {
           Louisiana Political News
         </h1>
       </div>
+      <p className="text-xs text-midnight-navy/60 mb-3">
+        Politics coverage from The Advocate, NOLA.com, The Acadiana Advocate and the Shreveport-Bossier Advocate, plus everything from the
+        Louisiana Illuminator and The Bayou Progressive. Articles open on the publisher&apos;s site. Reactions and comments come from MyBallot
+        users, not the newsrooms or MyBallot.
+      </p>
 
       {/* Meta bar */}
       <div className="flex items-center justify-between mb-5">
@@ -131,7 +157,7 @@ const InfoNewsPage: React.FC = () => {
       {!loading && !error && articles.length > 0 && (
         <div className="grid grid-cols-1 gap-5">
           {articles.map((article) => (
-            <NewsFeedCard key={article.id} article={article} />
+            <NewsFeedCard key={article.id} article={article} social={live} />
           ))}
         </div>
       )}

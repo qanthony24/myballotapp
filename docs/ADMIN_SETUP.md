@@ -210,6 +210,27 @@ as "might be on your ballot".
 without official maps, and JP and constable districts (except Ascension wards). Those races
 show to everyone in the election as "might be on your ballot".
 
+## News comments and moderation
+
+Signed-in users with a verified email (Google accounts are verified
+automatically) can react to news articles and comment. Comments post
+immediately, except these are **held** (hidden from everyone but the author)
+until an admin reviews them at **Admin → Comments** (`/#/admin/comments`):
+
+- comments containing a link or flagged language, or that look like spam;
+- a sixth comment within 10 minutes from the same person;
+- any comment reported by 3 different users.
+
+Approve, Remove, or Remove & ban. A banned user (Firestore `bannedUsers/{uid}`)
+can still read but can't react, comment or report. To unban, delete their
+document in `bannedUsers` in the Firebase console. Users can also block a
+commenter, which hides that person's comments on their own device.
+
+Comments show a first name and last initial from the account (or "Voter
+1a2b"), never an email address. Reactions are private; only totals are public.
+App Store and Google Play require exactly these tools (report, block, filter,
+remove) for apps with user comments.
+
 ## Testing the rules
 
 `tests/rules.test.mjs` checks 21 cases against the local Firebase emulator. Among them:

@@ -44,6 +44,33 @@ This deploys `firestore.rules` and `storage.rules` from the repo. The rules in
 the repo match what's live as of Oct 27, 2026. See `docs/ADMIN_SETUP.md` for
 what they allow and how to test them first.
 
+## Cloud Functions (news feed, reactions, comments)
+
+`functions/` holds four small functions:
+
+| Function | What it does |
+|---|---|
+| `refreshNews` | Every 30 minutes, pulls the six news feeds (`functions/lib/news.js` → `SOURCES`) into Firestore `news/`. Status in `config/newsStatus`. |
+| `countReactions` | Keeps the reaction totals on each article. |
+| `moderateComments` | New comments: rate limit (5 per 10 minutes) and hold checks (links, flagged words, spam). Keeps comment counts. |
+| `countReports` | Three reports hide a comment until an admin reviews it (Admin → Comments). |
+
+Deploy (also deploys the Firestore rules and indexes they rely on):
+
+```bash
+npm run deploy:functions
+```
+
+The first deploy may ask to enable a few Google Cloud APIs (Cloud Functions,
+Cloud Build, Artifact Registry, Cloud Scheduler, Eventarc). Say yes. It's on
+the Blaze plan already; at this volume the cost should be pennies a month.
+
+After deploying, the first news refresh happens within 30 minutes. To run it
+right away: Google Cloud console → Cloud Scheduler → `firebase-schedule-refreshNews-…` → **Force run**.
+Check `config/newsStatus` in Firestore to see how each source did.
+
+To change sources, edit `SOURCES` in `functions/lib/news.js` and deploy again.
+
 ## Caching
 
 `firebase.json` sets these cache rules:

@@ -39,6 +39,7 @@ import AdminOfficesPage from './pages/admin/AdminOfficesPage';
 import AdminRacesPage from './pages/admin/AdminRacesPage';
 import AdminResultsPage from './pages/admin/AdminResultsPage';
 import PrintableBallotPage from './pages/PrintableBallotPage';
+import AdminCommentsPage from './pages/admin/AdminCommentsPage';
 
 const AppRoutes: React.FC = () => {
   const { currentUser } = useAuth();
@@ -78,6 +79,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/admin/offices" element={<AdminRoute><AdminOfficesPage /></AdminRoute>} />
       <Route path="/admin/results" element={<Navigate to="/admin/elections" />} />
       <Route path="/admin/results/:electionId" element={<AdminRoute><AdminResultsPage /></AdminRoute>} />
+      <Route path="/admin/comments" element={<AdminRoute><AdminCommentsPage /></AdminRoute>} />
       <Route path="/admin/survey-responses" element={<AdminRoute><AdminSurveyResponsesPage /></AdminRoute>} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

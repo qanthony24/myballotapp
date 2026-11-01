@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import { NewsArticle } from '../../types/info';
 import { formatRelativeTime } from '../../services/newsService';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
+import ArticleSocial from './ArticleSocial';
+import type { LiveArticle } from '../../services/newsSocial';
 
 interface NewsFeedCardProps {
-  article: NewsArticle;
+  article: NewsArticle | LiveArticle;
+  /** Show reactions/comments (live Firestore articles only, not the static fallback). */
+  social?: boolean;
 }
 
-const NewsFeedCard: React.FC<NewsFeedCardProps> = ({ article }) => {
+const NewsFeedCard: React.FC<NewsFeedCardProps> = ({ article, social }) => {
   const [imgError, setImgError] = useState(false);
 
   return (
@@ -55,6 +59,8 @@ const NewsFeedCard: React.FC<NewsFeedCardProps> = ({ article }) => {
             </>
           )}
         </div>
+
+        {social && <ArticleSocial article={article as LiveArticle} />}
       </div>
     </div>
   );
