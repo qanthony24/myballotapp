@@ -111,9 +111,9 @@ the data pipeline's IDs.
 
 Voters enter their address (or tap "Use my location") on the Candidates or My
 Ballot page. The app asks the U.S. Census Bureau's free geocoder which
-districts that address is in. In East Baton Rouge Parish it also asks the
-City-Parish's official district maps (maps.brla.gov) for the local ones,
-sending only the map point, never the address. The result is saved **on the
+districts that address is in. In parishes that publish official district maps
+(East Baton Rouge: maps.brla.gov; Ascension: gis.ascensionparishla.gov) it also
+asks those for the local ones, sending only the map point, never the address. The result is saved **on the
 voter's device only**. Candidates whose race is definitely not on their ballot
 are hidden; races the app can't match stay visible as "might be on your ballot".
 If a map service is down, its races fall back to "might be", never to hidden.
@@ -130,6 +130,19 @@ From the Census (every Louisiana address):
 | State House | `la-house-N` | `la-house-67` |
 | Parish | `parish-<name>` | `parish-east-baton-rouge` |
 | City/town | `city-<name>` | `city-baton-rouge`, `city-st-george` |
+| Parish council / police jury (**approximate**) | `pj-<parish>-N` | `pj-pointe-coupee-8` |
+
+The State Senate district uses the 2026 plan (Act 955) even where the Census
+hasn't caught up yet (a few hundred blocks in Concordia, Morehouse and
+Ouachita; see `services/planOverrides.ts`).
+
+`pj-` keys come from the Census "county subdivisions", which in Louisiana are
+the council/police jury districts. They matched the official maps at 38 of 39
+test points in EBR and Ascension, so they're treated as approximate: a race
+with the voter's `pj-` key is marked as on their ballot, but races in the
+parish's other districts are never hidden (shown as "might be on your
+ballot"). Use them for police jury and council races in parishes without
+official maps: give the office the prefix `pj-west-feliciana`, for example.
 
 From East Baton Rouge City-Parish maps (EBR addresses only, for now):
 
@@ -145,8 +158,17 @@ From East Baton Rouge City-Parish maps (EBR addresses only, for now):
 | Baton Rouge City Court judge, by division | `br-city-court-div-<letter>` | `br-city-court-div-b` |
 | Voting precinct | `ebr-precinct-<ward>-<precinct>` | `ebr-precinct-1-086` |
 
-Inside EBR the city comes from the City-Parish's city limits, which already
-include St. George (the Census may not yet).
+From Ascension Parish maps (Ascension addresses only):
+
+| District | Key format | Example |
+|---|---|---|
+| Parish Council | `asc-council-N` | `asc-council-10` |
+| School board (multi-seat districts like 7A/7B share one key) | `asc-school-N` | `asc-school-7` |
+| Ward (for JP/constable once those offices are set up) | `asc-ward-<ward>` | `asc-ward-07g` |
+| Voting precinct | `asc-precinct-N` | `asc-precinct-58` |
+
+Inside EBR and Ascension the city comes from the parish's own city limits,
+which are more current than the Census (EBR's already include St. George).
 
 ### Keys you don't have to type
 
@@ -168,8 +190,9 @@ another parish, give them their own prefix or type the key on each race.
 Parishwide races (sheriff, assessor, clerk) use `parish-<name>`; at-large city
 races use `city-<name>`.
 
-**Not yet matchable:** local districts outside East Baton Rouge, BESE/PSC/
-Supreme Court outside EBR, and JP and constable districts anywhere. Those races
+**Not yet matchable:** BESE/PSC/Supreme Court outside EBR (planned: the
+Legislature's block lists), school board and judicial districts in parishes
+without official maps, and JP and constable districts (except Ascension wards). Those races
 show to everyone in the election as "might be on your ballot".
 
 ## Testing the rules

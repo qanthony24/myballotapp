@@ -90,14 +90,21 @@ export const LOCAL_KEY_PREFIXES: Record<string, string | null> = {
   'br-city-court-div': 'parish-east-baton-rouge',
   'br-city-court-section': 'parish-east-baton-rouge',
   'ebr-precinct': 'parish-east-baton-rouge',
+  'asc-council': 'parish-ascension',
+  'asc-school': 'parish-ascension',
+  'asc-ward': 'parish-ascension',
+  'asc-precinct': 'parish-ascension',
 };
-
-/** Local maps a fully-matched East Baton Rouge lookup always covers (used for the "couldn't reach" notice). */
-export const EBR_LOCAL_PREFIXES_SHOWN = ['la-bese', 'la-psc', 'ebr-council', 'ebr-school', 'jdc-19-div'];
 
 export function statusForKey(key: string | undefined, voterKeys: Set<string>): BallotStatus {
   if (!key) return 'unknown';
   if (voterKeys.has(key)) return 'yes';
+  // Approximate council/police jury districts from the Census: "pj-<parish>-N".
+  const pj = key.match(/^pj-(.+)-\d+$/);
+  if (pj) {
+    const voterParish = [...voterKeys].find((k) => k.startsWith('parish-'));
+    return voterParish && voterParish !== `parish-${pj[1]}` ? 'no' : 'unknown';
+  }
   const prefix = Object.keys(LOCAL_KEY_PREFIXES)
     .filter((p) => key.startsWith(`${p}-`))
     .sort((a, b) => b.length - a.length)[0];

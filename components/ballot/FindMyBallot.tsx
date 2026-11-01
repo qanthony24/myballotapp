@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { MapPinIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { lookupAddress, lookupCoordinates, DistrictLookupError } from '../../services/districtLookup';
 import { trackEvent } from '../../services/analytics';
-import { addLocalDistricts } from '../../services/localDistricts';
-import { EBR_LOCAL_PREFIXES_SHOWN } from '../../services/ballotScope';
+import { addLocalDistricts, PARISH_SOURCES } from '../../services/localDistricts';
 import { saveVoterDistricts, clearVoterDistricts, useVoterDistricts } from '../../hooks/useVoterDistricts';
 
 const OFFICIAL_SAMPLE_BALLOT = 'https://voterportal.sos.la.gov/';
@@ -75,8 +74,9 @@ const FindMyBallot: React.FC<{ compact?: boolean }> = ({ compact }) => {
     const city = saved.districts.find((d) => d.type === 'municipal')?.label;
     const parish = saved.districts.find((d) => d.type === 'parishwide')?.label;
     const chips = saved.districts.filter((d) => d.type !== 'statewide' && d.type !== 'municipal' && d.type !== 'parishwide');
-    const inEbr = saved.districts.some((d) => d.key === 'parish-east-baton-rouge');
-    const localMissing = inEbr && EBR_LOCAL_PREFIXES_SHOWN.some((p) => !saved.checked?.includes(p));
+    const parishKey = saved.districts.find((d) => d.type === 'parishwide')?.key;
+    const source = parishKey ? PARISH_SOURCES[parishKey] : undefined;
+    const localMissing = !!source && source.layers.flatMap((l) => l.covers).some((p) => !saved.checked?.includes(p));
     return (
       <div className="bg-white border border-civic-blue/30 rounded-lg p-4 mb-4" data-testid="my-ballot-districts">
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2">
@@ -102,9 +102,9 @@ const FindMyBallot: React.FC<{ compact?: boolean }> = ({ compact }) => {
         </div>
         {!compact && (
           <p className="text-xs text-gray-500 mt-3">
-            {inEbr
-              ? 'Matched using U.S. Census and East Baton Rouge City-Parish district maps.'
-              : 'Matched using U.S. Census district maps. Council, school board, BESE, PSC and judicial races are matched by address only in East Baton Rouge Parish so far.'}{' '}
+            {source
+              ? `Matched using U.S. Census and official ${parish ?? 'parish'} district maps.`
+              : 'Matched using U.S. Census district maps. Your parish council or police jury district is approximate, so other districts\' races stay visible. School board and judicial races aren\'t matched by address in your parish yet.'}{' '}
             {localMissing && "Some local maps couldn't be reached, so those races show as \"might be on your ballot\" (tap Change to try again). "}
             Always check your{' '}
             <a href={OFFICIAL_SAMPLE_BALLOT} target="_blank" rel="noopener noreferrer" className="underline">official sample ballot</a>{' '}
@@ -140,7 +140,7 @@ const FindMyBallot: React.FC<{ compact?: boolean }> = ({ compact }) => {
       </form>
       {error && <p className="text-sm text-red-600 mt-2" role="alert">{error}</p>}
       <p className="text-xs text-gray-500 mt-2">
-        Your address is sent only to the U.S. Census Bureau's address lookup (in East Baton Rouge, the map point, not the address, also goes to the City-Parish's district maps). MyBallot doesn't store it. Your districts are saved on this device.
+        Your address is sent only to the U.S. Census Bureau's address lookup (in parishes with official district maps, the map point, not the address, also goes to the parish's map service). MyBallot doesn't store it. Your districts are saved on this device.
         {saved && <> <button onClick={() => setEditing(false)} className="underline">Cancel</button></>}
       </p>
     </div>

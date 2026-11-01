@@ -1,7 +1,7 @@
 // Local district maps (East Baton Rouge City-Parish GIS). Attributes below are
 // real answers for the State Capitol area, captured Oct 31, 2026. Run: npm run test:data
 import assert from 'node:assert/strict';
-import { mergeLocalDistricts, EBR_LAYERS, type LayerResult } from '../services/localDistricts.ts';
+import { mergeLocalDistricts, EBR_LAYERS, ASCENSION_LAYERS, type LayerResult } from '../services/localDistricts.ts';
 import { statusForKey, derivedDistrictKey, raceBallotStatus, LOCAL_KEY_PREFIXES, districtToken } from '../services/ballotScope.ts';
 import { voterKeySet } from '../hooks/useVoterDistricts.ts';
 
@@ -92,7 +92,7 @@ assert.equal(raceBallotStatus({ officeId: 20, district: 'Division D' } as any, o
 assert.equal(raceBallotStatus({ officeId: 4, district: 'District 3' } as any, offices, keys), 'no');
 
 // Every prefix a map layer answers for is registered in ballotScope (and vice versa).
-const covers = new Set(EBR_LAYERS.flatMap((l) => l.covers).filter((c) => c !== 'city'));
+const covers = new Set([...EBR_LAYERS, ...ASCENSION_LAYERS].flatMap((l) => l.covers));
 assert.deepEqual([...covers].sort(), Object.keys(LOCAL_KEY_PREFIXES).sort());
 console.log('derived keys OK');
 
@@ -110,3 +110,27 @@ for (const k of ['ebr-council-4', 'city-central-council-4', 'central-school-3', 
 assert.equal(statusForKey('br-city-court-div-b', ck), 'no', 'Central is outside Baton Rouge City Court');
 assert.equal(statusForKey('city-baton-rouge', ck), 'no');
 console.log('Central OK');
+
+// Ascension (live answers for Gonzales City Hall, captured Oct 31, 2026).
+const ascCensus: any[] = [
+  { type: 'statewide', key: 'la', label: 'Louisiana' },
+  { type: 'parishwide', key: 'parish-ascension', label: 'Ascension Parish' },
+  { type: 'parish-council', key: 'pj-ascension-10', label: 'Ascension Parish District 10 (approx.)', number: 10 },
+  { type: 'municipal', key: 'city-gonzales', label: 'Gonzales city' },
+];
+const asc = mergeLocalDistricts(ascCensus, [
+  ok('ASC_Council', [{ DISTRICTID: '10', NAME: 'District 10' }]),
+  ok('ASC_School', [{ NAME: 'District 7' }]),
+  ok('ASC_Ward', [{ LABEL: 'Ward 7G', WARD: '07G' }]),
+  ok('ASC_Precinct', [{ NAME: 'Precinct 58', PRECINCTNO: '58' }]),
+  ok('ASC_City', [{ NAME: 'Gonzales', TYPE: 'City' }]),
+]);
+const ak = voterKeySet(asc);
+for (const k of ['asc-council-10', 'asc-school-7', 'asc-ward-07g', 'asc-precinct-58', 'city-gonzales']) assert.ok(ak.has(k), `ascension has ${k}`);
+assert.ok(!ak.has('pj-ascension-10'), 'official council replaces the approximate one');
+assert.equal(asc.districts.filter((d) => d.type === 'municipal').length, 1);
+assert.equal(statusForKey('asc-council-3', ak), 'no');
+assert.equal(statusForKey('asc-school-7', ak), 'yes');
+assert.equal(statusForKey('ebr-council-3', ak), 'no', 'EBR race not on an Ascension ballot');
+assert.equal(statusForKey('asc-council-3', keys), 'no', 'Ascension race not on an EBR ballot');
+console.log('Ascension OK');

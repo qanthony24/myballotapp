@@ -29,6 +29,7 @@ export type VoterDistrictType =
   | 'city-council'
   | 'school-board'
   | 'judicial'
+  | 'ward'
   | 'precinct';
 
 export interface VoterDistrict {
@@ -57,6 +58,8 @@ export class DistrictLookupError extends Error {
     super(message);
   }
 }
+
+import { senateOverride } from './planOverrides';
 
 const CENSUS_BASE = 'https://geocoding.geo.census.gov/geocoder/geographies/';
 const CENSUS_PARAMS = 'benchmark=Public_AR_Current&vintage=Current_Current';
@@ -104,7 +107,9 @@ export function parseCensusGeographies(geos: CensusGeographies): VoterDistrict[]
   if (cdNum) out.push({ type: 'congressional', key: `la-cd-${cdNum}`, label: `U.S. House District ${cdNum}`, number: cdNum });
 
   const sen = layer(geos, /State Legislative Districts - Upper/i);
-  const senNum = districtNumber(sen, 'SLDU');
+  const block = layer(geos, /Census Blocks/i)?.GEOID;
+  // The Census can lag behind a new plan; official block lists win (planOverrides.ts).
+  const senNum = senateOverride(block) ?? districtNumber(sen, 'SLDU');
   if (senNum) out.push({ type: 'state-senate', key: `la-sen-${senNum}`, label: `State Senate District ${senNum}`, number: senNum });
 
   const house = layer(geos, /State Legislative Districts - Lower/i);
@@ -114,6 +119,16 @@ export function parseCensusGeographies(geos: CensusGeographies): VoterDistrict[]
   const parish = layer(geos, /^Counties$/);
   if (parish?.BASENAME) {
     out.push({ type: 'parishwide', key: `parish-${slug(parish.BASENAME)}`, label: parish.NAME ?? `${parish.BASENAME} Parish` });
+  }
+
+  // Louisiana's Census "county subdivisions" are the parish council / police
+  // jury districts. Approximate (Census vintage, ~97% match with official
+  // maps in EBR and Ascension), so "pj-" keys can mark a race as the voter's
+  // but never rule other districts out (see ballotScope.statusForKey).
+  const sub = layer(geos, /^County Subdivisions$/);
+  const subNum = /^District \d+$/i.test(sub?.NAME ?? '') ? districtNumber(sub, 'BASENAME') : undefined;
+  if (parish?.BASENAME && subNum) {
+    out.push({ type: 'parish-council', key: `pj-${slug(parish.BASENAME)}-${subNum}`, label: `${parish.BASENAME} Parish District ${subNum} (approx.)`, number: subNum });
   }
 
   const place = layer(geos, /Incorporated Places/i);

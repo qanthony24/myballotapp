@@ -1,7 +1,7 @@
 // Address → districts (Census responses captured Oct 31, 2026) and ballot matching. Run: npm run test:data
 import assert from 'node:assert/strict';
 import { parseCensusGeographies, DistrictLookupError } from '../services/districtLookup.ts';
-import { raceBallotStatus, candidateBallotStatus, derivedDistrictKey } from '../services/ballotScope.ts';
+import { raceBallotStatus, candidateBallotStatus, derivedDistrictKey, statusForKey as statusForKeyT } from '../services/ballotScope.ts';
 
 // Real Census geographies for 400 Clyde Fant Memorial Pkwy, Shreveport (trimmed to the fields we use).
 const shreveport = {
@@ -14,7 +14,7 @@ const shreveport = {
   '2026 State Legislative Districts - Lower': [{ GEOID: '22002', NAME: 'State House District 2', BASENAME: '2', STATE: '22', SLDL: '002' }],
 };
 const d = parseCensusGeographies(shreveport as any);
-assert.deepEqual(d.map((x) => x.key), ['la', 'la-cd-4', 'la-sen-39', 'la-house-2', 'parish-caddo', 'city-shreveport']);
+assert.deepEqual(d.map((x) => x.key), ['la', 'la-cd-4', 'la-sen-39', 'la-house-2', 'parish-caddo', 'pj-caddo-3', 'city-shreveport']);
 assert.equal(d.find((x) => x.type === 'state-house')!.label, 'State House District 2');
 
 // Baton Rouge City Hall (222 St Louis St): CD 2, Senate 14, House 67, East Baton Rouge.
@@ -67,3 +67,25 @@ assert.equal(candidateBallotStatus({ officeId: 4, district: 'district 10' } as a
 assert.equal(candidateBallotStatus({ officeId: 4, district: 'district 10' } as any, races, offices, new Set(['ebr-council-10'])), 'yes');
 assert.equal(candidateBallotStatus({ officeId: 7 } as any, [], offices, voter), 'yes');
 console.log('ballot matching OK');
+
+// ---- Census lag fixes and approximate council districts ----
+import { senateOverride } from '../services/planOverrides.ts';
+// Blocks Act 955 (2026) moved; the Census still says 33, 33, 35, 34, 32 (checked Oct 31, 2026).
+assert.equal(senateOverride('220730051001006'), 35);
+assert.equal(senateOverride('220730054002024'), 35);
+assert.equal(senateOverride('220730017001020'), 34);
+assert.equal(senateOverride('220679506002018'), 33);
+assert.equal(senateOverride('220290002021018'), 34);
+assert.equal(senateOverride('220679503001016'), undefined, 'gap inside a range is not invented');
+assert.equal(senateOverride('220330051003010'), undefined, 'unchanged blocks fall through to the Census');
+const monroe = parseCensusGeographies({ ...br, Counties: [{ BASENAME: 'Ouachita', NAME: 'Ouachita Parish' }], '2020 Census Blocks': [{ GEOID: '220730051001006' }], '2026 State Legislative Districts - Upper': [{ BASENAME: '33', SLDU: '033' }] } as any);
+assert.ok(monroe.some((x) => x.key === 'la-sen-35'), 'override beats the Census');
+
+// Approximate council/police jury districts: mark the voter's race, never hide neighbors.
+const pc = new Set(parseCensusGeographies({ ...br, Counties: [{ BASENAME: 'Pointe Coupee', NAME: 'Pointe Coupee Parish' }], 'County Subdivisions': [{ NAME: 'District 8', BASENAME: '8' }] } as any).map((x) => x.key));
+assert.ok(pc.has('pj-pointe-coupee-8'));
+assert.equal(statusForKeyT('pj-pointe-coupee-8', pc), 'yes');
+assert.equal(statusForKeyT('pj-pointe-coupee-3', pc), 'unknown', 'approximate map never rules a district out');
+assert.equal(statusForKeyT('pj-livingston-3', pc), 'no', 'another parish');
+assert.ok(!parseCensusGeographies({ ...br, 'County Subdivisions': [{ NAME: 'Ward 3', BASENAME: '3' }] } as any).some((x) => x.key.startsWith('pj-')), 'only "District N" subdivisions');
+console.log('census fixes OK');
