@@ -8,7 +8,7 @@ Oct 2026.)
 ## One-time setup on your computer
 
 ```bash
-npx firebase-tools@13 login     # opens a browser to sign in with your Google account
+npx firebase-tools@15 login     # opens a browser to sign in with your Google account
 ```
 
 ## Private preview link (for testing)
@@ -29,7 +29,7 @@ domains. The first time, add the preview domain in the Firebase console under
 ## Production (later)
 
 ```bash
-npm run build && npx firebase-tools@13 deploy --only hosting
+npm run build && npx firebase-tools@15 deploy --only hosting
 ```
 
 This publishes to `https://myballot-app.web.app`. Hold off until the MVP is ready.
@@ -70,6 +70,12 @@ right away: Google Cloud console → Cloud Scheduler → `firebase-schedule-refr
 Check `config/newsStatus` in Firestore to see how each source did.
 
 To change sources, edit `SOURCES` in `functions/lib/news.js` and deploy again.
+
+**Node.js runtime:** the functions run on Node.js 24 (`firebase.json` →
+`runtime`), which Google supports until October 2028. Google retires each
+version on a fixed schedule (Node 20 was retired Oct 31, 2026), and deploys
+fail once that happens. Before then, bump `runtime` and `functions/package.json`
+→ `engines.node` to the next version.
 
 ## Caching
 
