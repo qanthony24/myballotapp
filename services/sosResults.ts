@@ -105,13 +105,22 @@ const num = (s?: string | null) => {
   return Number.isFinite(n) ? n : undefined;
 };
 
+/**
+ * The SoS feed sends a single object instead of a one-item list (one parish,
+ * one race, one candidate). Always work with arrays.
+ */
+export function asArray<T>(x: T | T[] | null | undefined): T[] {
+  return Array.isArray(x) ? x : x == null ? [] : [x];
+}
+
 const isMeasure = (r: SosRace) =>
   Number(r.OfficeLevel) >= 998 || r.Choice.every((c) => /^(yes|no|for|against)\b/i.test(c.Desc.trim()));
 
 export function convertRaces(races: SosRace[], votes: SosVotes[], parish?: string): Contest[] {
-  const byId = new Map(votes.map((v) => [v.ID, v]));
+  const byId = new Map(asArray(votes).map((v) => [v.ID, { ...v, Choice: asArray(v.Choice) }]));
   const out: Contest[] = [];
-  for (const r of races) {
+  for (const raw of asArray(races)) {
+    const r = { ...raw, Choice: asArray(raw.Choice) };
     const v = byId.get(r.ID);
     if (!v) continue;
     const totals = new Map(v.Choice.map((c) => [c.ID, c]));

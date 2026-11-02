@@ -80,3 +80,14 @@ assert.deepEqual([official[0].date, official[0].estimated], ['2027-09-08', false
 assert.equal(nextElection([sat, { ...sat, electionDate: '2026-11-03' }], '2026-11-02')!.electionDate, '2026-11-03');
 assert.equal(nextElection([sat], '2028-01-01'), null);
 console.log('voter deadlines OK');
+
+// Single-item shapes from the SoS feed (one parish, one race, one candidate) — crashed the Nov 2 test run.
+import { asArray } from '../services/sosResults.ts';
+assert.deepEqual(asArray({ a: 1 }), [{ a: 1 }]);
+assert.deepEqual(asArray(undefined), []);
+assert.deepEqual(asArray([1, 2]), [1, 2]);
+const unopposed = convertRaces({ ...fam, Choice: { ID: 'a', Desc: 'Only One (DEM)' } } as any, { ID: '64513', Choice: { ID: 'a', VoteTotal: '10', Outcome: 'Elected' } } as any, 'East Baton Rouge');
+assert.equal(unopposed.length, 1);
+assert.equal(unopposed[0].resultItems[0].name, 'Only One');
+assert.equal(unopposed[0].resultItems[0].votePercent, 100);
+console.log('single-item shapes OK');

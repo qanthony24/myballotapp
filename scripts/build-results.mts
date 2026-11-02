@@ -16,7 +16,7 @@
  */
 import { mkdir, readFile, writeFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
-import { buildElection, indexEntry, parishCode, type ResultsElection, type SosRace, type SosVotes } from '../services/sosResults.ts';
+import { asArray, buildElection, indexEntry, parishCode, type ResultsElection, type SosRace, type SosVotes } from '../services/sosResults.ts';
 
 const BASE = 'https://voterportal.sos.la.gov/ElectionResults/ElectionResults/Data?blob=';
 const CACHE = path.resolve('data/.cache/sos');
@@ -70,11 +70,11 @@ async function get(blob: string, cacheable: boolean): Promise<any | null> {
   return null;
 }
 
-const races = (j: any): SosRace[] => (Array.isArray(j?.Races?.Race) ? j.Races.Race : j?.Races?.Race ? [j.Races.Race] : []);
+const races = (j: any): SosRace[] => asArray(j?.Races?.Race);
 const votes = (j: any): SosVotes[] => races(j) as unknown as SosVotes[];
 
 async function main() {
-  const dates = (await get('ElectionDates.htm', false))?.Dates?.Date ?? [];
+  const dates = asArray((await get('ElectionDates.htm', false))?.Dates?.Date);
   if (!dates.length) throw new Error('Could not read the list of elections from the Secretary of State.');
   const todo = dates
     .map((d: any) => {
@@ -86,10 +86,12 @@ async function main() {
 
   await mkdir(OUT, { recursive: true });
   let written = 0;
+  const failed: string[] = [];
   for (const [n, d] of todo.entries()) {
     const cache = d.official; // unofficial results can still change
+    try {
     const [rc, vt, pie] = [await get(`${d.id}/RacesCandidates_Multiparish.htm`, cache), await get(`${d.id}/Votes_Multiparish.htm`, cache), await get(`${d.id}/ParishesInElection.htm`, cache)];
-    const codes: string[] = (pie?.ParishesInElection?.Parish ?? []).map((p: any) => String(p.ParishValue).padStart(2, '0')).filter((c: string) => !regionOnly || regionCodes.has(c));
+    const codes: string[] = asArray(pie?.ParishesInElection?.Parish).map((p: any) => String(p.ParishValue).padStart(2, '0')).filter((c: string) => !regionOnly || regionCodes.has(c));
     const parishes = [];
     for (const code of codes) {
       const [prc, pvt] = [await get(`${d.id}/RacesCandidates/ByParish_${code}.htm`, cache), await get(`${d.id}/VotesParish/Votes_${code}.htm`, cache)];
@@ -101,6 +103,10 @@ async function main() {
       written++;
     }
     console.log(`[${n + 1}/${todo.length}] ${d.id}: ${election ? `${election.contests.length} contests` : 'no results'}  (${requests} requests so far)`);
+    } catch (e) {
+      failed.push(d.id);
+      console.warn(`[${n + 1}/${todo.length}] ${d.id}: SKIPPED (${(e as Error).message}). Re-run later; it will retry.`);
+    }
   }
 
   // Rebuild the index from every election file on disk (so partial runs keep older ones).
@@ -110,6 +116,7 @@ async function main() {
   index.sort((a, b) => b.electionDate.localeCompare(a.electionDate));
   await writeFile(path.join(OUT, 'index.json'), JSON.stringify({ v: 1, builtAt: new Date().toISOString(), source: 'Louisiana Secretary of State', elections: index }));
   console.log(`\nDone: wrote ${written} elections this run; index has ${index.length}. ${requests} requests.`);
+  if (failed.length) console.log(`Skipped ${failed.length} (tell Claude): ${failed.join(', ')}`);
 }
 
 main().catch((e) => {
