@@ -11,7 +11,7 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowLeftIcon, ArrowTopRightOnSquareIcon, CalendarDaysIcon, ClipboardDocumentCheckIcon, EnvelopeIcon, IdentificationIcon,
-  MapPinIcon, ScaleIcon, UserPlusIcon, HandRaisedIcon,
+  MapPinIcon, ScaleIcon, UserPlusIcon, HandRaisedIcon, PhoneIcon,
 } from '@heroicons/react/24/outline';
 import { useElectionData } from '../../services/electionDataStore';
 import { getAllCycles, getFormattedElectionName } from '../../services/dataService';
@@ -62,7 +62,7 @@ const HowToVotePage: React.FC = () => {
         <nav aria-label="On this page" className="flex flex-wrap gap-2 mb-6 text-xs">
           {[
             ['dates', 'Key dates'], ['register', 'Register'], ['early', 'Vote early'], ['election-day', 'Election Day'],
-            ['id', 'Bring ID'], ['mail', 'Vote by mail'], ['primaries', 'Primaries'], ['at-the-polls', 'At the polls'],
+            ['id', 'Bring ID'], ['mail', 'Vote by mail'], ['primaries', 'Primaries'], ['at-the-polls', 'At the polls'], ['help', 'Get help'],
           ].map(([id, l]) => (
             <a key={id} href={`#${id}`} onClick={(e) => { e.preventDefault(); document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }); }} className="px-2.5 py-1 rounded-full border border-midnight-navy/15 text-midnight-navy/80 hover:bg-civic-blue hover:text-white">
               {l}
@@ -128,7 +128,10 @@ const HowToVotePage: React.FC = () => {
         <Section id="election-day" icon={MapPinIcon} title="Vote on Election Day">
           <p>
             Polls are open <strong>7 a.m. to 8 p.m.</strong> for Saturday elections and <strong>6 a.m. to 8 p.m.</strong> for Tuesday elections.
-            If you’re in line at 8 p.m., you can vote.
+          </p>
+          <p className="bg-sunlight-gold/20 border-l-4 border-sunlight-gold rounded-r px-3 py-2 text-base">
+            <strong>In line by 8 p.m.? Stay in line.</strong> Every voter in line when the polls close has the right to vote. You can’t be turned away
+            or told to leave. Just don’t step out of line.
           </p>
           <p>
             You vote at your assigned precinct. Find it in the <Ext href={PORTAL}>Voter Portal</Ext>. Your official sample ballot appears there about two weeks before each election.
@@ -183,6 +186,27 @@ const HowToVotePage: React.FC = () => {
             <li>Voters who have a disability or can’t read can get help voting. Ask a poll commissioner or contact your registrar of voters.</li>
             <li>If you’re listed as inactive, you can confirm your address at the polls and vote.</li>
             <li>If your name isn’t on the list, ask for a provisional ballot.</li>
+          </ul>
+        </Section>
+
+        <Section id="help" icon={PhoneIcon} title="Get help">
+          <ul className="space-y-2">
+            <li>
+              <strong>Louisiana Secretary of State elections hotline:</strong>{' '}
+              <a href="tel:+18008832805" className="text-civic-blue font-semibold underline">1-800-883-2805</a> (TTY: 711). Registration, polling places,
+              ballots and deadlines.
+            </li>
+            <li>
+              <strong>Your parish registrar of voters:</strong> find the office and phone number in the <Ext href={PORTAL}>Voter Portal</Ext>.
+            </li>
+            <li>
+              <strong>Election Protection (nonpartisan):</strong>{' '}
+              <a href="tel:+18666878683" className="text-civic-blue font-semibold underline">866-OUR-VOTE</a> (866-687-8683). Free legal help if you have trouble
+              voting or someone tries to stop you.
+            </li>
+            <li>
+              <strong>Problem at your polling place?</strong> Ask for the commissioner-in-charge first. If you’re told you can’t vote, ask for a provisional ballot.
+            </li>
           </ul>
         </Section>
 
