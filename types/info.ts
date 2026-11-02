@@ -51,6 +51,8 @@ export interface ResultItem {
   votePercent: number;
   isWinner?: boolean;
   incumbent?: boolean;
+  /** As reported by the Secretary of State: Elected, Defeated, Runoff, Approved… */
+  outcome?: string;
 }
 
 export interface ContestResult {

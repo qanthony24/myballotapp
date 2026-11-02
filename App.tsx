@@ -14,9 +14,8 @@ import MyBallotPage from './pages/MyBallotPage';
 import CompareCandidatesPage from './pages/CompareCandidatesPage';
 import UserProfilePage from './pages/UserProfilePage';
 import AuthPage from './pages/AuthPage';
-import ElectionInfoPage from './pages/ElectionInfoPage';
 import InfoHubPage from './pages/info/InfoHubPage';
-import InfoEssentialsPage from './pages/info/InfoEssentialsPage';
+import HowToVotePage from './pages/info/HowToVotePage';
 import InfoNewsPage from './pages/info/InfoNewsPage';
 import InfoResultsHomePage from './pages/info/InfoResultsHomePage';
 import InfoElectionResultsPage from './pages/info/InfoElectionResultsPage';
@@ -59,8 +58,10 @@ const AppRoutes: React.FC = () => {
       <Route path="/election-info" element={<Navigate to="/info" />} />
       <Route path="/info" element={<InfoNewsPage />} />
       <Route path="/info/hub" element={<InfoHubPage />} />
-      <Route path="/info/essentials" element={<InfoEssentialsPage />} />
-      <Route path="/info/qa" element={<ElectionInfoPage />} />
+      <Route path="/info/how-to-vote" element={<HowToVotePage />} />
+      {/* Old pages: Essentials was renamed; Q&A was a duplicate of it. */}
+      <Route path="/info/essentials" element={<Navigate to="/info/how-to-vote" replace />} />
+      <Route path="/info/qa" element={<Navigate to="/info/how-to-vote" replace />} />
       <Route path="/info/news" element={<InfoNewsPage />} />
       <Route path="/info/results" element={<InfoResultsHomePage />} />
       <Route path="/info/results/:electionId" element={<InfoElectionResultsPage />} />

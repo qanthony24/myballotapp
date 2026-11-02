@@ -210,6 +210,32 @@ as "might be on your ballot".
 without official maps, and JP and constable districts (except Ascension wards). Those races
 show to everyone in the election as "might be on your ballot".
 
+## Historical election results
+
+The Results section shows official results from the Louisiana Secretary of
+State's archive (voterportal.sos.la.gov/graphical; elections back to the early
+1990s, statewide races plus every parish's local races). To build or refresh it:
+
+```bash
+npm run data:results                  # everything (first run: an hour or so)
+npm run data:results -- --since 2023  # just recent elections
+npm run data:results -- --region      # local races for the 9 Capital Region parishes only
+```
+
+It writes `public/data/results/index.json` plus one file per election, and
+caches raw downloads in `data/.cache/sos/` so re-runs only fetch new or
+still-unofficial elections. Run it after each election once results are
+official, then commit `public/data/results/`. Results entered by hand in
+Admin → Results still work and override the archive for the same election.
+
+## Voter deadlines (How to Vote page)
+
+Each election in Admin → Elections has optional fields for the official
+registration and mail-ballot deadlines. Copy them from the Secretary of
+State's calendar (sos.la.gov → Elections & Voting → Registration Deadlines).
+When left blank, the How to Vote page estimates them from the standard rules
+(30 / 20 / 4 / 1 days before) and labels them "estimated".
+
 ## News comments and moderation
 
 Signed-in users with a verified email (Google accounts are verified

@@ -8,8 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "data:districts": "tsx scripts/build-district-blocks.mts",
+    "data:results": "tsx scripts/build-results.mts",
     "data:snapshot": "tsx data-pipeline/src/snapshot-from-firestore.ts",
-    "test:data": "tsx tests/data-merge.test.mts && tsx tests/races.test.mts && tsx tests/districts.test.mts && tsx tests/ballotShare.test.mts && tsx tests/localDistricts.test.mts && tsx tests/blockDistricts.test.mts && tsx tests/news.test.mts",
+    "test:data": "tsx tests/data-merge.test.mts && tsx tests/races.test.mts && tsx tests/districts.test.mts && tsx tests/ballotShare.test.mts && tsx tests/localDistricts.test.mts && tsx tests/blockDistricts.test.mts && tsx tests/news.test.mts && tsx tests/sosResults.test.mts",
     "deploy:preview": "npm run build && npx firebase-tools@15 hosting:channel:deploy preview --expires 7d",
     "deploy:rules": "npx firebase-tools@15 deploy --only firestore:rules,firestore:indexes,storage",
     "deploy:functions": "npm --prefix functions install && npx firebase-tools@15 deploy --only functions,firestore:rules,firestore:indexes"

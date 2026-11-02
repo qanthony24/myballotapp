@@ -1,46 +1,81 @@
 import type { ElectionResultSummary, ContestResult } from '../types/info';
+import type { ResultsIndexEntry, ResultsElection } from './sosResults';
 import { getResultsData, whenElectionDataReady } from './electionDataStore';
 
-// Historical results shipped with the app, served from public/data/results/elections.json.
-const ELECTIONS_URL = '/data/results/elections.json';
+/**
+ * Historical results, built from the Secretary of State's archive by
+ * `npm run data:results` (scripts/build-results.mts):
+ *   /data/results/index.json          one entry per election
+ *   /data/results/{yyyymmdd}.json     that election's contests (statewide + every parish's local races)
+ * Plus results entered in Admin → Results and marked published (Firestore),
+ * which win on the same electionId and update live.
+ */
+const BASE = `${(import.meta as { env?: { BASE_URL?: string } }).env?.BASE_URL ?? '/'}data/results/`;
 
-let cachedStatic: ElectionResultSummary[] | null = null;
+let indexPromise: Promise<ResultsIndexEntry[]> | null = null;
+const electionCache = new Map<string, Promise<ResultsElection | null>>();
 
-async function fetchStaticElections(): Promise<ElectionResultSummary[]> {
-  if (cachedStatic) return cachedStatic;
-  try {
-    const res = await fetch(ELECTIONS_URL);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    cachedStatic = (await res.json()) as ElectionResultSummary[];
-  } catch (err) {
-    console.warn('Static results unavailable:', err);
-    cachedStatic = [];
-  }
-  return cachedStatic;
+function staticIndex(): Promise<ResultsIndexEntry[]> {
+  indexPromise ??= fetch(`${BASE}index.json`)
+    .then((r) => (r.ok ? r.json() : null))
+    .then((j) => (Array.isArray(j?.elections) ? (j.elections as ResultsIndexEntry[]) : []))
+    .catch(() => []);
+  return indexPromise;
 }
 
-/**
- * All results voters can see: the static file plus results entered in
- * Admin → Results that are marked published (Firestore wins on the same
- * electionId). Live: the store updates as an admin saves, so callers that
- * re-run on useElectionData().version show new numbers within seconds.
- */
-export async function fetchAllElections(): Promise<ElectionResultSummary[]> {
-  const [statics] = await Promise.all([fetchStaticElections(), whenElectionDataReady(4000)]);
-  const published = getResultsData()
+function staticElection(id: string): Promise<ResultsElection | null> {
+  if (!/^\d{8}$/.test(id)) return Promise.resolve(null);
+  if (!electionCache.has(id)) {
+    electionCache.set(
+      id,
+      fetch(`${BASE}${id}.json`)
+        .then((r) => (r.ok ? r.json() : null))
+        .catch(() => null),
+    );
+  }
+  return electionCache.get(id)!;
+}
+
+function published(): ElectionResultSummary[] {
+  return getResultsData()
     .filter((r) => r.published)
     .map(({ _docId: _ignored, ...r }) => r as ElectionResultSummary);
-  const byId = new Map<string, ElectionResultSummary>();
-  for (const e of statics) byId.set(e.electionId, e);
-  for (const e of published) byId.set(e.electionId, e);
-  return [...byId.values()].sort(
-    (a, b) => new Date(b.electionDate).getTime() - new Date(a.electionDate).getTime(),
-  );
 }
 
-export async function fetchElectionById(electionId: string): Promise<ElectionResultSummary | null> {
-  const elections = await fetchAllElections();
-  return elections.find((e) => e.electionId === electionId) ?? null;
+function entryFromSummary(e: ElectionResultSummary): ResultsIndexEntry {
+  return {
+    electionId: e.electionId,
+    electionDate: e.electionDate,
+    electionName: e.electionName,
+    electionType: e.electionType,
+    highlights: [...new Set(e.contests.map((c) => c.officeName || c.title))].slice(0, 4),
+    contestCount: e.contests.length,
+    statewideCount: e.contests.length,
+    parishes: [],
+    ...(e.turnout ? { turnout: e.turnout } : {}),
+    official: false,
+  };
+}
+
+/** Every election with results, newest first. */
+export async function fetchResultsIndex(): Promise<ResultsIndexEntry[]> {
+  const [statics] = await Promise.all([staticIndex(), whenElectionDataReady(4000)]);
+  const byId = new Map<string, ResultsIndexEntry>(statics.map((e) => [e.electionId, e]));
+  for (const p of published()) byId.set(p.electionId, entryFromSummary(p));
+  return [...byId.values()].sort((a, b) => b.electionDate.localeCompare(a.electionDate));
+}
+
+/** @deprecated use fetchResultsIndex (kept for older callers). */
+export async function fetchAllElections(): Promise<ElectionResultSummary[]> {
+  const index = await fetchResultsIndex();
+  return index.map((e) => ({ ...e, jurisdiction: 'Louisiana', contests: [] }));
+}
+
+export async function fetchElectionById(electionId: string): Promise<(ElectionResultSummary & Partial<ResultsElection>) | null> {
+  await whenElectionDataReady(4000);
+  const live = published().find((e) => e.electionId === electionId);
+  if (live) return live as ElectionResultSummary & Partial<ResultsElection>;
+  return staticElection(electionId);
 }
 
 export async function fetchContestById(

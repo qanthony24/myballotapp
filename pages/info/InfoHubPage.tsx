@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import {
   InformationCircleIcon,
   CalendarDaysIcon,
-  ChatBubbleLeftRightIcon,
   NewspaperIcon,
   ChartBarIcon,
 } from '@heroicons/react/24/outline';
@@ -17,16 +16,10 @@ interface SectionCard {
 
 const sections: SectionCard[] = [
   {
-    title: 'Election Essentials',
-    description: 'Key dates, polling places, and voter resources',
-    to: '/info/essentials',
+    title: 'How to Vote',
+    description: 'Deadlines, ID, early voting and voting by mail',
+    to: '/info/how-to-vote',
     icon: CalendarDaysIcon,
-  },
-  {
-    title: 'Ask a Question',
-    description: 'Get answers about elections and voting',
-    to: '/info/qa',
-    icon: ChatBubbleLeftRightIcon,
   },
   {
     title: 'Louisiana Political News',
@@ -35,8 +28,8 @@ const sections: SectionCard[] = [
     icon: NewspaperIcon,
   },
   {
-    title: 'Past Election Results',
-    description: 'Browse historical election outcomes and data',
+    title: 'Election Results',
+    description: 'Official results for every Louisiana election since the 1990s',
     to: '/info/results',
     icon: ChartBarIcon,
   },

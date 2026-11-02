@@ -4,7 +4,6 @@ import {
   NewspaperIcon,
   ArrowPathIcon,
   CalendarDaysIcon,
-  ChatBubbleLeftRightIcon,
   ChartBarIcon,
 } from '@heroicons/react/24/outline';
 import { NewsArticle } from '../../types/info';
@@ -28,9 +27,8 @@ const SkeletonCard: React.FC = () => (
 );
 
 const INFO_SECTIONS = [
-  { to: '/info/essentials', icon: CalendarDaysIcon, label: 'Essentials' },
+  { to: '/info/how-to-vote', icon: CalendarDaysIcon, label: 'How to Vote' },
   { to: '/info/results', icon: ChartBarIcon, label: 'Results' },
-  { to: '/info/qa', icon: ChatBubbleLeftRightIcon, label: 'Q\u00A0&\u00A0A' },
 ];
 
 const InfoNewsPage: React.FC = () => {

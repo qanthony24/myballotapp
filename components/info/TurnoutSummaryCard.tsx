@@ -22,10 +22,10 @@ const TurnoutSummaryCard: React.FC<TurnoutSummaryCardProps> = ({ turnout }) => {
         Voter Turnout
       </h3>
 
-      <div className="grid grid-cols-3 gap-4 text-center">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center items-center">
         {/* Ballots Cast */}
         <div>
-          <p className="text-2xl font-bold text-midnight-navy">
+          <p className="text-base sm:text-2xl font-bold text-midnight-navy tabular-nums break-all">
             {ballotsCast != null ? ballotsCast.toLocaleString() : 'N/A'}
           </p>
           <p className="text-xs text-midnight-navy/60 mt-1">Ballots Cast</p>
@@ -33,7 +33,7 @@ const TurnoutSummaryCard: React.FC<TurnoutSummaryCardProps> = ({ turnout }) => {
 
         {/* Registered Voters */}
         <div>
-          <p className="text-2xl font-bold text-midnight-navy">
+          <p className="text-base sm:text-2xl font-bold text-midnight-navy tabular-nums break-all">
             {registeredVoters != null ? registeredVoters.toLocaleString() : 'N/A'}
           </p>
           <p className="text-xs text-midnight-navy/60 mt-1">Registered Voters</p>
@@ -41,7 +41,7 @@ const TurnoutSummaryCard: React.FC<TurnoutSummaryCardProps> = ({ turnout }) => {
 
         {/* Turnout Rate — circular progress */}
         <div className="flex flex-col items-center">
-          <div className="relative w-[76px] h-[76px]">
+          <div className="relative w-[64px] h-[64px] sm:w-[76px] sm:h-[76px]">
             <svg
               className="w-full h-full -rotate-90"
               viewBox="0 0 76 76"
@@ -71,7 +71,7 @@ const TurnoutSummaryCard: React.FC<TurnoutSummaryCardProps> = ({ turnout }) => {
                 />
               )}
             </svg>
-            <span className="absolute inset-0 flex items-center justify-center text-lg font-bold text-midnight-navy">
+            <span className="absolute inset-0 flex items-center justify-center text-sm sm:text-lg font-bold text-midnight-navy">
               {pct != null ? `${pct}%` : 'N/A'}
             </span>
           </div>

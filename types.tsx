@@ -69,6 +69,11 @@ export interface Cycle {
   evEnd: string;
   /** Shown to voters when MyBallot doesn't yet list every race on this ballot. */
   coverageNote?: string;
+  /** Official deadlines from the SoS calendar (yyyy-mm-dd). If blank, the app estimates them from the standard rules. */
+  registrationDeadline?: string;
+  onlineRegistrationDeadline?: string;
+  absenteeRequestDeadline?: string;
+  absenteeReturnDeadline?: string;
 }
 
 export interface SurveyQuestion {

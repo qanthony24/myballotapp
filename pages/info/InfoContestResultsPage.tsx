@@ -78,6 +78,17 @@ const InfoContestResultsPage: React.FC = () => {
         {contest.district && (
           <p className="text-sm text-midnight-navy/60 mb-1">{contest.district}</p>
         )}
+        {(contest as { parish?: string }).parish && (
+          <p className="text-sm text-midnight-navy/60 mb-1">{(contest as { parish?: string }).parish} Parish</p>
+        )}
+        {(contest as { runoff?: boolean }).runoff && (
+          <p className="text-sm text-amber-800 bg-amber-50 rounded px-2 py-1 mb-2 inline-block">
+            No one won a majority: {contest.resultItems.filter((i) => i.outcome === 'Runoff').map((i) => i.name).join(' and ')} advanced to a runoff.
+          </p>
+        )}
+        {(contest as { summary?: string }).summary && (
+          <p className="text-sm text-midnight-navy/80 bg-slate-50 rounded p-3 mb-4 whitespace-pre-line">{(contest as { summary?: string }).summary}</p>
+        )}
 
         {/* Called status */}
         <div className="flex items-center gap-4 text-sm text-midnight-navy/60 mb-6">

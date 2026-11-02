@@ -1,3 +1,4 @@
+import { shiftDays } from '../../services/votingDates';
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PlusIcon } from '@heroicons/react/24/outline';
@@ -73,11 +74,31 @@ const ElectionForm: React.FC<{ initial: Cycle; onDone: () => void }> = ({ initia
           <input type="date" className={field} value={e.evEnd} onChange={(ev) => setE({ ...e, evEnd: ev.target.value })} />
         </div>
       </div>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+        {([
+          ['registrationDeadline', 'Register in person/mail by', 30],
+          ['onlineRegistrationDeadline', 'Register online by', 20],
+          ['absenteeRequestDeadline', 'Request mail ballot by', 4],
+          ['absenteeReturnDeadline', 'Mail ballot due', 1],
+        ] as const).map(([k, l, days]) => (
+          <div key={k}>
+            <label className={label}>{l}</label>
+            <input
+              type="date"
+              className={field}
+              value={e[k] || ''}
+              placeholder={e.electionDate ? shiftDays(e.electionDate, -days) : ''}
+              onChange={(ev) => setE({ ...e, [k]: ev.target.value })}
+            />
+            {!e[k] && e.electionDate && <p className="text-[11px] text-gray-500 mt-0.5">Blank: voters see {shiftDays(e.electionDate, -days)} (estimated)</p>}
+          </div>
+        ))}
+      </div>
       <div>
         <label className={label}>Coverage note (optional; shown to voters in the banner, e.g. when not every race is listed yet)</label>
         <input className={field} value={e.coverageNote || ''} onChange={(ev) => setE({ ...e, coverageNote: ev.target.value })} />
       </div>
-      <p className="text-xs text-gray-500">Early voting is pre-filled with Louisiana's usual window (14 to 7 days before). Check it against the Secretary of State's calendar.</p>
+      <p className="text-xs text-gray-500">Early voting is pre-filled with Louisiana's usual window (14 to 7 days before). Copy the official dates from the Secretary of State's election calendar (sos.la.gov → Elections &amp; Voting → Registration Deadlines). Holidays can shift them.</p>
       {error && <p className="text-sm text-red-600">{error}</p>}
       <div className="flex gap-2">
         <button onClick={handleSave} disabled={saving} className="bg-civic-blue text-white px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50">

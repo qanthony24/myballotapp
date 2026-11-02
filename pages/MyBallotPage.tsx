@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useElectionData } from '../services/electionDataStore';
 import FindMyBallot from '../components/ballot/FindMyBallot';
+import NotesSummary from '../components/ballot/NotesSummary';
 import { useVoterDistricts } from '../hooks/useVoterDistricts';
 import { candidateBallotStatus } from '../services/ballotScope';
 import { Link, useNavigate } from 'react-router-dom';
@@ -479,6 +480,7 @@ const MyBallotPage: React.FC = () => {
             {shareNotice}
         </div>
       )}
+      <NotesSummary />
       {showConfetti && <Confetti recycle={false} />} 
        {isReminderModalOpen && currentElectionCycleDetails && (
         <ReminderSetupModal
