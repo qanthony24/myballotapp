@@ -20,7 +20,7 @@ const raw = parseFeed(blox);
 assert.equal(raw.length, 1, 'items without a link are skipped');
 assert.equal(raw[0].title, 'The races for Louisiana’s two open seats in Congress');
 assert.equal(raw[0].summary, 'Voters in two districts will pick & choose.');
-assert.equal(raw[0].imageUrl, 'https://bloximages.example.com/photo?resize=1', 'BLOX enclosure: url before type, no file extension');
+assert.equal(raw[0].imageUrl, 'https://bloximages.example.com/photo?resize=800%2C', 'BLOX enclosure: url before type, no file extension');
 const now = new Date('2026-11-01T12:00:00Z');
 const a = normalize(raw[0], SOURCES[0], now)!;
 assert.equal(a.url, 'https://www.theadvocate.com/baton_rouge/news/politics/congress-races/article_abc.html', 'tracking params and hash dropped');
@@ -82,3 +82,15 @@ assert.equal(extractOgImage('<meta property="og:image" content="http://site.com/
 assert.equal(extractOgImage('<meta property="og:image" content="https://site.com/logo.png">', 'https://site.com'), undefined, 'site logo is not a headline image');
 assert.equal(extractOgImage('<html>no meta</html>', 'https://site.com'), undefined);
 console.log('headline images OK');
+
+// Advocate feeds: http:// thumbnails at 300px → https, 800px.
+import { feedImageUrl } from '../functions/lib/news.js';
+assert.equal(feedImageUrl('http://bloximages.chicago2.vip.townnews.com/theadvocate.com/content/tncms/assets/v3/editorial/c/dd/cdd493ee45.image.jpg?resize=300%2C191'),
+  'https://bloximages.chicago2.vip.townnews.com/theadvocate.com/content/tncms/assets/v3/editorial/c/dd/cdd493ee45.image.jpg?resize=800%2C');
+assert.equal(feedImageUrl('http://other.example/a.jpg'), 'https://other.example/a.jpg');
+assert.equal(feedImageUrl('ftp://x/a.jpg'), undefined);
+const bloxItem = parseFeed('<rss><item><title>t</title><link>https://www.theadvocate.com/x</link><enclosure url="http://bloximages.chicago2.vip.townnews.com/a.image.jpg?resize=300%2C191" length="1" type="image/jpeg" /></item></rss>')[0];
+assert.equal(bloxItem.imageUrl, 'https://bloximages.chicago2.vip.townnews.com/a.image.jpg?resize=800%2C', 'real BLOX enclosure now kept');
+// Bayou Progressive feed after Quentin's change: media:content.
+assert.equal(parseFeed('<rss><item><title>t</title><link>https://bayouprogressive.com/x</link><media:content url="https://cms.bayouprogressive.com/uploads/a.jpg" medium="image"/></item></rss>')[0].imageUrl, 'https://cms.bayouprogressive.com/uploads/a.jpg');
+console.log('advocate images OK');

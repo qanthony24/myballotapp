@@ -78,8 +78,25 @@ function image(item, html) {
     item.match(/<media:thumbnail[^>]+url=["']([^"']+)["']/i) ??
     enclosureImage(item) ??
     firstPhoto(html);
-  const url = m?.[1] ? decodeEntities(m[1]) : undefined;
-  return url && /^https:\/\//.test(url) ? url : undefined;
+  return feedImageUrl(m?.[1]);
+}
+
+/**
+ * Make a feed image usable on an https page: upgrade http → https (the
+ * Advocate sites' feeds list http:// images that also work over https), and
+ * ask BLOX (bloximages) for 800px wide instead of its 300px feed thumbnail.
+ */
+export function feedImageUrl(raw) {
+  if (!raw) return undefined;
+  try {
+    const u = new URL(decodeEntities(raw.trim()));
+    if (u.protocol === 'http:') u.protocol = 'https:';
+    if (u.protocol !== 'https:') return undefined;
+    if (/(^|\.)bloximages\./i.test(u.hostname) && u.searchParams.has('resize')) u.searchParams.set('resize', '800,');
+    return u.toString();
+  } catch {
+    return undefined;
+  }
 }
 
 /** RSS 2.0 items → raw articles. */
