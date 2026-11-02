@@ -32,7 +32,7 @@ assert.match(a.id, /^[0-9a-f]{20}$/);
 const w = normalize(parseFeed(wp)[0], SOURCES[1], now)!;
 assert.equal(w.title, 'Legislators weigh "data centers"');
 assert.equal(w.summary, 'A long summary.', 'WordPress "appeared first on" footer removed');
-assert.equal(w.imageUrl, undefined, 'non-https images dropped');
+assert.equal(w.imageUrl, 'https://insecure.example/x.jpg', 'http images upgraded to https (hidden by the card if the host has no https)');
 assert.ok(isRecent(w, now));
 assert.ok(!isRecent({ ...w, publishedAt: '2026-10-01T00:00:00Z' }, now), 'older than 14 days');
 assert.equal(canonicalUrl('https://x.com/a/?id=5&utm_source=y'), 'https://x.com/a/?id=5');
