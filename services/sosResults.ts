@@ -104,6 +104,34 @@ const num = (s?: string | null) => {
   const n = parseInt(String(s ?? ''), 10);
   return Number.isFinite(n) ? n : undefined;
 };
+/** Counts the SoS didn't record come through as -1 (most elections before ~2010). */
+const count = (s?: string | null) => {
+  const n = num(s);
+  return n != null && n > 0 ? n : undefined;
+};
+
+/**
+ * Office groups by SoS office level. Federal codes sit among state ones:
+ * Presidential Electors 10, U.S. Senator 140, U.S. Representative 145.
+ */
+export function officeGroup(level: number | undefined): string {
+  const l = level ?? 500;
+  if (l < 100 || l === 140 || l === 145) return 'Federal';
+  if (l < 140) return 'Statewide offices';
+  if (l >= 160 && l < 200) return 'State boards and commissions';
+  if (l === 200 || l === 205) return 'Legislature';
+  if ((l >= 150 && l < 160) || (l >= 210 && l < 230)) return 'Judges and district attorneys';
+  if (l === 998) return 'Constitutional amendments';
+  if (l === 999) return 'Propositions';
+  return 'Other offices';
+}
+export const OFFICE_GROUP_ORDER = ['Federal', 'Statewide offices', 'State boards and commissions', 'Legislature', 'Judges and district attorneys', 'Other offices', 'Constitutional amendments', 'Propositions'];
+
+/** Turnout only when both counts were recorded and make sense. */
+export function cleanTurnout(t?: { registeredVoters?: number; ballotsCast?: number; turnoutPercent?: number }) {
+  if (!t || !t.registeredVoters || t.registeredVoters <= 0 || !t.ballotsCast || t.ballotsCast <= 0 || t.ballotsCast > t.registeredVoters) return undefined;
+  return { registeredVoters: t.registeredVoters, ballotsCast: t.ballotsCast, turnoutPercent: Math.round((t.ballotsCast / t.registeredVoters) * 1000) / 10 };
+}
 
 /**
  * The SoS feed sends a single object instead of a one-item list (one parish,
@@ -162,8 +190,8 @@ export function convertRaces(races: SosRace[], votes: SosVotes[], parish?: strin
       ...(measure && r.SummaryText ? { summary: r.SummaryText.trim().slice(0, 1200) } : {}),
       ...(reporting != null ? { precinctsReporting: reporting } : {}),
       ...(expected != null ? { precinctsExpected: expected } : {}),
-      ...(num(v.VoterCountQualified) ? { registeredVoters: num(v.VoterCountQualified) } : {}),
-      ...(num(v.VoterCountVoted) ? { ballotsCast: num(v.VoterCountVoted) } : {}),
+      ...(count(v.VoterCountQualified) ? { registeredVoters: count(v.VoterCountQualified) } : {}),
+      ...(count(v.VoterCountVoted) ? { ballotsCast: count(v.VoterCountVoted) } : {}),
     });
   }
   return out.sort((a, b) => a.level - b.level || a.title.localeCompare(b.title, undefined, { numeric: true }));
@@ -176,9 +204,9 @@ export function electionName(isoDate: string): string {
 }
 
 export function electionType(contests: Contest[]): ElectionType {
-  const levels = contests.filter((c) => !c.parish).map((c) => c.level);
-  if (levels.some((l) => l < 100)) return 'federal';
-  if (levels.some((l) => l >= 100 && l < 998)) return 'state';
+  const groups = contests.filter((c) => !c.parish).map((c) => officeGroup(c.level));
+  if (groups.includes('Federal')) return 'federal';
+  if (groups.length) return 'state';
   if (contests.some((c) => c.parish)) return 'municipal';
   return 'special';
 }
@@ -197,13 +225,7 @@ export function buildElection(args: {
   if (!contests.length) return null;
   // Turnout: the multi-parish race with the most registered voters (statewide races cover everyone).
   const widest = [...statewide].sort((a, b) => (b.registeredVoters ?? 0) - (a.registeredVoters ?? 0))[0];
-  const turnout = widest?.registeredVoters
-    ? {
-        registeredVoters: widest.registeredVoters,
-        ballotsCast: widest.ballotsCast,
-        turnoutPercent: widest.ballotsCast ? Math.round((widest.ballotsCast / widest.registeredVoters) * 1000) / 10 : undefined,
-      }
-    : undefined;
+  const turnout = cleanTurnout(widest);
   return {
     electionId: args.date,
     electionName: electionName(iso),

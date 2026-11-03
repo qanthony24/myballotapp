@@ -91,3 +91,23 @@ assert.equal(unopposed.length, 1);
 assert.equal(unopposed[0].resultItems[0].name, 'Only One');
 assert.equal(unopposed[0].resultItems[0].votePercent, 100);
 console.log('single-item shapes OK');
+
+// Nov 3 fixes: "-1" turnout (not recorded before ~2010) and federal office codes 140/145.
+import { officeGroup, cleanTurnout } from '../services/sosResults.ts';
+assert.equal(officeGroup(140), 'Federal', 'U.S. Senator');
+assert.equal(officeGroup(145), 'Federal', 'U.S. Representative');
+assert.equal(officeGroup(10), 'Federal', 'Presidential Electors');
+assert.equal(officeGroup(100), 'Statewide offices');
+assert.equal(officeGroup(160), 'State boards and commissions', 'PSC');
+assert.equal(officeGroup(165), 'State boards and commissions', 'BESE');
+assert.equal(officeGroup(205), 'Legislature');
+assert.equal(officeGroup(155), 'Judges and district attorneys');
+assert.equal(officeGroup(300), 'Other offices', 'mayor');
+assert.equal(cleanTurnout({ registeredVoters: -1, ballotsCast: -1, turnoutPercent: 100 }), undefined);
+assert.equal(cleanTurnout({ registeredVoters: 100, ballotsCast: 140 }), undefined, 'more ballots than voters = bad data');
+assert.deepEqual(cleanTurnout({ registeredVoters: 2970684, ballotsCast: 1078689 }), { registeredVoters: 2970684, ballotsCast: 1078689, turnoutPercent: 36.3 });
+const old2002 = buildElection({ date: '20021207', official: true, multi: { races: [{ ...gov, ID: '9', SpecificTitle: 'U. S. Senator', GeneralTitle: 'U.S. Senator', OfficeLevel: '140' }], votes: [{ ...govVotes, ID: '9', VoterCountQualified: '-1', VoterCountVoted: '-1' }] }, parishes: [] })!;
+assert.equal(old2002.turnout, undefined, 'no fake 100% turnout');
+assert.equal(old2002.electionType, 'federal');
+assert.equal(old2002.contests[0].registeredVoters, undefined);
+console.log('turnout + federal fixes OK');

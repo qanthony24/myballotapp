@@ -1,5 +1,5 @@
 import type { ElectionResultSummary, ContestResult } from '../types/info';
-import type { ResultsIndexEntry, ResultsElection } from './sosResults';
+import { cleanTurnout, officeGroup, type ResultsIndexEntry, type ResultsElection } from './sosResults';
 import { getResultsData, whenElectionDataReady } from './electionDataStore';
 
 /**
@@ -15,10 +15,32 @@ const BASE = `${(import.meta as { env?: { BASE_URL?: string } }).env?.BASE_URL ?
 let indexPromise: Promise<ResultsIndexEntry[]> | null = null;
 const electionCache = new Map<string, Promise<ResultsElection | null>>();
 
+/**
+ * Guards for files built before Nov 3, 2026: drop "-1" turnout (not recorded by
+ * the SoS) and re-derive federal elections (U.S. Senate/House use codes 140/145).
+ */
+function sanitizeEntry(e: ResultsIndexEntry): ResultsIndexEntry {
+  const turnout = cleanTurnout(e.turnout);
+  const { turnout: _t, ...rest } = e;
+  const federal = e.highlights.some((h) => /^(U\. ?S\. |Presidential)/i.test(h));
+  return { ...rest, ...(turnout ? { turnout } : {}), ...(federal ? { electionType: 'federal' as const } : {}) };
+}
+
+function sanitizeElection(e: ResultsElection): ResultsElection {
+  const turnout = cleanTurnout(e.turnout);
+  const { turnout: _t, ...rest } = e;
+  const contests = e.contests.map((c) => {
+    const { registeredVoters, ballotsCast, ...cr } = c;
+    return { ...cr, ...(registeredVoters && registeredVoters > 0 ? { registeredVoters } : {}), ...(ballotsCast && ballotsCast > 0 ? { ballotsCast } : {}) };
+  });
+  const federal = contests.some((c) => !c.parish && officeGroup(c.level) === 'Federal');
+  return { ...rest, contests, ...(turnout ? { turnout } : {}), ...(federal ? { electionType: 'federal' } : {}) };
+}
+
 function staticIndex(): Promise<ResultsIndexEntry[]> {
   indexPromise ??= fetch(`${BASE}index.json`)
     .then((r) => (r.ok ? r.json() : null))
-    .then((j) => (Array.isArray(j?.elections) ? (j.elections as ResultsIndexEntry[]) : []))
+    .then((j) => (Array.isArray(j?.elections) ? (j.elections as ResultsIndexEntry[]).map(sanitizeEntry) : []))
     .catch(() => []);
   return indexPromise;
 }
@@ -30,6 +52,7 @@ function staticElection(id: string): Promise<ResultsElection | null> {
       id,
       fetch(`${BASE}${id}.json`)
         .then((r) => (r.ok ? r.json() : null))
+        .then((e: ResultsElection | null) => (e ? sanitizeElection(e) : null))
         .catch(() => null),
     );
   }

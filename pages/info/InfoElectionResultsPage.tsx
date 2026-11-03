@@ -6,19 +6,9 @@ import { fetchElectionById } from '../../services/resultsService';
 import { useVoterDistricts } from '../../hooks/useVoterDistricts';
 import TurnoutSummaryCard from '../../components/info/TurnoutSummaryCard';
 import type { ContestResult, ElectionResultSummary } from '../../types/info';
-import type { Contest, ResultsElection } from '../../services/sosResults';
+import { officeGroup, OFFICE_GROUP_ORDER, type Contest, type ResultsElection } from '../../services/sosResults';
 
 type AnyContest = ContestResult & Partial<Contest>;
-
-/** Group statewide/multi-parish contests by SoS office level. */
-function groupOf(c: AnyContest): string {
-  const l = c.level ?? 500;
-  if (l < 100) return 'Federal';
-  if (l < 200) return 'Statewide offices';
-  if (l < 998) return 'Legislative, judicial and multi-parish';
-  if (l === 998) return 'Constitutional amendments';
-  return 'Propositions';
-}
 
 const ContestCard: React.FC<{ electionId: string; c: AnyContest }> = ({ electionId, c }) => {
   const max = Math.max(1, ...c.resultItems.map((i) => i.votes));
@@ -84,11 +74,11 @@ const InfoElectionResultsPage: React.FC = () => {
   const statewide = useMemo(() => {
     const groups = new Map<string, AnyContest[]>();
     for (const c of contests.filter((c) => !c.parish && match(c))) {
-      const g = groupOf(c);
+      const g = officeGroup(c.level);
       if (!groups.has(g)) groups.set(g, []);
       groups.get(g)!.push(c);
     }
-    return [...groups.entries()];
+    return [...groups.entries()].sort(([a], [b]) => OFFICE_GROUP_ORDER.indexOf(a) - OFFICE_GROUP_ORDER.indexOf(b));
   }, [contests, q]); // eslint-disable-line react-hooks/exhaustive-deps
   const local = contests.filter((c) => parish && c.parish === parish && match(c));
 

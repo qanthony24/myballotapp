@@ -7,6 +7,8 @@ interface TurnoutSummaryCardProps {
 
 const TurnoutSummaryCard: React.FC<TurnoutSummaryCardProps> = ({ turnout }) => {
   const { ballotsCast, registeredVoters, turnoutPercent } = turnout;
+  // Older records use -1 for "not recorded": show nothing rather than a wrong number.
+  if (!registeredVoters || registeredVoters <= 0 || !ballotsCast || ballotsCast <= 0) return null;
 
   const pct = turnoutPercent ?? (ballotsCast && registeredVoters
     ? Math.round((ballotsCast / registeredVoters) * 1000) / 10
