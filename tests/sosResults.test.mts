@@ -111,3 +111,21 @@ assert.equal(old2002.turnout, undefined, 'no fake 100% turnout');
 assert.equal(old2002.electionType, 'federal');
 assert.equal(old2002.contests[0].registeredVoters, undefined);
 console.log('turnout + federal fixes OK');
+
+// 2027 calendar (SoS, revised 10/2026): every 2027 election carries official deadlines, none estimated.
+import { PREDEFINED_CYCLES } from '../constants.tsx';
+const cal: Record<string, string[]> = {
+  '2027-04-17': ['2027-03-17', '2027-03-27', '2027-04-03', '2027-04-13', '2027-04-16'],
+  '2027-05-29': ['2027-04-28', '2027-05-08', '2027-05-15', '2027-05-25', '2027-05-28'],
+  '2027-10-09': ['2027-09-08', '2027-09-18', '2027-09-25', '2027-10-05', '2027-10-08'],
+  '2027-11-20': ['2027-10-20', '2027-10-30', '2027-11-05', '2027-11-16', '2027-11-19'],
+};
+for (const [date, want] of Object.entries(cal)) {
+  const c = PREDEFINED_CYCLES.find((x) => x.electionDate === date) as any;
+  assert.ok(c, `cycle for ${date}`);
+  const d = voterDeadlines(c);
+  assert.deepEqual(d.filter((x) => x.key !== 'electionDay').map((x) => x.date), want, date);
+  assert.ok(d.every((x) => !x.estimated), `${date} has no estimated dates`);
+}
+assert.equal(new Set(PREDEFINED_CYCLES.map((c) => c.id)).size, PREDEFINED_CYCLES.length, 'unique cycle ids');
+console.log('2027 calendar OK');

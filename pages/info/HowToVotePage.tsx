@@ -170,7 +170,7 @@ const HowToVotePage: React.FC = () => {
             is elected; otherwise the top two go to a runoff. This includes governor, other statewide offices, the Legislature and local offices.
           </p>
           <p>
-            <strong>A few offices now use closed party primaries,</strong> including U.S. Senate, U.S. House, the Public Service Commission and the Louisiana Supreme Court. Republicans
+            <strong>A few offices now use closed party primaries,</strong> including U.S. Senate, U.S. House, the Public Service Commission, the Louisiana Supreme Court and the state school board (BESE). In 2027, BESE’s party primaries are in the spring (April 17, with a second party primary May 29 if needed) and the final BESE election is Oct. 9. Republicans
             vote in the Republican primary and Democrats in the Democratic primary. Voters registered as <strong>No Party</strong> can choose either party’s primary when they vote.
             Your sample ballot shows which applies to each race.
           </p>

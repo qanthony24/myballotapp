@@ -46,7 +46,8 @@ export const CIVIC_INFO_SOURCES_LIST = [
 export const formatElectionName = (electionDate, baseName) => {
   try {
     const date = new Date(electionDate + 'T00:00:00'); // Ensure local timezone interpretation
-    const namePart = baseName ? baseName.split(' ')[1] : "Election"; // e.g. General from "2026 General"
+    // Everything after the year: "2027 Spring Primary" → "Spring Primary", "2026 General" → "General".
+    const namePart = (baseName ? String(baseName).replace(/^\d{4}\s+/, '').trim() : '') || "Election";
     return `${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} ${namePart}`;
   } catch (e) {
     console.error("Error formatting election date:", electionDate, e);
@@ -90,11 +91,14 @@ const PREDEFINED_CYCLES_DATA_RAW = [
     { "id": 2, "name": "2026 Party Primary", "slug": "2026-primary", "electionDate": "2026-05-16", "evStart": "2026-05-02", "evEnd": "2026-05-09", "type": [CycleType.PRIMARY, CycleType.MIDTERM_FEDERAL] },
     { "id": 3, "name": "2024 Presidential Primary", "slug": "2024-primary", "electionDate": "2024-03-23", "evStart": "2024-03-09", "evEnd": "2024-03-16", "type": [CycleType.PRIMARY, CycleType.PRESIDENTIAL] }, // Past
     { "id": 4, "name": "2028 Presidential General", "slug": "2028-presidential-general", "electionDate": "2028-11-07", "evStart": "2028-10-24", "evEnd": "2028-11-02", "type": [CycleType.PRESIDENTIAL, CycleType.MIDTERM_FEDERAL, CycleType.STATE_GENERAL, CycleType.MUNICIPAL_LOCAL] },
-    // 2027 statewide/legislative/parish elections. Dates per the LA Secretary of State 2027 calendar as reported by
-    // Ballotpedia/Wikipedia (Oct 9 primary, Nov 20 general) — the legislature can still change them. Early voting
-    // windows are projected from the standard 14-to-7-days-before rule; confirm against the official SoS calendar.
-    { "id": 5, "name": "2027 Primary", "slug": "2027-state-primary", "electionDate": "2027-10-09", "evStart": "2027-09-25", "evEnd": "2027-10-02", "type": [CycleType.STATE_GENERAL, CycleType.MUNICIPAL_LOCAL] },
-    { "id": 8, "name": "2027 General", "slug": "2027-state-general", "electionDate": "2027-11-20", "evStart": "2027-11-06", "evEnd": "2027-11-13", "type": [CycleType.STATE_GENERAL, CycleType.MUNICIPAL_LOCAL] },
+    // 2027 elections. Dates and deadlines from the Louisiana Secretary of State's 2027 elections calendar
+    // (revised 10/2026). The legislature can still change them; Admin → Elections overrides these.
+    // District-only specials (Jan 9 Senate 14; Feb 6 / Mar 13 House 77) are left out on purpose so the
+    // "next election" banner doesn't show them to every voter.
+    { "id": 101, "name": "2027 Spring Primary", "slug": "2027-spring-primary", "electionDate": "2027-04-17", "evStart": "2027-04-03", "evEnd": "2027-04-10", "registrationDeadline": "2027-03-17", "onlineRegistrationDeadline": "2027-03-27", "absenteeRequestDeadline": "2027-04-13", "absenteeReturnDeadline": "2027-04-16", "coverageNote": "BESE party primary and municipal primaries. Only towns holding spring elections have local races.", "type": [CycleType.PRIMARY, CycleType.STATE_GENERAL, CycleType.MUNICIPAL_LOCAL] },
+    { "id": 102, "name": "2027 Spring General", "slug": "2027-spring-general", "electionDate": "2027-05-29", "evStart": "2027-05-15", "evEnd": "2027-05-22", "registrationDeadline": "2027-04-28", "onlineRegistrationDeadline": "2027-05-08", "absenteeRequestDeadline": "2027-05-25", "absenteeReturnDeadline": "2027-05-28", "coverageNote": "BESE second party primary and municipal general elections, only where a race is still undecided.", "type": [CycleType.PRIMARY, CycleType.STATE_GENERAL, CycleType.MUNICIPAL_LOCAL] },
+    { "id": 5, "name": "2027 Primary", "slug": "2027-state-primary", "electionDate": "2027-10-09", "evStart": "2027-09-25", "evEnd": "2027-10-02", "registrationDeadline": "2027-09-08", "onlineRegistrationDeadline": "2027-09-18", "absenteeRequestDeadline": "2027-10-05", "absenteeReturnDeadline": "2027-10-08", "type": [CycleType.STATE_GENERAL, CycleType.MUNICIPAL_LOCAL] },
+    { "id": 8, "name": "2027 General", "slug": "2027-state-general", "electionDate": "2027-11-20", "evStart": "2027-11-05", "evEnd": "2027-11-13", "registrationDeadline": "2027-10-20", "onlineRegistrationDeadline": "2027-10-30", "absenteeRequestDeadline": "2027-11-16", "absenteeReturnDeadline": "2027-11-19", "type": [CycleType.STATE_GENERAL, CycleType.MUNICIPAL_LOCAL] },
     { "id": 6, "name": "2022 Midterm Election", "slug": "2022-midterm-election", "electionDate": "2022-11-08", "evStart": "2022-10-25", "evEnd": "2022-11-03", "type": [CycleType.MIDTERM_FEDERAL, CycleType.STATE_GENERAL, CycleType.MUNICIPAL_LOCAL], "nameOverride": "2022 Midterm" }, // Past
     { "id": 7, "name": "2023 State General", "slug": "2023-state-general", "electionDate": "2023-10-14", "evStart": "2023-09-30", "evEnd": "2023-10-07", "type": [CycleType.STATE_GENERAL, CycleType.MUNICIPAL_LOCAL], "nameOverride": "2023 State" } // Past, LA specific
 ];
